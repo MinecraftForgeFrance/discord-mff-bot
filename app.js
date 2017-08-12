@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+const config = require("./config/config.js");
+const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
 const client = new Discord.Client();
 const token = '***REMOVED***';
 
@@ -6,7 +8,6 @@ let userLastCommand = [];
 client.on("ready", () => {
     console.log('I am ready!');
 });
-
 
 client.on("message", message => {
     if (!message.author.bot) {
@@ -33,14 +34,14 @@ client.on("message", message => {
 });
 
 client.on("guildMemberAdd", member => {
-    /*
-        Messages :
-        - Bienvenu sur le discord de mff
-        - pour aquérir vos droits enregistrez vous / confirmer membre forum
-        - taper '!register pseudo'
-    */
-
     member.send(`Bonjour **${member.displayName}**,\nPour acquérir vos droits sur le Discord, merci de m'indiquer votre pseudo sur le forum à l'aide de la commande \`!register "pseudo"\`.`)
+        .then(async (message) => console.log(`Sent message: ${message.content}`))
+        .catch(console.error());
+});
+
+client.on("guildMemberRemove", member => {
+    const channel = client.channels.find("name", defaultConfig.announcementChannel);
+    channel.send(`**${member.displayName}** a quitté le Discord.`)
         .then(async (message) => console.log(`Sent message: ${message.content}`))
         .catch(console.error());
 });
