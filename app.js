@@ -28,6 +28,9 @@ client.on("message", message => {
                 commandFile.run(client, messageUser, message, args);
             }
         } catch (err) {
+            message.channel.send("Cette commande n'existe pas")
+                .then(async (message) => console.log(`Send message : ${message.content}`))
+                .catch(console.error());
             console.error(err);
         }
     }
