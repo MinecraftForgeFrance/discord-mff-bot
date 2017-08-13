@@ -13,13 +13,20 @@ module.exports = {
     run: (client, messageUser, message, args) => {
         // Read file before process message
         users = jsonFile.readFileSync("data/users.json");
+        if (args.length === 0)
+            message.channel.send(":x: Vous avez oublié d'indiqué votre pseudo.")
+                .then(async (message) => console.log(`Send message : ${message.content}`))
+                .catch(console.error());
 
-        if (typeof(users.data[messageUser]) === "undefined" || (typeof(users.data[messageUser]) === "object" && users.data[messageUser].step === 0)) {
+        if (args.length !== 0 && (typeof(users.data[messageUser]) === "undefined" || (typeof(users.data[messageUser]) === "object" && users.data[messageUser].step === 0))) {
             username = args[0];
             console.log(`username : ${username}`);
             // test username already use
             for (const user in users.data) {
                 if (user.username === username) {
+                    message.channel.send("Ce pseudo est déjà utilisé, veuillez contacter l'équipe de Minecraft Forge France s'il vous appartient.")
+                        .then(async (message) => console.log(`Send message : ${message.content}`))
+                        .catch(console.error());
                     return;
                 }
             }
