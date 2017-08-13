@@ -53,7 +53,7 @@ module.exports = {
                     });
                     console.log(body);
 
-                    message.channel.send(":white_check_mark: Un code vient de vous être envoyé par mp, veuillez l'indiquer en réponse à ce message.")
+                    message.channel.send(":white_check_mark: Un code vient de vous être envoyé par mp, veuillez l'indiquer en réponse à ce message avec la commande \`!register \"code\"\`.")
                         .then(async (message) => console.log(`Send message : ${message.content}`))
                         .catch(console.error());
                 }

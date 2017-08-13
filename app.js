@@ -4,7 +4,7 @@ const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig(
 const client = new Discord.Client();
 const token = '***REMOVED***';
 
-let userLastCommand = [];
+//let userLastCommand = [];
 client.on("ready", () => {
     console.log('I am ready!');
 });
@@ -13,7 +13,7 @@ client.on("message", message => {
     if (!message.author.bot) {
         let messageUser = message.author.id;
 
-        if (message.content.indexOf('!') !== 0/* && !(typeof(userLastCommand[messageUser]) === 'string')*/) return;
+        //if (message.content.indexOf('!') !== 0 && !(typeof(userLastCommand[messageUser]) === 'string')) return;
         if (message.content.indexOf('!') !== 0) return;
         // use user id instead of username
             //message.content = `!${userLastCommand[messageUser]} ${message.content}`;
@@ -28,9 +28,6 @@ client.on("message", message => {
                 commandFile.run(client, messageUser, message, args);
             }
         } catch (err) {
-            message.channel.send("Cette commande n'existe pas")
-                .then(async (message) => console.log(`Send message : ${message.content}`))
-                .catch(console.error());
             console.error(err);
         }
     }
