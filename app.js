@@ -13,14 +13,14 @@ client.on("message", message => {
     if (!message.author.bot) {
         let messageUser = message.author.id;
 
-        if (message.content.indexOf('!') !== 0 && !(typeof(userLastCommand[messageUser]) === 'string')) return;
-        if (message.content.indexOf('!') !== 0)
+        if (message.content.indexOf('!') !== 0/* && !(typeof(userLastCommand[messageUser]) === 'string')*/) return;
+        if (message.content.indexOf('!') !== 0) return;
         // use user id instead of username
-            message.content = `!${userLastCommand[messageUser]} ${message.content}`;
+            //message.content = `!${userLastCommand[messageUser]} ${message.content}`;
         // This is the best way to define args. Trust me.
         const args = message.content.slice(1).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
-        userLastCommand[messageUser] = command;
+        //userLastCommand[messageUser] = command;
         // The list of if/else is replaced with those simple 2 lines:
         try {
             let commandFile = require(`./commands/${message.channel.type}_${command}.js`);
