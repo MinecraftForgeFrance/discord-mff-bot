@@ -19,7 +19,8 @@ module.exports = {
                 .catch(console.error());
 
         if (args.length !== 0 && (typeof(users.data[messageUser]) === "undefined" || (typeof(users.data[messageUser]) === "object" && users.data[messageUser].step === 0))) {
-            username = args[0];
+            for (const arg of args)
+                username = arg;
             console.log(`username : ${username}`);
             // test username already use
             for (const user in users.data) {
