@@ -91,7 +91,7 @@ module.exports = {
 
                 for (const guild of client.guilds) {
                     let role = guild[1].roles.find("name", defaultConfig.roles.roleMember);
-                    let channel = guild[1].channels.find("name", defaultConfig.announcementChannel);
+                    let channel = guild[1].channels.find("name", defaultConfig.channels.logs);
                     guild[1].members.get(messageUser).addRole(role).then(console.log(`${message.author.username} a le role ${defaultConfig.roles.roleMember}`)).catch(console.error());
                     channel.send(`**${message.author.username}** a rejoint le Discord.`)
                         .then(async (message) => console.log(`Send message : ${message.content}`))

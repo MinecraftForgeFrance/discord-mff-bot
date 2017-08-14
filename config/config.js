@@ -6,7 +6,12 @@ const config = {
     hostname: "localhost",
     port: "80",
     path: "/mybb/discord2mff.php",
-    announcementChannel: "test",
+    channels: {
+        logs: "test",
+        supportModding: "aide-modding",
+        supportProgramming: "aide-programmation",
+        bots: "bots"
+    },
     bot: {
         prefix: "!",
         token: "***REMOVED***"

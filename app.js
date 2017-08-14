@@ -33,16 +33,19 @@ client.on("message", message => {
 });
 
 client.on("guildMemberAdd", member => {
-    member.send(`Bonjour **${member.displayName}**,\nPour acquérir vos droits sur le Discord, merci de m'indiquer votre pseudo sur le forum à l'aide de la commande \`!register "pseudo"\`.`)
-        .then(async (message) => console.log(`Sent message: ${message.content}`))
-        .catch(console.error());
+    if (!member.user.bot)
+        member.send(`Bonjour **${member.displayName}**,\nPour acquérir vos droits sur le Discord, merci de m'indiquer votre pseudo sur le forum à l'aide de la commande \`!register "pseudo"\`.`)
+            .then(async (message) => console.log(`Sent message: ${message.content}`))
+            .catch(console.error());
 });
 
 client.on("guildMemberRemove", member => {
-    const channel = client.channels.find("name", defaultConfig.announcementChannel);
-    channel.send(`**${member.displayName}** a quitté le Discord.`)
-        .then(async (message) => console.log(`Sent message: ${message.content}`))
-        .catch(console.error());
+    if (!member.user.bot) {
+        const channel = client.channels.find("name", defaultConfig.channels.logs);
+        channel.send(`**${member.displayName}** a quitté le Discord.`)
+            .then(async (message) => console.log(`Sent message: ${message.content}`))
+            .catch(console.error());
+    }
 });
 
 client.login(defaultConfig.bot.token);
