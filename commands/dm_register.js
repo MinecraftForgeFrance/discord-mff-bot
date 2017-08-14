@@ -19,11 +19,12 @@ module.exports = {
                 .catch(console.error());
 
         if (args.length !== 0 && (typeof(users.data[messageUser]) === "undefined" || (typeof(users.data[messageUser]) === "object" && users.data[messageUser].step === 0))) {
-            for (const arg of args)
-                username = arg;
+            for (let i = 0; i < args.length; i++)
+                username += (i === (args.length - 1)) ? args[i] : args[i] + " ";
+
             console.log(`username : ${username}`);
             // test username already use
-            for (const user in users.data) {
+            for (const user of users.data) {
                 if (user.username === username) {
                     message.channel.send("Ce pseudo est déjà utilisé, veuillez contacter l'équipe de Minecraft Forge France s'il vous appartient.")
                         .then(async (message) => console.log(`Send message : ${message.content}`))
