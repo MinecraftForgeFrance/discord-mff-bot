@@ -5,8 +5,12 @@ const config = {
     protocol: "http",
     hostname: "localhost",
     port: "80",
-    path: "/mybb/inc/plugins/minecraftforgefrance.php",
+    path: "/mybb/discord2mff.php",
     announcementChannel: "test",
+    bot: {
+        prefix: "!",
+        token: "***REMOVED***"
+    },
     roles: {
         roleMember: "Membre",
         roleSupport: "Support"

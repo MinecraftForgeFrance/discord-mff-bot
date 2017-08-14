@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const config = require("./config/config.js");
 const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
 const client = new Discord.Client();
-const token = '***REMOVED***';
 
 //let userLastCommand = [];
 client.on("ready", () => {
@@ -14,11 +13,11 @@ client.on("message", message => {
         let messageUser = message.author.id;
 
         //if (message.content.indexOf('!') !== 0 && !(typeof(userLastCommand[messageUser]) === 'string')) return;
-        if (message.content.indexOf('!') !== 0) return;
+        if (message.content.indexOf(defaultConfig.bot.prefix) !== 0) return;
         // use user id instead of username
             //message.content = `!${userLastCommand[messageUser]} ${message.content}`;
         // This is the best way to define args. Trust me.
-        const args = message.content.slice(1).trim().split(/ +/g);
+        const args = message.content.slice(defaultConfig.bot.prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
         //userLastCommand[messageUser] = command;
         // The list of if/else is replaced with those simple 2 lines:
@@ -46,4 +45,4 @@ client.on("guildMemberRemove", member => {
         .catch(console.error());
 });
 
-client.login(token);
+client.login(defaultConfig.bot.token);

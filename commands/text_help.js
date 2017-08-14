@@ -8,10 +8,14 @@ module.exports = {
                     {
                         name: "support",
                         value: "La syntaxe est soit `!support on`, soit `!support off`."
+                    },
+                    {
+                        name: "ping",
+                        value: "La syntaxe est `!ping`."
                     }
                 ]
             }
-        });
+        }).catch(console.error());
     },
     canRun: () => {
         return true;
