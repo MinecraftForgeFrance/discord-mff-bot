@@ -29,21 +29,24 @@ module.exports = {
                         embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");
                         let prefixArray = [];
                         let fieldContent = [];
-                        for (let i = 0; i < body.prefix.length; i++) {
-                            if (!prefixArray.includes(body.prefix[i])) {
-                                prefixArray[i] = body.prefix[i];
-                                fieldContent[i] = `- [${body.subject[i]}](${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path2"]}?tid=${body.tid[i]})`;
+                        if (typeof (body.prefix) !== "undefinec") {
+                            for (let i = 0, j = 0; i < body.prefix.length; i++) {
+                                if (!prefixArray.includes(body.prefix[i])) {
+                                    prefixArray[j] = body.prefix[i];
+                                    fieldContent[j] = `- [${body.subject[i]}](${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path2"]}?tid=${body.tid[i]})`;
+                                    j++;
+                                }
+                                else {
+                                    fieldContent[prefixArray.indexOf(body.prefix[i])] += `\n- [${body.subject[i]}](${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path2"]}?tid=${body.tid[i]})`;
+                                }
                             }
-                            else {
-                                fieldContent[prefixArray.indexOf(body.prefix[i])] += `\n- [${body.subject[i]}](${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path2"]}?tid=${body.tid[i]})`;
+
+                            for (let i = 0; i < prefixArray.length; i++) {
+                                embed.addField(prefixArray[i], fieldContent[i]);
                             }
-                        }
 
-                        for (let i = 0; i < prefixArray.length; i++) {
-                            embed.addField(prefixArray[i], fieldContent[i]);
+                            message.channel.send({embed}).catch(console.error());
                         }
-
-                        message.channel.send({embed}).catch(console.error());
                     }
                 });
             }
