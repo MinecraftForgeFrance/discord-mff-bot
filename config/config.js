@@ -6,15 +6,16 @@ const config = {
     hostname: "localhost",
     port: "80",
     path: "/mybb/discord2mff.php",
+    path2: "/mybb/showthread.php",
     channels: {
-        logs: "test",
+        logs: "logs-io",
         supportModding: "aide-modding",
         supportProgramming: "aide-programmation",
         bots: "bots"
     },
     bot: {
         prefix: "!",
-        token: "***REMOVED***"
+        token: "***REMOVED***" //"***REMOVED***"
     },
     roles: {
         roleMember: "Membre",

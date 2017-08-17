@@ -3,7 +3,6 @@ const request = require('request');
 const config = require('../config/config.js');
 const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
 
-let username = "";
 let attempt = 3;
 let users = {
     data: {}
@@ -12,6 +11,7 @@ let users = {
 module.exports = {
     run: (client, messageUser, message, args) => {
         // Read file before process message
+        let username = "";
         users = jsonFile.readFileSync("data/users.json");
         if (args.length === 0)
             message.channel.send(":x: Vous avez oublié d'indiqué votre pseudo.")
@@ -24,7 +24,7 @@ module.exports = {
 
             console.log(`username : ${username}`);
             // test username already use
-            for (const user of users.data) {
+            for (const user in users.data) {
                 if (user.username === username) {
                     message.channel.send("Ce pseudo est déjà utilisé, veuillez contacter l'équipe de Minecraft Forge France s'il vous appartient.")
                         .then(async (message) => console.log(`Send message : ${message.content}`))

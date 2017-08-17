@@ -8,6 +8,9 @@ module.exports = {
             embed: {
                 color: 0x03BEED,
                 title: "Voici les commandes disponibles : ",
+                thumbnail: {
+                    url: "https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png"
+                },
                 fields: [
                     {
                         name: "support",
@@ -18,6 +21,11 @@ module.exports = {
                         name: "ping",
                         value: "Cette commande est uniquement disponible si vous êtes dans le channel " + `${channels[2]}.\n` +
                         "La syntaxe est `!ping`."
+                    },
+                    {
+                        name: "tutorial",
+                        value: "Cette commande est uniquement disponible dans les channels " + `${channels[0] + ", " + channels[2]}.\n` +
+                        "La syntaxe est `!tutorial \<\sujet\>`."
                     }
                 ]
             }
