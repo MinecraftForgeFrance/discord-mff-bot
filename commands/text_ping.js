@@ -6,7 +6,7 @@ module.exports = {
         if (message.channel.name === defaultConfig.channels.bots)
             message.channel.send({
                 embed: {
-                    color: 0x03BEED,
+                    color: 0xB9121B,
                     description: ":ping_pong: Pong: `" + `${Date.now() - message.createdTimestamp} ms` + "`"
                 }
             }).catch(console.error());

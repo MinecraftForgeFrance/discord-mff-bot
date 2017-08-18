@@ -25,27 +25,41 @@ module.exports = {
                             .catch(console.error());
                     else {
                         let embed = new Discord.RichEmbed();
-                        embed.setColor(0x03BEED).setTitle("Liste des tutoriels correspondants à votre recherche : ");
+                        embed.setColor(0xBD8D46).setTitle("Liste des tutoriels correspondants à votre recherche : ");
                         embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");
                         let prefixArray = [];
                         let fieldContent = [];
-                        if (typeof (body.prefix) !== "undefinec") {
+                        if (typeof (body.prefix) !== "undefined") {
                             for (let i = 0, j = 0; i < body.prefix.length; i++) {
+                                let field = `- [${body.subject[i]}](${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path2"]}?tid=${body.tid[i]})`;
                                 if (!prefixArray.includes(body.prefix[i])) {
                                     prefixArray[j] = body.prefix[i];
-                                    fieldContent[j] = `- [${body.subject[i]}](${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path2"]}?tid=${body.tid[i]})`;
+                                    fieldContent[j] = field;
                                     j++;
                                 }
                                 else {
-                                    fieldContent[prefixArray.indexOf(body.prefix[i])] += `\n- [${body.subject[i]}](${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path2"]}?tid=${body.tid[i]})`;
+                                    if (fieldContent[prefixArray.lastIndexOf(body.prefix[i])].length <= (1024 - field.length)) {
+                                        fieldContent[prefixArray.lastIndexOf(body.prefix[i])] += `\n${field}`;
+                                    }
+                                    else {
+                                        prefixArray[j] = body.prefix[i];
+                                        fieldContent[j] = field;
+                                        j++;
+                                    }
                                 }
                             }
 
-                            for (let i = 0; i < prefixArray.length; i++) {
-                                embed.addField(prefixArray[i], fieldContent[i]);
+                            if (prefixArray.length >= 25) {
+                                message.reply("Votre recherche renvoit trop de résultat, merci de l'affiner.")
+                                    .then(async (message) => console.log(`Send message : ${message.content}`))
+                                    .catch(console.error());
                             }
-
-                            message.channel.send({embed}).catch(console.error());
+                            else {
+                                for (let i = 0; i < prefixArray.length; i++) {
+                                    embed.addField(prefixArray[i], fieldContent[i]);
+                                }
+                                message.channel.send({embed}).catch(console.error());
+                            }
                         }
                     }
                 });
