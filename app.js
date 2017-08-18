@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const config = require("./config/config.js");
 const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
 const client = new Discord.Client();
+const jsonFile = require('jsonfile');
 
 //let userLastCommand = [];
 client.on("ready", () => {
@@ -41,6 +42,16 @@ client.on("guildMemberAdd", member => {
 
 client.on("guildMemberRemove", member => {
     if (!member.user.bot) {
+        let users = jsonFile.readFileSync("data/users.json");
+        if (users.data[member.id] !== null) {
+            delete users.data[member.id];
+            jsonFile.writeFile("data/users.json", users, {spaces: 4}, err => {
+                if (err)
+                    throw err;
+                console.log("This file has been saved");
+            });
+            console.log(`${member.displayName} a bien été supprimé.`);
+        }
         const channel = client.channels.find("name", defaultConfig.channels.logs);
         channel.send(`**${member.displayName}** a quitté le Discord.`)
             .then(async (message) => console.log(`Sent message: ${message.content}`))
