@@ -50,7 +50,7 @@ module.exports = {
                             }
 
                             if (prefixArray.length >= 25) {
-                                message.reply("Votre recherche renvoit trop de résultat, merci de l'affiner.")
+                                message.reply("votre recherche renvoit trop de résultat, merci de l'affiner.")
                                     .then(async (message) => console.log(`Send message : ${message.content}`))
                                     .catch(console.error());
                             }

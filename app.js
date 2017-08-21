@@ -16,7 +16,7 @@ client.on("message", message => {
         //if (message.content.indexOf('!') !== 0 && !(typeof(userLastCommand[messageUser]) === 'string')) return;
         if (message.content.indexOf(defaultConfig.bot.prefix) !== 0) return;
         // use user id instead of username
-            //message.content = `!${userLastCommand[messageUser]} ${message.content}`;
+        //message.content = `!${userLastCommand[messageUser]} ${message.content}`;
         // This is the best way to define args. Trust me.
         const args = message.content.slice(defaultConfig.bot.prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
@@ -24,9 +24,18 @@ client.on("message", message => {
         // The list of if/else is replaced with those simple 2 lines:
         try {
             let commandFile = require(`./commands/${message.channel.type}_${command}.js`);
-            if (commandFile.canRun(client, messageUser)) {
+            //if exists
+            if (commandFile.canRun(client, messageUser, message)) {
                 commandFile.run(client, messageUser, message, args);
             }
+            else {
+                message.reply("la commande ne peut pas s'exécuter")
+                    .then(async (message) => console.log(`Sent message: ${message.content}`))
+                    .catch(console.error());
+            }
+            // send perm error
+            // else
+            // unknow command
         } catch (err) {
             console.error(err);
         }
