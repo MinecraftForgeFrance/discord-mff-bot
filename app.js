@@ -1,12 +1,46 @@
+// Modules
 const Discord = require('discord.js');
 const config = require("./config/config.js");
-const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
-const client = new Discord.Client();
+const schedule = require("node-schedule");
 const jsonFile = require('jsonfile');
 
+// Config
+const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
+const client = new Discord.Client();
+
 //let userLastCommand = [];
+
 client.on("ready", () => {
     console.log('I am ready!');
+    // Launch periodic tasks
+    schedule.scheduleJob('*/1 * * * *', function () {
+        // read ban file
+        let banList = jsonFile.readFileSync("data/ban.json");
+
+        // get current date
+        let now = Date.now();
+
+        banList.data.forEach((ban) => {
+            if (ban.endBan <= now) {
+                for (const guild of client.guilds) {
+                    guild[1].unban(ban.member);
+                }
+                // remove file entry
+                let index = banList.data.indexOf(ban);
+                if (index > -1) {
+                    banList.data.splice(index, 1);
+                }
+                console.log(`L'utilisateur ${ban.member} à de nouveau accès au Discord`);
+
+                // Save file
+                jsonFile.writeFile("data/ban.json", banList, {spaces: 4}, err => {
+                    if (err)
+                        throw err;
+                    console.log("This file has been saved");
+                });
+            }
+        });
+    });
 });
 
 client.on("message", message => {
@@ -52,7 +86,7 @@ client.on("guildMemberAdd", member => {
 client.on("guildMemberRemove", member => {
     if (!member.user.bot) {
         let users = jsonFile.readFileSync("data/users.json");
-        if (users.data[member.id] !== null) {
+        if (typeof (users.data[member.id]) !== "undefined") {
             delete users.data[member.id];
             jsonFile.writeFile("data/users.json", users, {spaces: 4}, err => {
                 if (err)

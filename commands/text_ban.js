@@ -4,48 +4,58 @@ const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig(
 const jsonFile = require("jsonfile");
 
 let banList = {
-    data: {}
+    data: []
 };
 
 module.exports = {
-    /*
-    @command ban
-    @param username
-
-     */
     run: (client, messageUser, message, args) => {
-        banList = jsonFile.readFileSync();
-        let member = message.mentions.members.first();
-        let time, reason;
-        if (/^(\d+)([mhdMY])$/.test(args[1])) {
-            time = /^(\d+)([mhdMY])$/.exec(args[1]); // optional
-            moment.locale('fr');
-            time = moment().add(time[1], time[2]);
-            reason = message.content.split(/\s+/g).slice(3).join(" ");
-            message.channel.send(`${member} a été banni jusqu'au ${time.format('dddd D MMMM YYYY à kk:mm')}.`)
-                .then(async (message) => console.log(`Send message : ${message.content}`))
-                .catch(console.error());
-        } else {
-            reason = message.content.split(/\s+/g).slice(2).join(" ");
-            time = 'def';
-            message.channel.send(`${member} a été banni définitivement.`)
+        if (args.length <= 1) {
+            message.channel.send("- La syntaxe est `!ban @member <1m|1h|1d|1M|1Y> [reason]` pour bannir temporairement.\n" +
+                "- La syntaxe est `!ban @member [reason]` pour bannir définitivemment.")
                 .then(async (message) => console.log(`Send message : ${message.content}`))
                 .catch(console.error());
         }
+        else {
+            banList = jsonFile.readFileSync("data/ban.json");
+            let member = message.mentions.members.first();
+            let time, reason;
+            if (/^(\d+)([mhdMY])$/.test(args[1])) {
+                time = /^(\d+)([mhdMY])$/.exec(args[1]); // optional
+                moment.locale('fr');
+                time = moment().add(time[1], time[2]);
+                reason = message.content.split(/\s+/g).slice(3).join(" ");
+                member.send(`Vous avez été banni du Discord pour la raison suivante : ${reason} et jusqu'au ${time.format('dddd D MMMM YYYY à HH:mm')}`)
+                    .then(async (message) => console.log(`Send message : ${message.content}`))
+                    .catch(console.error());
+                message.channel.send(`${member} a été banni jusqu'au ${time.format('dddd D MMMM YYYY à HH:mm')}.`)
+                    .then(async (message) => console.log(`Send message : ${message.content}`))
+                    .catch(console.error());
+            } else {
+                reason = message.content.split(/\s+/g).slice(2).join(" ");
+                time = 'def';
+                member.send(`Vous avez été banni définitivement du Discord pour la raison suivante : ${reason}`)
+                    .then(async (message) => console.log(`Send message : ${message.content}`))
+                    .catch(console.error());
+                message.channel.send(`${member} a été banni définitivement.`)
+                    .then(async (message) => console.log(`Send message : ${message.content}`))
+                    .catch(console.error());
+            }
+            banList.data.push({
+                dateNow: Date.now(),
+                operator: messageUser,
+                reason: reason,
+                endBan: time.valueOf(),
+                member: member.id
+            });
 
-        banList.data[member.id] = {
-            dateNow: Date.now(),
-            operator: messageUser,
-            reason: reason,
-            endBan: time
-        };
+            jsonFile.writeFile("data/ban.json", banList, {spaces: 4}, err => {
+                if (err)
+                    throw err;
+                console.log("This file has been saved");
+            });
 
-        jsonFile.writeFile("data/ban.json", banList, {spaces: 4}, err => {
-            if (err)
-                throw err;
-            console.log("This file has been saved");
-        });
-        member.ban(reason);
+            member.ban(reason);
+        }
     },
     canRun: (client, messageUser, message) => {
         const role = message.guild.roles.find("name", defaultConfig.roles.roleAdmin);
