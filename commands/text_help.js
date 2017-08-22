@@ -18,7 +18,7 @@ module.exports = {
             "- La syntaxe est `!tutorial \<\sujet\>`.");
 
         if (message.member.roles.has(role.id)) {
-            embed.addField("ban", "Cette commande permet de bannir temporairement ou définitvement.\n" +
+            embed.addField("ban", "Cette commande permet de bannir temporairement ou définitivement.\n" +
                 "- La syntaxe est `!ban @member <1m|1h|1d|1M|1Y> [reason]` pour bannir temporairement.\n" +
                 "- La syntaxe est `!ban @member [reason]` pour bannir définitivemment.");
         }
