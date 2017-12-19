@@ -6,7 +6,7 @@ module.exports = {
     run: (client, messageUser, message) => {
         let channels = [defaultConfig.channels.supportModding, defaultConfig.channels.supportProgramming, defaultConfig.channels.bots];
         let embed = new Discord.RichEmbed();
-        const role = message.guild.roles.find("name", defaultConfig.roles.roleAdmin);
+        const role = message.guild.roles.find(value => value.name === defaultConfig.roles.roleAdmin);
         embed.setColor(0x03BEED).setTitle("Voici les commandes disponibles : ");
         embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");
 
@@ -25,7 +25,7 @@ module.exports = {
                 "- La syntaxe est `!ban @member [reason]` pour bannir définitivemment.");
         }
 
-        message.channel.send({embed}).catch(console.error());
+        message.channel.send({embed}).catch(console.error);
     },
     canRun: () => {
         return true;

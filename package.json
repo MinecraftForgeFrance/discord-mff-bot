@@ -1,16 +1,16 @@
 {
     "name": "minecraftforgefrance",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "private": true,
     "main": "app.js",
     "scripts": {
         "start": "node app.js"
     },
     "dependencies": {
-        "discord.js": "^11.1.0",
+        "discord.js": "^11.2.1",
         "jsonfile": "^3.0.1",
-        "moment": "^2.18.1",
-        "node-schedule": "^1.2.4",
-        "request": "^2.81.0"
+        "moment": "^2.20.1",
+        "node-schedule": "^1.2.5",
+        "request": "^2.83.0"
     }
 }

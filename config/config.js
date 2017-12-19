@@ -11,7 +11,8 @@ const config = {
         logs: "logs-io",
         supportModding: "aide-modding",
         supportProgramming: "aide-programmation",
-        bots: "bots"
+        bots: "bots",
+        shoutbox: "shoutbox"
     },
     bot: {
         prefix: "!",

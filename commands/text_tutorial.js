@@ -8,7 +8,7 @@ module.exports = {
         if (args.length === 0)
             message.channel.send("La syntaxe doit être `!tutorial \<\sujet\>`")
                 .then(async (message) => console.log(`Send message : ${message.content}`))
-                .catch(console.error());
+                .catch(console.error);
         else {
             let tutorialName = "";
             for (let i = 0; i < args.length; i++)
@@ -21,7 +21,7 @@ module.exports = {
                 if (body === "Tutorial not found")
                     message.channel.send("Il n'existe aucun tutoriel avec ce sujet")
                         .then(async (message) => console.log(`Send message : ${message.content}`))
-                        .catch(console.error());
+                        .catch(console.error);
                 else {
                     let embed = new Discord.RichEmbed();
                     embed.setColor(0xBD8D46).setTitle("Liste des tutoriels correspondants à votre recherche : ");
@@ -51,13 +51,13 @@ module.exports = {
                         if (prefixArray.length >= 25) {
                             message.reply("votre recherche renvoit trop de résultat, merci de l'affiner.")
                                 .then(async (message) => console.log(`Send message : ${message.content}`))
-                                .catch(console.error());
+                                .catch(console.error);
                         }
                         else {
                             for (let i = 0; i < prefixArray.length; i++) {
                                 embed.addField(prefixArray[i], fieldContent[i]);
                             }
-                            message.channel.send({embed}).catch(console.error());
+                            message.channel.send({embed}).catch(console.error);
                         }
                     }
                 }
@@ -70,12 +70,12 @@ module.exports = {
         }
         else {
             let channels = [
-                client.channels.find("name", defaultConfig.channels.supportModding),
-                client.channels.find("name", defaultConfig.channels.bots)
+                client.channels.find(value => value.name === defaultConfig.channels.supportModding),
+                client.channels.find(value => value.name === defaultConfig.channels.bots)
             ];
             message.channel.send(`Cette commande est seulement disponible dans les channels ${channels[0] + ", " + channels[1]}.`)
                 .then(async (message) => console.log(`Send message : ${message.content}`))
-                .catch(console.error());
+                .catch(console.error);
         }
     }
 };
