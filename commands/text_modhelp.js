@@ -50,10 +50,10 @@ module.exports = {
 
                         let embedSize = embed.title.length;
                         for (let i = 0; i < prefixArray.length; i++) {
-                            embedSize += prefixArray[i].length * fieldContent[i].length;
+                            embedSize += prefixArray[i].length + fieldContent[i].length;
                         }
 
-                        if (prefixArray.length >= 25 || embedSize) {
+                        if (prefixArray.length >= 25 || embedSize >= 6000) {
                             message.reply("votre recherche renvoit trop de résultat, merci de l'affiner.")
                                 .then(async (message) => console.log(`Send message : ${message.content}`))
                                 .catch(console.error);
