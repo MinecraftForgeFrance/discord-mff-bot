@@ -6,16 +6,22 @@ const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig(
 module.exports = {
     run: (client, messageUser, message, args) => {
         if (args.length === 0)
-            message.channel.send("La syntaxe doit être `!tutorial \<\sujet\>`")
+            message.channel.send("La syntaxe doit être `!tutorial [-v\<\version>\] \<\sujet\>`")
                 .then(async (message) => console.log(`Send message : ${message.content}`))
                 .catch(console.error);
         else {
             let tutorialName = "";
-            for (let i = 0; i < args.length; i++)
+            let tutorialVersion = "";
+            let beginTutorialName = 0;
+            if(args[0].startsWith("-v")) {
+                tutorialVersion = args[0].substring(args[0].indexOf("-v") + 2);
+                beginTutorialName = 1;
+            }
+            for (let i = beginTutorialName; i < args.length; i++)
                 tutorialName += (i === (args.length - 1)) ? args[i] : args[i] + " ";
 
             request({
-                uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?tutoname=${tutorialName}&token=k3K0DnQaQMemIDAGnVP6`,
+                uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?tutoname=${tutorialName}&tutoversion=${tutorialVersion}&token=k3K0DnQaQMemIDAGnVP6`,
                 json: true
             }, (err, res, body) => {
                 if (body === "Tutorial not found")

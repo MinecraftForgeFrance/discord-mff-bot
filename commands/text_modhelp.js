@@ -6,16 +6,22 @@ const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig(
 module.exports = {
     run: (client, messageUser, message, args) => {
         if (args.length === 0)
-            message.channel.send("La syntaxe doit être `!modhelp \<\sujet\>`")
+            message.channel.send("La syntaxe doit être `!modhelp [-v\<\version\>] \<\sujet\>`")
                 .then(async (message) => console.log(`Send message : ${message.content}`))
                 .catch(console.error);
         else {
             let supportName = "";
-            for (let i = 0; i < args.length; i++)
+            let supportVersion = "";
+            let beginSupportName = 0;
+            if(args[0].startsWith("-v")) {
+                supportVersion = args[0].substring(args[0].indexOf("-v") + 2);
+                beginSupportName = 1;
+            }
+            for (let i = beginSupportName; i < args.length; i++)
                 supportName += (i === (args.length - 1)) ? args[i] : args[i] + " ";
 
             request({
-                uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?supportname=${supportName}&token=k3K0DnQaQMemIDAGnVP6`,
+                uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?supportname=${supportName}&supportversion=${supportVersion}&token=k3K0DnQaQMemIDAGnVP6`,
                 json: true
             }, (err, res, body) => {
                 if (body === "Tutorial not found")

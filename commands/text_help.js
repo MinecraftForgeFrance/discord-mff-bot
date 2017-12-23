@@ -15,9 +15,9 @@ module.exports = {
         embed.addField("ping", "Cette commande est uniquement disponible si vous êtes dans le channel " + `${channels[2]}.\n` +
             "- La syntaxe est `!ping`.");
         embed.addField("tutorial", "Cette commande est uniquement disponible dans les channels " + `${channels[0] + ", " + channels[2]}.\n` +
-            "- La syntaxe est `!tutorial \<\sujet\>`.");
+            "- La syntaxe est `!tutorial [-v\<\version\>] \<\sujet\>`.");
         embed.addField("modhelp", "Cette commande est uniquement disponible dans les channels " + `${channels[0] + ", " + channels[2]}.\n` +
-            "- La syntaxe est `!modhelp \<\sujet\>`.");
+            "- La syntaxe est `!modhelp [-v\<\version\>] \<\sujet\>`.");
 
         if (message.member.roles.has(role.id)) {
             embed.addField("ban", "Cette commande permet de bannir temporairement ou définitivement.\n" +
