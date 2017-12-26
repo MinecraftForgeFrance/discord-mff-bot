@@ -34,7 +34,7 @@ client.on("ready", () => {
                 if (index > -1) {
                     banList.data.splice(index, 1);
                 }
-                console.log(`L'utilisateur ${ban.member} à de nouveau accès au Discord`);
+                console.log(`L'utilisateur ${ban.member} a de nouveau accès au Discord`);
 
                 // Save file
                 jsonFile.writeFile("data/ban.json", banList, {spaces: 4}, err => {

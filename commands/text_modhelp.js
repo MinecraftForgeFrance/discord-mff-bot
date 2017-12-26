@@ -6,7 +6,7 @@ const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig(
 module.exports = {
     run: (client, messageUser, message, args) => {
         if (args.length === 0)
-            message.channel.send("La syntaxe doit être `!modhelp [-v\<\version\>] \<\sujet\>`")
+            message.channel.send("La syntaxe doit être `!modhelp [-v\<\mcversion\>] \<\sujet\>`")
                 .then(async (message) => console.log(`Send message : ${message.content}`))
                 .catch(console.error);
         else {
