@@ -119,7 +119,7 @@ function sendMessageToShoutbox(message, messageUser) {
         let users = jsonFile.readFileSync("data/users.json");
         data = jsonFile.readFileSync("data/data.json");
         if (typeof (users.data[messageUser]) === "object") {
-            request(`${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?shoutbox&username=${users.data[messageUser].username}&content=${message.content}&date=${message.createdTimestamp}&token=k3K0DnQaQMemIDAGnVP6`, (err, res, body) => {
+            request(`${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?shoutbox&username=${users.data[messageUser].username}&content=${message.content}&date=${message.createdTimestamp}&token=${defaultConfig["token"]}`, (err, res, body) => {
                 if (err)
                     throw err;
                 console.log(body);
@@ -153,7 +153,7 @@ function readMessageFromShoutbox(newDate) {
             i++;
         }
         request({
-            uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?shoutbox&oldDate=${data.oldDate}&newDate=${newDate}&token=k3K0DnQaQMemIDAGnVP6`,
+            uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?shoutbox&oldDate=${data.oldDate}&newDate=${newDate}&token=${defaultConfig["token"]}`,
             json: true
         }, (err, res, body) => {
             if (err)

@@ -21,7 +21,7 @@ module.exports = {
                 tutorialName += (i === (args.length - 1)) ? args[i] : args[i] + " ";
 
             request({
-                uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?tutoname=${tutorialName}&tutoversion=${tutorialVersion}&token=k3K0DnQaQMemIDAGnVP6`,
+                uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?tutoname=${tutorialName}&tutoversion=${tutorialVersion}&token=${defaultConfig["token"]}`,
                 json: true
             }, (err, res, body) => {
                 if (body === "Tutorial not found")

@@ -34,7 +34,7 @@ module.exports = {
             }
 
             // generate token and add user to file
-            request(`${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?username=${username}&token=k3K0DnQaQMemIDAGnVP6`, (err, res, body) => {
+            request(`${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?username=${username}&token=${defaultConfig["token"]}`, (err, res, body) => {
                 if (body === "User not found")
                     message.channel.send(":x: Votre pseudo n'existe pas ou n'est pas correct.")
                         .then(async (message) => console.log(`Send message : ${message.content}`))

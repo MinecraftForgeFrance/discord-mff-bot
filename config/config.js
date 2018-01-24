@@ -7,6 +7,7 @@ const config = {
     port: "80",
     path: "/mybb/discord2mff.php",
     path2: "/mybb/showthread.php",
+    token: "***REMOVED***",
     channels: {
         logs: "logs-io",
         supportModding: "aide-modding",
