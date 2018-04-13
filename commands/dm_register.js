@@ -34,8 +34,11 @@ module.exports = {
             }
 
             // generate token and add user to file
-            request(`${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?username=${username}&token=${defaultConfig["token"]}`, (err, res, body) => {
-                if (body === "User not found")
+            request({
+                uri :`${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?username=${username}&token=${defaultConfig["token"]}`,
+                json: true
+            }, (err, res, body) => {
+                if (body.error === "User not found")
                     message.channel.send(":x: Votre pseudo n'existe pas ou n'est pas correct.")
                         .then(async (message) => console.log(`Send message : ${message.content}`))
                         .catch(console.error);
@@ -43,7 +46,7 @@ module.exports = {
                     // save user infos
                     users.data[messageUser] = {
                         "username": username,
-                        "token": body,
+                        "token": body.result,
                         "step": 1,
                         "attempt": attempt
                     };
@@ -53,7 +56,7 @@ module.exports = {
                             throw err;
                         console.log("This file has been saved");
                     });
-                    console.log(body);
+                    console.log(body.result);
 
                     message.channel.send(":white_check_mark: Un code vient de vous être envoyé par mp, veuillez l'indiquer en réponse à ce message avec la commande \`!register \"code\"\`.")
                         .then(async (message) => console.log(`Send message : ${message.content}`))

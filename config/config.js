@@ -4,8 +4,8 @@ const configFile = "config/config.json";
 const config = {
     protocol: "http",
     hostname: "localhost",
-    port: "80",
-    path: "/mybb/discord2mff.php",
+    port: "4567",//"80",
+    path: "/discord/register",//"/mybb/discord2mff.php",
     path2: "/mybb/showthread.php",
     token: "***REMOVED***",
     channels: {
