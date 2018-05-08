@@ -3,7 +3,7 @@ const config = require('../config/config.js');
 const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
 
 module.exports = {
-    run: (client, messageUser, message) => {
+    run(client, messageUser, message) {
         let channels = [defaultConfig.channels.supportModding, defaultConfig.channels.supportProgramming, defaultConfig.channels.bots];
         let embed = new Discord.RichEmbed();
         embed.setColor(0x03BEED).setTitle("Voici les commandes disponibles : ");
@@ -26,7 +26,7 @@ module.exports = {
 
         message.channel.send({embed}).catch(console.error);
     },
-    canRun: () => {
+    canRun() {
         return true;
     }
 };

@@ -44,14 +44,13 @@ client.on("ready", () => {
                 });
             }
         });
-        //readMessageFromShoutbox(now);
     });
 });
 
 client.on("message", message => {
     if (!message.author.bot) {
         let messageUser = message.author.id;
-        //sendMessageToShoutbox(message, messageUser);
+        readShoutbox(message, messageUser);
         //if (message.content.indexOf('!') !== 0 && !(typeof(userLastCommand[messageUser]) === 'string')) return;
         if (message.content.indexOf(defaultConfig.bot.prefix) !== 0) return;
         // use user id instead of username
@@ -105,103 +104,30 @@ client.on("guildMemberRemove", member => {
                 console.log("This file has been saved");
             });
             console.log(`${member.displayName} a bien été supprimé.`);
+            const channel = client.channels.find(value => value.name === defaultConfig.channels.logs);
+            channel.send(`**${member.displayName}** a quitté le Discord.`)
+                .then(async (message) => console.log(`Sent message: ${message.content}`))
+                .catch(console.error);
         }
-        const channel = client.channels.find(value => value.name === defaultConfig.channels.logs);
-        channel.send(`**${member.displayName}** a quitté le Discord.`)
-            .then(async (message) => console.log(`Sent message: ${message.content}`))
-            .catch(console.error);
     }
 });
 
-function sendMessageToShoutbox(message, messageUser) {
+
+function readShoutbox(message, messageUser) {
     if (message.channel.name === defaultConfig.channels.shoutbox) {
-        console.log(message.content);
         let users = jsonFile.readFileSync("data/users.json");
-        data = jsonFile.readFileSync("data/data.json");
-        if (typeof (users.data[messageUser]) === "object") {
-            request(`${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?shoutbox&username=${users.data[messageUser].username}&content=${message.content}&date=${message.createdTimestamp}&token=${defaultConfig["token"]}`, (err, res, body) => {
-                if (err)
-                    throw err;
-                console.log(body);
-            });
-            data[message.id] = {
-                timeStamp: message.createdTimestamp
-            };
-            jsonFile.writeFile("data/data.json", data, {spaces: 4}, err => {
-                if (err)
-                    throw err;
-                console.log("This file has been saved");
-            });
-        }
-        else {
-            for (const guild of client.guilds) {
-                guild[1].members.get(messageUser).send(`Merci de faire la commande \`!register\` en réponse à ce message pour pouvoir envoyer un message sur la shoutbox.`)
-                    .then(message => console.log(`Send message: ${message.content}`)).catch(console.error);
+        request({
+            uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}/discordapi/sendshout`,
+            method: "post",
+            json: {
+                username: users.data[messageUser].username,
+                token: defaultConfig.token,
+                message: message.content
             }
-        }
+        }, (err, res, body) => {
+            if (err) throw err;
+        });
     }
 }
-
-function readMessageFromShoutbox(newDate) {
-    data = jsonFile.readFileSync("data/data.json");
-    const channel = client.channels.find(value => value.name === defaultConfig.channels.shoutbox);
-    channel.fetchMessages().then(messageCollection => {
-        let i = 0;
-        let messageArrayID = [];
-        for (const message of messageCollection) {
-            messageArrayID[i] = message[0];
-            i++;
-        }
-        request({
-            uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?shoutbox&oldDate=${data.oldDate}&newDate=${newDate}&token=${defaultConfig["token"]}`,
-            json: true
-        }, (err, res, body) => {
-            if (err)
-                throw err;
-            console.log(body);
-            for (let k = 0; k < messageArrayID.length; k++) {
-                for (let j = 0; j < body.username.length; j++) {
-                    //if (typeof (data[messageArrayID[k]]) !== 'object' || (typeof (data[messageArrayID[k]]["timeStamp"]) === "number")) {
-                    let datas = data[messageArrayID[k]];
-                    console.log("typeof timestamp "  + (typeof (datas["timeStamp"])));
-                    if (typeof (datas) === 'object' && typeof (datas["timeStamp"]) === "object")
-                        console.log(datas["timeStamp"] !== body.date[j]);
-                    else {
-                        console.log("Nop");
-                        /*if (typeof (body["modified"][j]) !== "string") {
-                            console.log("Moi aussi 3");*/
-                        /*channel.send(`\`${body.username[j]}\` : ${body.text[j]}`)
-                            .then(async (message) => {
-                                console.log(`Sent message: ${message.content}`);
-                                data[message.id] = {
-                                    timeStamp: message.createdTimestamp
-                                };
-                                jsonFile.writeFile("data/data.json", data, {spaces: 4}, err => {
-                                    if (err)
-                                        throw err;
-                                    console.log("This file has been saved");
-                                });
-                            }).catch(console.error());*/
-                        /*} else {
-
-                        }*/
-                        //}
-                    }
-                }
-            }
-            data = {oldDate: newDate};
-            jsonFile.writeFile("data/data.json", data, {spaces: 4}, err => {
-                if (err)
-                    throw err;
-                console.log("This file has been saved");
-            });
-        });
-    });
-}
-
-function filterTimeMessage(message) {
-
-}
-
 
 client.login(defaultConfig.bot.token).catch(console.error);

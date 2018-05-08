@@ -2,7 +2,7 @@ const config = require('../config/config.js');
 const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
 
 module.exports = {
-    run: (client, messageUser, message, args) => {
+    run(client, messageUser, message, args) {
         if (message.channel.name === defaultConfig.channels.supportModding || message.channel.name === defaultConfig.channels.supportProgramming || message.channel.name === defaultConfig.channels.bots) {
             if (args.length === 0)
                 message.channel.send("La syntaxe doit être `!support \<\on/off\>`.")
@@ -31,7 +31,7 @@ module.exports = {
                 .catch(console.error);
         }
     },
-    canRun: () => {
+    canRun() {
         return true;
     }
 };

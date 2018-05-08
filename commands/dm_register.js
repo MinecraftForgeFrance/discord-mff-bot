@@ -9,7 +9,7 @@ let users = {
 };
 
 module.exports = {
-    run: (client, messageUser, message, args) => {
+    run(client, messageUser, message, args) {
         // Read file before process message
         let username = "";
         users = jsonFile.readFileSync("data/users.json");
@@ -35,8 +35,12 @@ module.exports = {
 
             // generate token and add user to file
             request({
-                uri :`${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}${defaultConfig["path"]}?username=${username}&token=${defaultConfig["token"]}`,
-                json: true
+                uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}/discordapi/register`,
+                method: "POST",
+                json: {
+                    username: username,
+                    token: defaultConfig.token
+                }
             }, (err, res, body) => {
                 if (body.error === "User not found")
                     message.channel.send(":x: Votre pseudo n'existe pas ou n'est pas correct.")
@@ -103,7 +107,7 @@ module.exports = {
             }
         }
     },
-    canRun: (client, messageUser) => {
+    canRun(client, messageUser) {
         // Read file before process message
         users = jsonFile.readFileSync("data/users.json");
 

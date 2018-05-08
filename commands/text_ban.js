@@ -6,7 +6,7 @@ let banList = {
 };
 
 module.exports = {
-    run: (client, messageUser, message, args) => {
+    run(client, messageUser, message, args) {
         if (args.length <= 1) {
             message.channel.send("- La syntaxe est `!ban @member <1m|1h|1d|1M|1Y> [reason]` pour bannir temporairement.\n" +
                 "- La syntaxe est `!ban @member [reason]` pour bannir définitivemment.")

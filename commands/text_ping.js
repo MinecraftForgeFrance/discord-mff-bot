@@ -2,7 +2,7 @@ const config = require('../config/config.js');
 const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
 
 module.exports = {
-    run: (client, messageUser, message) => {
+    run(client, messageUser, message) {
         if (message.channel.name === defaultConfig.channels.bots)
             message.channel.send({
                 embed: {
@@ -17,7 +17,7 @@ module.exports = {
                 .catch(console.error);
         }
     },
-    canRun: () => {
+    canRun() {
         return true;
     }
 };
