@@ -6,7 +6,6 @@ module.exports = {
     run: (client, messageUser, message) => {
         let channels = [defaultConfig.channels.supportModding, defaultConfig.channels.supportProgramming, defaultConfig.channels.bots];
         let embed = new Discord.RichEmbed();
-        const role = message.guild.roles.find(value => value.name === defaultConfig.roles.roleAdmin);
         embed.setColor(0x03BEED).setTitle("Voici les commandes disponibles : ");
         embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");
 
@@ -19,7 +18,7 @@ module.exports = {
         embed.addField("modhelp", "Cette commande est uniquement disponible dans les channels " + `${channels[0] + ", " + channels[2]}.\n` +
             "- La syntaxe est `!modhelp [-v\<\mcversion\>] \<\sujet\>`.");
 
-        if (message.member.roles.has(role.id)) {
+        if (message.member.hasPermission("ADMINISTRATOR")) {
             embed.addField("ban", "Cette commande permet de bannir temporairement ou définitivement.\n" +
                 "- La syntaxe est `!ban @member <1m|1h|1d|1M|1Y> [reason]` pour bannir temporairement.\n" +
                 "- La syntaxe est `!ban @member [reason]` pour bannir définitivemment.");

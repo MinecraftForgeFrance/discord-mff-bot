@@ -1,6 +1,4 @@
-const config = require('../config/config.js');
 const moment = require('moment');
-const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
 const jsonFile = require("jsonfile");
 
 let banList = {
@@ -57,8 +55,5 @@ module.exports = {
             member.ban(reason).catch(console.error);
         }
     },
-    canRun: (client, messageUser, message) => {
-        const role = message.guild.roles.find(value => value.name === defaultConfig.roles.roleAdmin);
-        return (message.member.roles.has(role.id));
-    }
+    canRun: (client, messageUser, message) => message.member.hasPermission("ADMINISTRATOR")
 };

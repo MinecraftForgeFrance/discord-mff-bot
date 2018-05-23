@@ -20,7 +20,6 @@ const config = {
         token: "***REMOVED***" //"***REMOVED***"
     },
     roles: {
-        roleAdmin: "Admin",
         roleMember: "Membre",
         roleSupport: "Support"
     }
