@@ -1,6 +1,5 @@
 # Created by https://www.gitignore.io/api/node,linux,eclipse,windows,intellij
 
-data/
 ### Eclipse ###
 
 .metadata
@@ -54,10 +53,10 @@ local.properties
 .worksheet
 
 ### Eclipse Patch ###
-# Eclipse Core		
+# Eclipse Core
 .project
 
-# JDT-specific (Eclipse Java Development Tools)		
+# JDT-specific (Eclipse Java Development Tools)
 .classpath
 
 ### Intellij ###
@@ -223,3 +222,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/node,linux,eclipse,windows,intellij
+
+data/
+pidfile
