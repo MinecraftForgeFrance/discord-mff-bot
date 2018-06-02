@@ -5,17 +5,16 @@ const request = require("request");
 const schedule = require("node-schedule");
 const jsonFile = require('jsonfile');
 const fs = require("fs");
+const moment = require("moment");
 
 // Config
 const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
 const client = new Discord.Client();
 //let userLastCommand = [];
-let data = {
-    oldDate: 0
-};
 
 client.on("ready", () => {
-    console.log('I am ready!');
+    moment.locale("fr");
+    console.log(`[${moment()}] I am ready!`);
     // Launch periodic tasks
     schedule.scheduleJob('*/30 * * * * *', function () {
         // read ban file
