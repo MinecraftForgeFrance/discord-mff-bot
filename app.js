@@ -5,7 +5,7 @@ const request = require("request");
 const schedule = require("node-schedule");
 const jsonFile = require('jsonfile');
 const fs = require("fs");
-const moment = require("moment");
+const logger = require("./logger");
 
 // Config
 const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
@@ -13,8 +13,7 @@ const client = new Discord.Client();
 //let userLastCommand = [];
 
 client.on("ready", () => {
-    moment.locale("fr");
-    console.log(`[${moment()}] I am ready!`);
+    logger.info("I'm ready !");
     // Launch periodic tasks
     schedule.scheduleJob('*/30 * * * * *', function () {
         // read ban file
@@ -33,13 +32,13 @@ client.on("ready", () => {
                 if (index > -1) {
                     banList.data.splice(index, 1);
                 }
-                console.log(`L'utilisateur ${ban.member} a de nouveau accès au Discord`);
+                logger.info(`L'utilisateur ${ban.member} a de nouveau accès au Discord`);
 
                 // Save file
                 jsonFile.writeFile("data/ban.json", banList, {spaces: 4}, err => {
                     if (err)
                         throw err;
-                    console.log("This file has been saved");
+                    logger.info("This file has been saved");
                 });
             }
         });
@@ -68,19 +67,19 @@ client.on("message", message => {
                 }
                 else {
                     message.reply("la commande ne peut pas s'exécuter")
-                        .then(async (message) => console.log(`Sent message: ${message.content}`))
-                        .catch(console.error);
+                        .then(async (message) => logger.info(`Sent message: ${message.content}`))
+                        .catch(logger.error);
                 }
             } else {
                 message.reply("la commande n'existe pas")
-                    .then(async (message) => console.log(`Sent message: ${message.content}`))
-                    .catch(console.error);
+                    .then(async (message) => logger.info(`Sent message: ${message.content}`))
+                    .catch(logger.error);
             }
             // send perm error
             // else
             // unknow command
         } catch (err) {
-            console.error(err);
+            logger.error(err);
         }
     }
 });
@@ -88,8 +87,8 @@ client.on("message", message => {
 client.on("guildMemberAdd", member => {
     if (!member.user.bot)
         member.send(`Bonjour **${member.displayName}**,\nPour acquérir vos droits sur le Discord, merci de m'indiquer votre pseudo sur le forum à l'aide de la commande \`!register "pseudo"\`.`)
-            .then(async (message) => console.log(`Sent message: ${message.content}`))
-            .catch(console.error);
+            .then(async (message) => logger.info(`Sent message: ${message.content}`))
+            .catch(logger.error);
 });
 
 client.on("guildMemberRemove", member => {
@@ -100,13 +99,13 @@ client.on("guildMemberRemove", member => {
             jsonFile.writeFile("data/users.json", users, {spaces: 4}, err => {
                 if (err)
                     throw err;
-                console.log("This file has been saved");
+                logger.info("This file has been saved");
             });
-            console.log(`${member.displayName} a bien été supprimé.`);
+            logger.info(`${member.displayName} a bien été supprimé.`);
             const channel = client.channels.find(value => value.name === defaultConfig.channels.logs);
             channel.send(`**${member.displayName}** a quitté le Discord.`)
-                .then(async (message) => console.log(`Sent message: ${message.content}`))
-                .catch(console.error);
+                .then(async (message) => logger.info(`Sent message: ${message.content}`))
+                .catch(logger.error);
         }
     }
 });
@@ -129,4 +128,4 @@ function readShoutbox(message, messageUser) {
     }
 }
 
-client.login(defaultConfig.bot.token).catch(console.error);
+client.login(defaultConfig.bot.token).catch(logger.error);

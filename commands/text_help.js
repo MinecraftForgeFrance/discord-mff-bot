@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const logger = require("../logger");
 const config = require('../config/config.js');
 const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
 
@@ -24,7 +25,7 @@ module.exports = {
                 "- La syntaxe est `!ban @member [reason]` pour bannir définitivemment.");
         }
 
-        message.channel.send({embed}).catch(console.error);
+        message.channel.send({embed}).catch(logger.error);
     },
     canRun() {
         return true;

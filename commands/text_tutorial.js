@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const request = require('request');
+const logger = require("../logger");
 const config = require('../config/config.js');
 const defaultConfig = process.env.NODE_ENV === 'production' ? config.readConfig() : config.defaultConfig();
 
@@ -7,8 +8,8 @@ module.exports = {
     run(client, messageUser, message, args) {
         if (args.length === 0)
             message.channel.send("La syntaxe doit être `!tutorial [-v\<\mcversion>\] \<\sujet\>`")
-                .then(async (message) => console.log(`Send message : ${message.content}`))
-                .catch(console.error);
+                .then(async (message) => logger.info(`Send message : ${message.content}`))
+                .catch(logger.error);
         else {
             let tutorialName = "";
             let tutorialVersion = "";
@@ -26,8 +27,8 @@ module.exports = {
             }, (err, res, body) => {
                 if (body.message === "No result")
                     message.channel.send("Il n'existe aucun tutoriel avec ce sujet")
-                        .then(async (message) => console.log(`Send message : ${message.content}`))
-                        .catch(console.error);
+                        .then(async (message) => logger.info(`Send message : ${message.content}`))
+                        .catch(logger.error);
                 else {
                     let embed = new Discord.RichEmbed();
                     embed.setColor(0xBD8D46).setTitle("Liste des tutoriels correspondants à votre recherche : ");
@@ -60,14 +61,14 @@ module.exports = {
 
                     if (prefixArray.length >= 25 || embedSize >= 6000) {
                         message.reply("votre recherche renvoit trop de résultat, merci de l'affiner.")
-                            .then(async (message) => console.log(`Send message : ${message.content}`))
-                            .catch(console.error);
+                            .then(async (message) => logger.info(`Send message : ${message.content}`))
+                            .catch(logger.error);
                     }
                     else {
                         for (let i = 0; i < prefixArray.length; i++) {
                             embed.addField(prefixArray[i], fieldContent[i]);
                         }
-                        message.channel.send({embed}).catch(console.error);
+                        message.channel.send({embed}).catch(logger.error);
                     }
                 }
             });
@@ -83,8 +84,8 @@ module.exports = {
                 client.channels.find(value => value.name === defaultConfig.channels.bots)
             ];
             message.channel.send(`Cette commande est seulement disponible dans les channels ${channels[0] + ", " + channels[1]}.`)
-                .then(async (message) => console.log(`Send message : ${message.content}`))
-                .catch(console.error);
+                .then(async (message) => logger.info(`Send message : ${message.content}`))
+                .catch(logger.error);
         }
     }
 };
