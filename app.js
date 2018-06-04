@@ -68,12 +68,12 @@ client.on("message", message => {
                 else {
                     message.reply("la commande ne peut pas s'exécuter")
                         .then(async (message) => logger.info(`Sent message: ${message.content}`))
-                        .catch(logger.error);
+                        .catch(err => logger.error(err));
                 }
             } else {
                 message.reply("la commande n'existe pas")
                     .then(async (message) => logger.info(`Sent message: ${message.content}`))
-                    .catch(logger.error);
+                    .catch(err => logger.error(err));
             }
             // send perm error
             // else
@@ -88,7 +88,7 @@ client.on("guildMemberAdd", member => {
     if (!member.user.bot)
         member.send(`Bonjour **${member.displayName}**,\nPour acquérir vos droits sur le Discord, merci de m'indiquer votre pseudo sur le forum à l'aide de la commande \`!register "pseudo"\`.`)
             .then(async (message) => logger.info(`Sent message: ${message.content}`))
-            .catch(logger.error);
+            .catch(err => logger.error(err));
 });
 
 client.on("guildMemberRemove", member => {
@@ -105,7 +105,7 @@ client.on("guildMemberRemove", member => {
             const channel = client.channels.find(value => value.name === defaultConfig.channels.logs);
             channel.send(`**${member.displayName}** a quitté le Discord.`)
                 .then(async (message) => logger.info(`Sent message: ${message.content}`))
-                .catch(logger.error);
+                .catch(err => logger.error(err));
         }
     }
 });
@@ -114,13 +114,24 @@ client.on("guildMemberRemove", member => {
 function readShoutbox(message, messageUser) {
     if (message.channel.name === defaultConfig.channels.shoutbox) {
         let users = jsonFile.readFileSync("data/users.json");
+        let roles = message.mentions.roles;
+        let members = message.mentions.members;
+        let messageParse = message.content;
+        if (messageParse.match(Discord.MessageMentions.ROLES_PATTERN) || messageParse.match(Discord.MessageMentions.USERS_PATTERN)) {
+            roles.forEach((value) => {
+                messageParse = messageParse.replace(Discord.MessageMentions.ROLES_PATTERN, value.name);
+            });
+            members.forEach((value) => {
+                messageParse = messageParse.replace(Discord.MessageMentions.USERS_PATTERN, (users.data[value.id]) ? users.data[value.id].username : value.displayName);
+            });
+        }
         request({
             uri: `${defaultConfig["protocol"]}://${defaultConfig["hostname"]}:${defaultConfig["port"]}/discordapi/sendshout`,
             method: "post",
             json: {
                 username: users.data[messageUser].username,
                 token: defaultConfig.token,
-                message: message.content
+                message: messageParse
             }
         }, (err, res, body) => {
             if (err) throw err;
@@ -128,4 +139,4 @@ function readShoutbox(message, messageUser) {
     }
 }
 
-client.login(defaultConfig.bot.token).catch(logger.error);
+client.login(defaultConfig.bot.token).catch(err => logger.error(err));

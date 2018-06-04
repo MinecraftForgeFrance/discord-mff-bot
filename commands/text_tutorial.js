@@ -9,7 +9,7 @@ module.exports = {
         if (args.length === 0)
             message.channel.send("La syntaxe doit être `!tutorial [-v\<\mcversion>\] \<\sujet\>`")
                 .then(async (message) => logger.info(`Send message : ${message.content}`))
-                .catch(logger.error);
+                .catch(err => logger.error(err));
         else {
             let tutorialName = "";
             let tutorialVersion = "";
@@ -28,7 +28,7 @@ module.exports = {
                 if (body.message === "No result")
                     message.channel.send("Il n'existe aucun tutoriel avec ce sujet")
                         .then(async (message) => logger.info(`Send message : ${message.content}`))
-                        .catch(logger.error);
+                        .catch(err => logger.error(err));
                 else {
                     let embed = new Discord.RichEmbed();
                     embed.setColor(0xBD8D46).setTitle("Liste des tutoriels correspondants à votre recherche : ");
@@ -62,13 +62,13 @@ module.exports = {
                     if (prefixArray.length >= 25 || embedSize >= 6000) {
                         message.reply("votre recherche renvoit trop de résultat, merci de l'affiner.")
                             .then(async (message) => logger.info(`Send message : ${message.content}`))
-                            .catch(logger.error);
+                            .catch(err => logger.error(err));
                     }
                     else {
                         for (let i = 0; i < prefixArray.length; i++) {
                             embed.addField(prefixArray[i], fieldContent[i]);
                         }
-                        message.channel.send({embed}).catch(logger.error);
+                        message.channel.send({embed}).catch(err => logger.error(err));
                     }
                 }
             });
@@ -85,7 +85,7 @@ module.exports = {
             ];
             message.channel.send(`Cette commande est seulement disponible dans les channels ${channels[0] + ", " + channels[1]}.`)
                 .then(async (message) => logger.info(`Send message : ${message.content}`))
-                .catch(logger.error);
+                .catch(err => logger.error(err));
         }
     }
 };

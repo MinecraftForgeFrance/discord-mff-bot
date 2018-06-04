@@ -17,7 +17,7 @@ module.exports = {
         if (args.length === 0)
             message.channel.send(":x: Vous avez oublié d'indiqué votre pseudo.")
                 .then(async (message) => logger.info(`Send message : ${message.content}`))
-                .catch(logger.error);
+                .catch(err => logger.error(err));
 
         if (args.length !== 0 && (typeof(users.data[messageUser]) === "undefined" || (typeof(users.data[messageUser]) === "object" && users.data[messageUser].step === 0))) {
             for (let i = 0; i < args.length; i++)
@@ -29,7 +29,7 @@ module.exports = {
                 if (user.username === username) {
                     message.channel.send("Ce pseudo est déjà utilisé, veuillez contacter l'équipe de Minecraft Forge France s'il vous appartient.")
                         .then(async (message) => logger.info(`Send message : ${message.content}`))
-                        .catch(logger.error);
+                        .catch(err => logger.error(err));
                     return;
                 }
             }
@@ -46,7 +46,7 @@ module.exports = {
                 if (body.error === "User not found")
                     message.channel.send(":x: Votre pseudo n'existe pas ou n'est pas correct.")
                         .then(async (message) => logger.info(`Send message : ${message.content}`))
-                        .catch(logger.error);
+                        .catch(err => logger.error(err));
                 else {
                     // save user infos
                     users.data[messageUser] = {
@@ -65,7 +65,7 @@ module.exports = {
 
                     message.channel.send(":white_check_mark: Un code vient de vous être envoyé par mp, veuillez l'indiquer en réponse à ce message avec la commande \`!register \"code\"\`.")
                         .then(async (message) => logger.info(`Send message : ${message.content}`))
-                        .catch(logger.error);
+                        .catch(err => logger.error(err));
                 }
             });
         } else if (users.data[messageUser].step === 1 && users.data[messageUser].attempt !== 0) {
@@ -75,11 +75,11 @@ module.exports = {
                 if (users.data[messageUser].attempt === 0)
                     message.channel.send(":no_entry: **Code incorrect. Vous avez épuisé vos 3 essais.**\nVeuillez contacter l'équipe de Minecraft Forge France pour obtenir vos droits sur le Discord.")
                         .then(async (message) => logger.info(`Send message : ${message.content}`))
-                        .catch(logger.error);
+                        .catch(err => logger.error(err));
                 else
                     message.channel.send(`:x: **Code incorrect, veuillez réessayer. **Nombre d\'essai restant : **${users.data[messageUser].attempt}**`)
                         .then(async (message) => logger.info(`Send message : ${message.content}`))
-                        .catch(logger.error);
+                        .catch(err => logger.error(err));
                 jsonFile.writeFile("data/users.json", users, {spaces: 4}, err => {
                     if (err)
                         throw err;
@@ -88,7 +88,7 @@ module.exports = {
             } else {
                 message.channel.send(":white_check_mark: **Code valide. Bienvenue !**\nPrière de lire les règles du salon #regles sur le Discord.")
                     .then(async (message) => logger.info(`Send message : ${message.content}`))
-                    .catch(logger.error);
+                    .catch(err => logger.error(err));
                 users.data[messageUser].step = 2;
                 // save node
                 jsonFile.writeFile("data/users.json", users, {spaces: 4}, err => {
@@ -100,10 +100,10 @@ module.exports = {
                 for (const guild of client.guilds) {
                     let role = guild[1].roles.find(value => value.name === defaultConfig.roles.roleMember);
                     let channel = guild[1].channels.find(value => value.name === defaultConfig.channels.logs);
-                    guild[1].members.get(messageUser).addRole(role).then(() => logger.info(`${message.author.username} a le role ${defaultConfig.roles.roleMember}`)).catch(logger.error);
+                    guild[1].members.get(messageUser).addRole(role).then(() => logger.info(`${message.author.username} a le role ${defaultConfig.roles.roleMember}`)).catch(err => logger.error(err));
                     channel.send(`**${message.author.username}** a rejoint le Discord.`)
                         .then(async (message) => logger.info(`Send message : ${message.content}`))
-                        .catch(logger.error);
+                        .catch(err => logger.error(err));
                 }
             }
         }
