@@ -3,11 +3,9 @@ const jsonFile = require('jsonfile');
 const configFile = "config/config.json";
 const config = {
     protocol: "http",
-    hostname: "localhost",
+    hostname: "node.wolfdev.fr",
     port: "80",
-    path: "/mybb/discord2mff.php",
-    path2: "/mybb/showthread.php",
-    token: "***REMOVED***",
+    token: "***REMOVED***",//"***REMOVED***",//"***REMOVED***",
     channels: {
         logs: "logs-io",
         supportModding: "aide-modding",
