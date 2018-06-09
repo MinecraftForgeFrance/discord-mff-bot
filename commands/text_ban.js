@@ -12,7 +12,7 @@ module.exports = {
             message.channel.send("- La syntaxe est `!ban @member <1m|1h|1d|1M|1Y> [reason]` pour bannir temporairement.\n" +
                 "- La syntaxe est `!ban @member [reason]` pour bannir définitivemment.")
                 .then(async (message) => logger.info(`Send message : ${message.content}`))
-                .catch(err => logger.error(err));
+                .catch(console.error);
         }
         else {
             banList = jsonFile.readFileSync("data/ban.json");
@@ -25,19 +25,19 @@ module.exports = {
                 reason = message.content.split(/\s+/g).slice(3).join(" ");
                 member.send(`Vous avez été banni du Discord pour la raison suivante : ${reason} et jusqu'au ${time.format('dddd D MMMM YYYY à HH:mm')}`)
                     .then(async (message) => logger.info(`Send message : ${message.content}`))
-                    .catch(err => logger.error(err));
+                    .catch(console.error);
                 message.channel.send(`${member} a été banni jusqu'au ${time.format('dddd D MMMM YYYY à HH:mm')}.`)
                     .then(async (message) => logger.info(`Send message : ${message.content}`))
-                    .catch(err => logger.error(err));
+                    .catch(console.error);
             } else {
                 reason = message.content.split(/\s+/g).slice(2).join(" ");
                 time = 'def';
                 member.send(`Vous avez été banni définitivement du Discord pour la raison suivante : ${reason}`)
                     .then(async (message) => logger.info(`Send message : ${message.content}`))
-                    .catch(err => logger.error(err));
+                    .catch(console.error);
                 message.channel.send(`${member} a été banni définitivement.`)
                     .then(async (message) => logger.info(`Send message : ${message.content}`))
-                    .catch(err => logger.error(err));
+                    .catch(console.error);
             }
             banList.data.push({
                 dateNow: Date.now(),
@@ -53,7 +53,7 @@ module.exports = {
                 logger.info("This file has been saved");
             });
 
-            member.ban(reason).catch(err => logger.error(err));
+            member.ban(reason).catch(console.error);
         }
     },
     canRun: (client, messageUser, message) => message.member.hasPermission("ADMINISTRATOR")

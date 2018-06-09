@@ -25,7 +25,7 @@ module.exports = {
                 "- La syntaxe est `!ban @member [reason]` pour bannir définitivemment.");
         }
 
-        message.channel.send({embed}).catch(err => logger.error(err));
+        message.channel.send({embed}).catch(console.error);
     },
     canRun() {
         return true;
