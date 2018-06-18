@@ -49,7 +49,7 @@ module.exports = {
 
             jsonFile.writeFile("data/ban.json", banList, {spaces: 4}, err => {
                 if (err)
-                    throw err;
+                    console.error(err);
                 logger.info("This file has been saved");
             });
 
