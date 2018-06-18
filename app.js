@@ -16,32 +16,34 @@ client.on("ready", () => {
     logger.info("I'm ready !");
     // Launch periodic tasks
     schedule.scheduleJob('*/30 * * * * *', function () {
-        // read ban file
-        let banList = jsonFile.readFileSync("data/ban.json");
+        if (fs.existsSync("data/ban.json")) {
+            // read ban file
+            let banList = jsonFile.readFileSync("data/ban.json");
 
-        // get current date
-        let now = Date.now();
+            // get current date
+            let now = Date.now();
 
-        banList.data.forEach((ban) => {
-            if (ban.endBan <= now) {
-                for (const guild of client.guilds) {
-                    guild[1].unban(ban.member).catch(console.error);
+            banList.data.forEach((ban) => {
+                if (ban.endBan <= now) {
+                    for (const guild of client.guilds) {
+                        guild[1].unban(ban.member).catch(console.error);
+                    }
+                    // remove file entry
+                    let index = banList.data.indexOf(ban);
+                    if (index > -1) {
+                        banList.data.splice(index, 1);
+                    }
+                    logger.info(`L'utilisateur ${ban.member} a de nouveau accès au Discord`);
+
+                    // Save file
+                    jsonFile.writeFile("data/ban.json", banList, {spaces: 4}, err => {
+                        if (err)
+                            console.error(err);
+                        logger.info("This file has been saved");
+                    });
                 }
-                // remove file entry
-                let index = banList.data.indexOf(ban);
-                if (index > -1) {
-                    banList.data.splice(index, 1);
-                }
-                logger.info(`L'utilisateur ${ban.member} a de nouveau accès au Discord`);
-
-                // Save file
-                jsonFile.writeFile("data/ban.json", banList, {spaces: 4}, err => {
-                    if (err)
-                        throw err;
-                    logger.info("This file has been saved");
-                });
-            }
-        });
+            });
+        }
     });
 });
 
@@ -98,7 +100,7 @@ client.on("guildMemberRemove", member => {
             delete users.data[member.id];
             jsonFile.writeFile("data/users.json", users, {spaces: 4}, err => {
                 if (err)
-                    throw err;
+                    console.error(err);
                 logger.info("This file has been saved");
             });
             logger.info(`${member.displayName} a bien été supprimé.`);
@@ -114,7 +116,7 @@ client.on("guildMemberRemove", member => {
 function readShoutbox(message, messageUser) {
     if (message.channel.name === defaultConfig.channels.shoutbox) {
         let users = jsonFile.readFileSync("data/users.json");
-        if(typeof (users.data[messageUser]) !== "undefined") {
+        if (typeof (users.data[messageUser]) !== "undefined") {
             let roles = message.mentions.roles;
             let members = message.mentions.members;
             let messageParse = message.content;
@@ -135,7 +137,7 @@ function readShoutbox(message, messageUser) {
                     message: messageParse
                 }
             }, (err, res, body) => {
-                if (err) throw err;
+                if (err) console.error(err);
             });
         }
         else {

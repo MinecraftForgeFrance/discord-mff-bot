@@ -58,7 +58,7 @@ module.exports = {
                     // save node
                     jsonFile.writeFile("data/users.json", users, {spaces: 4}, err => {
                         if (err)
-                            throw err;
+                            console.error(err);
                         logger.info("This file has been saved");
                     });
                     logger.info(body.result);
@@ -82,7 +82,7 @@ module.exports = {
                         .catch(console.error);
                 jsonFile.writeFile("data/users.json", users, {spaces: 4}, err => {
                     if (err)
-                        throw err;
+                        console.error(err);
                     logger.info("This file has been saved");
                 });
             } else {
@@ -93,7 +93,7 @@ module.exports = {
                 // save node
                 jsonFile.writeFile("data/users.json", users, {spaces: 4}, err => {
                     if (err)
-                        throw err;
+                        console.error(err);
                     logger.info("This file has been saved");
                 });
 
