@@ -38,16 +38,10 @@ module.exports = {
                     let fieldContent = [];
                     for (let key of Object.keys(body)) {
                         let packageEvent = body[key].package;
-                        let descriptionEvent = body[key].description;
+                        let descriptionEvent = `${body[key].description.substring(0, 512 - 5)} (...)`;
                         let urlAnchorEvent = `${url}/forgeevents#${body[key].anchors}`;
-                        let field = `- **Package** : \`${packageEvent}\`\n${(descriptionEvent) ? `- **Description** : ${descriptionEvent}\n` : ""} [Pour plus d'info](${urlAnchorEvent})`;
                         fieldTitle.push(key);
-                        if (field.length <= 1024) {
-                            fieldContent.push(field);
-                        }
-                        else {
-                            fieldContent.push(`- **Package** : \`${packageEvent}\`\n[Pour plus d'info](${urlAnchorEvent})`);
-                        }
+                        fieldContent.push(`- **Package** : \`${packageEvent}\`\n${(descriptionEvent) ? `- **Description** : ${descriptionEvent}\n` : ""} [Pour plus d'info](${urlAnchorEvent})`);
                     }
                     let embedSize = embed.title.length;
                     for (let i = 0; i < fieldTitle.length; i++) {
