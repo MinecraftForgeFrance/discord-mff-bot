@@ -60,7 +60,7 @@ module.exports = {
                     }
 
                     if (prefixArray.length >= 25 || embedSize >= 6000) {
-                        message.reply("votre recherche renvoit trop de résultat, merci de l'affiner.")
+                        message.reply("votre recherche renvoie trop de résultat, merci de l'affiner.")
                             .then(async (message) => logger.info(`Send message : ${message.content}`))
                             .catch(console.error);
                     }

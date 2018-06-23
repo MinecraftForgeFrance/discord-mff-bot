@@ -18,7 +18,7 @@ module.exports = {
         embed.addField("modhelp", "Cette commande est uniquement disponible dans les channels " + `${channels[0] + ", " + channels[2]}.\n` +
             "- La syntaxe est `!modhelp [-v\<\mcversion\>] \<\sujet\>`.");
         embed.addField("events", "Cette commande est uniquement disponible dans les channels " + `${channels[0] + ", " + channels[2]}.\n` +
-            "- La syntaxe est `!events [-s\<\side\>] \<\sujet\>`.");
+            "- La syntaxe est `!events \<\eventName\>`.");
 
         if (message.member.hasPermission("ADMINISTRATOR")) {
             embed.addField("ban", "Cette commande permet de bannir temporairement ou définitivement.\n" +

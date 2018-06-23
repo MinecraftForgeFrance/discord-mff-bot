@@ -8,27 +8,20 @@ const defaultConfig = process.env.NODE_ENV === "production" ? config.readConfig(
 module.exports = {
     run(client, messageUser, message, args) {
         if (args.length === 0) {
-            message.channel.send("La syntaxe doit être `!events [-s\<\side\>] `")
+            message.channel.send("La syntaxe doit être `!events \<\eventName\>`")
                 .then(async (message) => logger.info(`Send message : ${message}`))
                 .catch(console.error);
         }
         else {
             let eventName = "";
-            let side = "";
-            let beginEventName = 0;
 
-            if (args[0].startsWith("-s")) {
-                side = args[0].substring(args[0].indexOf("-s") + 2);
-                beginEventName = 1;
-            }
-
-            for (let i = beginEventName; i < args.length; i++) {
+            for (let i = 0; i < args.length; i++) {
                 eventName += (i === (args.length - 1)) ? args[i] : args[i] + " ";
             }
 
             let url = `${defaultConfig.protocol}://${defaultConfig.hostname}:${defaultConfig.port}`;
             request({
-                uri: `${url}/discordapi/forgeevents?term=${eventName}${args[0].startsWith("-s") ? `&side=${side}` : ""}`,
+                uri: `${url}/discordapi/forgeevents?term=${eventName}`,
                 json: true
             }, (err, res, body) => {
                 console.log(body);
@@ -45,8 +38,17 @@ module.exports = {
                     let fieldTitle = [];
                     let fieldContent = [];
                     for (let key of Object.keys(body)) {
+                        let packageEvent = body[key].package;
+                        let descriptionEvent = body[key].description;
+                        let urlAnchorEvent = `${url}/forgeevents#${body[key].anchors}`;
+                        let field = `- **Package** : \`${packageEvent}\`\n${(descriptionEvent) ? `- **Description** : ${descriptionEvent}\n` : ""} [Pour plus d'info](${urlAnchorEvent})`;
                         fieldTitle.push(key);
-                        fieldContent.push(`- **Package** : ${body[key].package}\n${(body[key].description) ? `- **Description** : ${body[key].description}\n` : ""} [Pour plus d'info](${url}/forgeevents#${body[key].anchors})`);
+                        if (field.length <= 1024) {
+                            fieldContent.push(field);
+                        }
+                        else {
+                            fieldContent.push(`- **Package** : \`${packageEvent}\`\n[Pour plus d'info](${urlAnchorEvent})`);
+                        }
                     }
                     let embedSize = embed.title.length;
                     for (let i = 0; i < fieldTitle.length; i++) {
@@ -54,7 +56,7 @@ module.exports = {
                     }
 
                     if (fieldTitle.length > 25 || embedSize >= 6000) {
-                        message.reply("votre recherche renvoit trop de résultat, merci de l'affiner.")
+                        message.reply("votre recherche renvoie trop de résultat, merci de l'affiner.")
                             .then(async (message) => logger.info(`Send message : ${message.content}`))
                             .catch(console.error);
                     }
