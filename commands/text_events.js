@@ -24,7 +24,6 @@ module.exports = {
                 uri: `${url}/discordapi/forgeevents?term=${eventName}`,
                 json: true
             }, (err, res, body) => {
-                console.log(body);
                 if (body.message === "No result") {
                     message.channel.send("Il n'existe aucun event avec ce nom")
                         .then(async (message) => logger.info(`Send message : ${message.content}`))
