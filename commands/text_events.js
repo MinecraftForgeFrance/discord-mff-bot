@@ -38,7 +38,7 @@ module.exports = {
                     let fieldContent = [];
                     for (let key of Object.keys(body)) {
                         let packageEvent = body[key].package;
-                        let descriptionEvent = `${body[key].description.substring(0, 512 - 5)} (...)`;
+                        let descriptionEvent = (body[key].description.length >= 512 - 5) ? `${body[key].description.substring(0, 512 - 5)} (...)` : `${body[key].description}`;
                         let urlAnchorEvent = `${url}/forgeevents#${body[key].anchors}`;
                         fieldTitle.push(key);
                         fieldContent.push(`- **Package** : \`${packageEvent}\`\n${(descriptionEvent) ? `- **Description** : ${descriptionEvent}\n` : ""} [Pour plus d'info](${urlAnchorEvent})`);
