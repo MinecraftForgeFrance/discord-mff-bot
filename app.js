@@ -47,6 +47,15 @@ client.on("ready", () => {
     });
 });
 
+client.on("error", (error) => logger.error(error));
+
+client.on("warn", (warn) => logger.warn(warn));
+
+if(process.env.NODE_ENV === 'development')
+{
+    client.on("debug", (info) => logger.info(info))
+}
+
 client.on("message", message => {
     if (!message.author.bot) {
         let messageUser = message.author.id;
