@@ -132,7 +132,7 @@ module.exports = {
                         .catch(console.error);
                 saveUsersFile()
             } else {
-                message.channel.send(`:white_check_mark: **Code valide**. Répondez correctement à ${defaultConfig.javaQuestionsCount} questions pour finir votre enregistrement. Attention, vous n'avez pas le droit à l'ereur.`)
+                message.channel.send(`:white_check_mark: **Code valide**. Répondez correctement à ${defaultConfig.javaQuestionsCount} questions pour finir votre enregistrement. Attention, vous n'avez pas le droit à l'erreur.`)
                     .then(async (message) => logger.info(`Send message : ${message.content}`))
                     .catch(console.error);
                 users.data[messageUser].step = 2;
@@ -179,8 +179,8 @@ module.exports = {
                 } else {
                     const questionId = pickRandomJavaQuestion(users.data[messageUser].javaQuestionsInfo.answered)
                     const question = defaultConfig.javaQuestions[questionId];
-                    users.date[messageUser].javaQuestionsInfo.currentQuestionId = questionId;
-                    users.date[messageUser].javaQuestionsInfo.answer = question.answser;
+                    users.data[messageUser].javaQuestionsInfo.currentQuestionId = questionId;
+                    users.data[messageUser].javaQuestionsInfo.answer = question.answser;
 
                     sendJavaQuestion(question);
                 }
