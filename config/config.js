@@ -20,7 +20,29 @@ const config = {
     roles: {
         roleMember: "Membre",
         roleSupport: "Support"
-    }
+    },
+    javaQuestions: [
+        {
+            question: "La réponse à cette question est la réponse C",
+            choices: [
+                "La réponse A",
+                "La réponse B",
+                "La réponse C",
+                "La réponse D"
+            ],
+            answser: 0
+        },
+        {
+            question: "La réponse à cette question est la réponse A",
+            choices: [
+                "La réponse A",
+                "La réponse B",
+                "La réponse C"
+            ],
+            answer: 2
+        }
+    ],
+    javaQuestionsCount: 2
 };
 
 module.exports = {
@@ -36,6 +58,9 @@ module.exports = {
 
     },
     readConfig: () => {
-        return jsonFile.readFileSync(configFile);
+        let config = jsonFile.readFileSync(configFile);
+        if(config.javaQuestions.length < config.javaQuestionsCount)
+            config.javaQuestionsCount = config.javaQuestions.length
+        return config
     }
 };
