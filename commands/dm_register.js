@@ -165,6 +165,8 @@ module.exports = {
                 if(users.data[messageUser].javaQuestionsInfo.remainingQuestions === 0) {
                     // Can become a member
 
+                    users.data[messageUser].step = 3;
+
                     message.channel.send("**Bienvenue !** Prière de lire les règles du salon #regles sur le Discord.")
 
                     for (const guild of client.guilds) {
@@ -204,6 +206,6 @@ module.exports = {
         // Read file before process message
         users = jsonFile.readFileSync("data/users.json");
 
-        return !(typeof(users.data[messageUser]) === "object" && users.data[messageUser].step === 2);
+        return !(typeof(users.data[messageUser]) === "object" && users.data[messageUser].step === 3);
     }
 };
