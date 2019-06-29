@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "dist",
+        "sourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "lib": [
+            "es2018"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "discord.js": ["./node_modules/discord.js/typings"],
+            "mocha": ["./node_modules/@types/mocha"],
+            "node": ["./node_modules/@types/node"],
+            "winston": ["./node_modules/@types/winston"]
+        }
+    },
+    "include": [
+        "./src/**/*.ts",
+        "./test/**/*.ts"
+    ],
+    "exclude": [
+        "./node_modules"
+    ]
+}
