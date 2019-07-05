@@ -1,12 +1,12 @@
-import { IntArgument } from '../src/parser/ArgumentType';
-import { StringReader } from '../src/parser/StringReader';
-const expect = require('chai').expect;
+import { expect } from "chai";
+import { IntArgument } from "../src/parser/ArgumentType";
+import { StringReader } from "../src/parser/StringReader";
 
-describe('IntArgument', function() {
-    describe('#parse()', function() {
+describe("IntArgument", () => {
+    describe("#parse()", () => {
         const arg: IntArgument = new IntArgument();
 
-        it('Correctly parse positive integer', function() {
+        it("Correctly parse positive integer", () => {
             const reader: StringReader = new StringReader("12");
             const value: number | undefined = arg.parse(reader);
 
@@ -14,7 +14,7 @@ describe('IntArgument', function() {
             expect(reader.getCursor()).to.equal(2);
         });
 
-        it('Correctly parse negative integer', function() {
+        it("Correctly parse negative integer", () => {
             const reader: StringReader = new StringReader("-45");
             const value: number | undefined = arg.parse(reader);
 
@@ -22,7 +22,7 @@ describe('IntArgument', function() {
             expect(reader.getCursor()).to.equal(3);
         });
 
-        it("Don't parse floating number.", function() {
+        it("Don't parse floating number.", () => {
             const reader: StringReader = new StringReader("56.02");
             const value: number | undefined = arg.parse(reader);
 
@@ -30,8 +30,8 @@ describe('IntArgument', function() {
             expect(reader.getCursor()).to.equal(0);
         })
 
-        it("Stop parsing after first space.", function() {
-            const reader: StringReader = new StringReader('7485 hello world');
+        it("Stop parsing after first space.", () => {
+            const reader: StringReader = new StringReader("7485 hello world");
             const value: number | undefined = arg.parse(reader);
 
             expect(value).to.equal(7485);

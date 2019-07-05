@@ -64,6 +64,10 @@ class StringReader {
         this.cursor = Math.min(this.total_length, index);
     }
 
+    public getRemainingCharacters(): number {
+        return this.total_length - this.cursor;
+    }
+
 }
 
 export {

@@ -10,7 +10,14 @@ export class UsersManager {
     private usersCache: UsersCache = {};
     private usersHolders: UsersHolder = {};
 
-    constructor(private discAccess: DiscAccess) {}
+    constructor(private discAccess: DiscAccess) {
+        if(!this.discAccess.exists("data")) {
+            this.discAccess.mkdir("data");
+        }
+        if(!this.discAccess.exists("data/users")) {
+            this.discAccess.mkdir("data/users");
+        }
+    }
 
     public getUser(querySession: QuerySession, userId: string): UserInfo {
         let user: UserInfo | null = null;
@@ -50,12 +57,12 @@ export class UsersManager {
      * @returns the user info or null if info can't be read from file
      */
     getFromFile(userId: string): UserInfo | null {
-        if(this.discAccess.exists(`/data/users/${userId}.json`)) {
+        if(this.discAccess.exists(`data/users/${userId}.json`)) {
             try {
-                const jsonStr: string = this.discAccess.read(`/data/users/${userId}.json`);
+                const jsonStr: string = this.discAccess.read(`data/users/${userId}.json`);
                 return new UserInfo(jsonStr);
             } catch(err) {
-                // TODO log
+                console.log(err);
             }
         }
         return null;
@@ -107,8 +114,8 @@ export class UsersManager {
             if(this.usersHolders[id].entries.length === 0) {
                 const cachedValue: UserInfo = this.usersCache[id];
                 
-                fs.writeFileSync(`${__dirname}/data/users/${cachedValue.getDiscordId()}.json`, cachedValue);
-                
+                this.discAccess.write(`data/users/${cachedValue.getDiscordId()}.json`, JSON.stringify(cachedValue));
+
                 delete this.usersCache[id];
                 delete this.usersHolders[id];
 
@@ -156,11 +163,19 @@ interface UsersHolder {
 export class DiscAccess {
 
     public exists(path: string): boolean {
-        return fs.existsSync(`${__dirname}/${path}`);
+        return fs.existsSync(path);
     }
 
     public read(path: string): string {
-        return fs.readFileSync(`${__dirname}/${path}`, { encoding: 'utf8' });
+        return fs.readFileSync(path, { encoding: 'utf8' });
+    }
+
+    public mkdir(path: string): void {
+        fs.mkdirSync(path, { recursive: true });
+    }
+
+    public write(path: string, data: any): void {
+        fs.writeFileSync(path, data);
     }
 
 }

@@ -1,8 +1,10 @@
 export class UserInfo {
 
      private discordId: string = '';
-     private pseudo: string | null = null;
+     private forumId: string | null = null;
      private banned: boolean = false;
+     private registrationStep: number = 0;
+     private registrationToken: number | undefined;
 
      constructor(jsonStr: string) {
          const parsed: UserInfo = JSON.parse(jsonStr);
@@ -16,14 +18,19 @@ export class UserInfo {
         // this.banned
         if(parsed.banned)
             this.banned = true;
-        else
-            this.banned = false;
 
-        // this.pseudo
-        if(parsed.pseudo)
-            this.pseudo = parsed.pseudo;
+        // this.forumId
+        if(parsed.forumId)
+            this.forumId = parsed.forumId;
         else
-            this.pseudo = null;
+            this.forumId = null;
+
+        // this.registrationStep
+        if(parsed.registrationStep !== undefined)
+            this.registrationStep = parsed.registrationStep
+
+        // this.registrationToken
+        this.registrationToken = parsed.registrationToken;
      }
 
      /**
@@ -34,10 +41,25 @@ export class UserInfo {
      }
 
      /**
-      * @returns the pseudo of the user on the forum. Can be null if the user isn't registered
+      * @returns the id of the user on the forum. Can be null if the user isn't registered
       */
-     public getPseudo(): string | null {
-         return this.pseudo;
+     public getForumId(): string | null {
+         return this.forumId;
+     }
+
+     /**
+      * Sets the token the user will receive on the forum
+      */
+     public setRegistrationToken(token: number): void {
+        this.registrationToken = token;
+     }
+
+     public getRegistrationToken(): number | undefined {
+         return this.registrationToken;
+     }
+
+     public setRegistrationStep(step: number): void {
+         this.registrationStep = step;
      }
 
      public isBanned(): boolean {
@@ -50,8 +72,12 @@ export class UserInfo {
          this.banned = banned;
      }
 
-     public setPseudo(pseudo: string): void {
-         this.pseudo = pseudo;
+     public setForumId(forumId: string): void {
+         this.forumId = forumId;
+     }
+
+     public getRegistrationStep(): number {
+         return this.registrationStep;
      }
 
 }

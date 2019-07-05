@@ -1,39 +1,39 @@
+import { expect } from "chai";
 import { UserInfo } from "../src/user/UserInfo";
-const expect = require('chai').expect;
 
-describe('UserInfo', function() {
+describe("UserInfo", () => {
 
-    describe('Deserialization', function() {
+    describe("Deserialization", () => {
 
-        it('Retrieve information from json', function() {
+        it("Retrieve information from json", () => {
             const jsonStr = `
                 {
                     "discordId": "266241948824764416",
                     "banned": true,
-                    "pseudo": null
+                    "forumId": null
                 }
             `;
             const info: UserInfo = new UserInfo(jsonStr);
-            expect(info.getDiscordId()).to.equal('266241948824764416');
+            expect(info.getDiscordId()).to.equal("266241948824764416");
             expect(info.isBanned()).to.be.true;
-            expect(info.getPseudo()).to.be.null;
+            expect(info.getForumId()).to.be.null;
         });
 
-        it('Allows missing field in json', function() {
+        it("Allows missing field in json", () => {
             const jsonStr = `
                 {
                     "discordId": "266241948824764416",
-                    "pseudo": "Jhon"
+                    "forumId": "124"
                 }
             `;
             const info: UserInfo = new UserInfo(jsonStr);
-            expect(info.getDiscordId()).to.equal('266241948824764416');
+            expect(info.getDiscordId()).to.equal("266241948824764416");
             expect(info.isBanned()).to.be.false;
-            expect(info.getPseudo()).to.equal("Jhon");
+            expect(info.getForumId()).to.equal("124");
         });
 
-        it("Must throw an error if 'discordId' field is missing", function() {
-             expect(() => new UserInfo('{}')).to.throw("Field 'discordId' must be specified.");
+        it("Must throw an error if 'discordId' field is missing", () => {
+             expect(() => new UserInfo("{}")).to.throw("Field 'discordId' must be specified.");
         });
 
     });
