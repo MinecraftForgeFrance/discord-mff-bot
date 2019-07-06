@@ -6,8 +6,7 @@ interface ArgumentType<T> {
 
 }
 
-class IntArgument implements ArgumentType<number>
-{
+class IntArgument implements ArgumentType<number> {
 
     public parse(reader: StringReader): number | undefined {
         let start = reader.getCursor();
@@ -32,10 +31,9 @@ class IntArgument implements ArgumentType<number>
     
 }
 
-class WordArgument implements ArgumentType<string>
-{
+class WordArgument implements ArgumentType<string> {
 
-    constructor(private predicate: WordChecker = (word) => true) {}
+    constructor(private predicate: WordChecker = (word) => word.length > 0) {}
     
     public parse(parser: StringReader): string | undefined {
         let start = parser.getCursor();
@@ -58,6 +56,32 @@ class WordArgument implements ArgumentType<string>
     
 }
 
+class AllRemainingArgument implements ArgumentType<string> {
+    
+    constructor(private predicate: WordChecker = (sentence: string) => sentence.length > 0) {}
+    
+    parse(reader: StringReader): string | undefined {
+        const start: number = reader.getCursor();
+        const length: number = reader.getRemainingCharacters();
+        const sentence: string = reader.read(length);
+        if(this.predicate(sentence))  {
+            return sentence;
+        } else {
+            reader.setCursor(start);
+            return undefined;
+        }
+    }
+
+}
+
+class VersionArgument extends WordArgument {
+
+    constructor() {
+        super((word: string) => word.match(/^\d+(?:\.\d+)*(?:\.x)?$/) !== null);
+    }
+
+}
+
 interface WordChecker {
     (word: string): boolean;
 }
@@ -66,5 +90,7 @@ export {
     IntArgument,
     WordArgument,
     WordChecker,
-    ArgumentType
+    ArgumentType,
+    AllRemainingArgument,
+    VersionArgument
 }

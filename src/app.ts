@@ -14,6 +14,9 @@ import { CommandsDispatcher } from "./commands/CommandsDispatcher";
 import { CommandContext } from "./commands/CommandContext";
 import { ResetCommand } from "./commands/ResetCommand";
 import { HelpCommand } from "./commands/HelpCommand";
+import { EventsCommand } from "./commands/EventsCommand";
+import { TutorialCommand } from "./commands/TutorialCommand";
+import { ModHelpCommand } from "./commands/ModHelpCommand";
 
 const logger: Logger = createLogger(options);
 if(process.argv.indexOf("--debug") !== -1) {
@@ -86,6 +89,9 @@ function registerAllCommands() {
     commandsDispatcher.registerCommand(new RegisterCommand());
     commandsDispatcher.registerCommand(new StopCommand());
     commandsDispatcher.registerCommand(new ResetCommand());
+    commandsDispatcher.registerCommand(new EventsCommand());
+    commandsDispatcher.registerCommand(new TutorialCommand());
+    commandsDispatcher.registerCommand(new ModHelpCommand());
 }
 
 client.login(conf.get("application.token")).catch((err) => {

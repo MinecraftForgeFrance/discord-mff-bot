@@ -1,0 +1,38 @@
+import { expect } from "chai";
+import { VersionArgument } from "../src/parser/ArgumentType";
+import { StringReader } from "../src/parser/StringReader";
+
+describe("VersionArgument", () => {
+
+    describe("#parse()", () => {
+    
+        it("Stops after after parsing version", () => {
+            const reader: StringReader = new StringReader("1.12.2 I'm Jack");
+            const arg: VersionArgument = new VersionArgument();
+            const value: string | undefined = arg.parse(reader);
+
+            expect(value).to.equal("1.12.2");
+            expect(reader.getCursor()).to.equal(7);
+        });
+
+        it("Fails if the string deosn't match version format", () => {
+            const reader: StringReader = new StringReader("Hello 1.4");
+            const arg: VersionArgument = new VersionArgument();
+            const value: string | undefined = arg.parse(reader);
+
+            expect(reader.getCursor()).to.equal(0);
+            expect(value).to.be.undefined;
+        });
+
+        it("Accepts 'x' wilcard at the end of the version", () => {
+            const reader: StringReader = new StringReader("1.4.x George");
+            const arg: VersionArgument = new VersionArgument();
+            const value: string | undefined = arg.parse(reader);
+
+            expect(value).to.equal("1.4.x");
+            expect(reader.getCursor()).to.equal(6);
+        });
+        
+    });
+
+});

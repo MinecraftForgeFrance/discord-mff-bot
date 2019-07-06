@@ -41,7 +41,6 @@ export class CommandContext {
      */
     public answerPrivate(message: string): void {
         this.message.author.send(message)
-            .then((message: Message) => {})
             .catch(err => this.logger.error(`Got error while sending private text message : ${err}`));
     }
 
@@ -52,7 +51,6 @@ export class CommandContext {
      */
     public answerPrivateEmbed(embed: RichEmbed | RichEmbedOptions): void {
         this.message.author.send({embed})
-                            .then((message: Message) => {})
                             .catch(err => this.logger.error(`Got error while sending private embed message : ${err}`));
     }
 
@@ -63,7 +61,6 @@ export class CommandContext {
      */
     public answer(message: string): void {
         this.message.channel.send(message)
-            .then((message: Message) => {})
             .catch(err => this.logger.error(`Got error while sending text message : ${err}`));
     }
 
@@ -74,7 +71,6 @@ export class CommandContext {
      */
     public answerEmbed(embed: RichEmbed | RichEmbedOptions): void {
         this.message.channel.send({embed})
-                            .then((message: Message) => {})
                             .catch(err => this.logger.error(`Got error while sending embed message : ${err}`));
     }
 

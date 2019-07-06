@@ -33,7 +33,10 @@ export class FetchPseudoStep extends RegistrationStep {
         }, (err, res, body) => {
             if(body) {
                 if(body.error === "User not found") {
-                    ctx.answer("Le pseudo que vous avez indiqué n'existe pas, essayez encore.");
+                    ctx.answerEmbed({
+                        description: "Le pseudo que vous avez indiqué n'existe pas, essayez encore.",
+                        color: 0xFF0000
+                    });
                 } else {
                     const token: number = body.result;
                     const userId: string = body.userId;
@@ -45,12 +48,14 @@ export class FetchPseudoStep extends RegistrationStep {
                     });
                     nextStep();
                 }
+                resolve();
             } else if(err) {
                 ctx.getLogger().error(`Error when requesting user id and auth token. Response code: ${res.statusCode}`);
-                ctx.getLogger().error(err);
-                ctx.answer("Une erreur est survenue en interrogeant le forum. Veillez réessayer plus tard.");
+                if(err) {
+                    ctx.getLogger().error(err);
+                }
+                reject();
             }
-            resolve();
         });
     }    
     
