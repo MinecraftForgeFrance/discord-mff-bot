@@ -51,6 +51,19 @@ List of configuration fields :
     * Description : The token required for the bot to connect to your application
     * Accepted values : any string
     * No default value
+* `javaQuestions`
+    * Description : The pool of questions for java level validation
+    * Accepted values : array of java question object
+    * No default value
+    * Must have at least 5 items
+* `javaQuestions`.item
+    * Description : A question that can be picked up for java level validation
+    * Attributes
+        * `title` (string) : the question
+        * `choices` (array&lt;string&gt;) : the differents possibilities to answer to the question. Must contains at least 2 items.
+        * `answer` (integer) : the good answer
+
+The JSON-Schema can be found [here](src/config/config.ts).
 
 ## Contribute
 
