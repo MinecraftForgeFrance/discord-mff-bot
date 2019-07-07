@@ -1,5 +1,5 @@
 import Conf = require("conf");
-import { Client, TextChannel, Message, Guild, GuildChannel } from "discord.js";
+import { Client, TextChannel, Message } from "discord.js";
 import { createLogger, Logger } from "winston";
 import { PingCommand } from "./commands/PingCommand";
 import { schema } from "./config/config";
@@ -17,6 +17,7 @@ import { HelpCommand } from "./commands/HelpCommand";
 import { EventsCommand } from "./commands/EventsCommand";
 import { TutorialCommand } from "./commands/TutorialCommand";
 import { ModHelpCommand } from "./commands/ModHelpCommand";
+import { memberLeave, INFO_COLOR } from "./util/util";
 
 const logger: Logger = createLogger(options);
 if(process.argv.indexOf("--debug") !== -1) {
@@ -73,7 +74,7 @@ client.on("guildMemberAdd", (member) => {
             embed: {
                 description: `Bonjour ${member.displayName} sur le serveur Discord de Minecraft Forge France. 
                 Veuillez vous enregistrer pour acquérir des droits sur le serveur. Tapez \`${commandsPrefix}register\` pour en savoir plus.`,
-                color: 0x66FF
+                color: INFO_COLOR
             }
         })
         .then((message: Message) => logger.debug(`Sent welcome embed to ${member.user.username}@${member.user.id}`))
@@ -83,14 +84,7 @@ client.on("guildMemberAdd", (member) => {
 
 client.on("guildMemberRemove", (member) => {
     if(!member.user.bot) {
-        const guild: Guild = client.guilds.first();
-        const logsChannels: GuildChannel = guild.channels.find("name", conf.get("channels.logs"));
-        (logsChannels as TextChannel).send({
-            embed: {
-                description: `${member.displayName} a quitté le serveur`,
-                color: 0xFF0000
-            }
-        });
+        memberLeave(client, conf, member.user, logger);
     }
 });
 

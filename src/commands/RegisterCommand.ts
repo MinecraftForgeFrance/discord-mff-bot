@@ -3,7 +3,8 @@ import { UserInfo } from "../user/UserInfo";
 import { RegistrationStep, FetchPseudoStep, ValidateTokenStep, JavaLevelStep } from "../registriation/RegistrationStep";
 import { PermissionBuilder } from "./permission/PermissionBuilder";
 import { CommandContext } from "./CommandContext";
-import { Guild, Role, GuildChannel, TextChannel } from "discord.js";
+import { Guild, Role } from "discord.js";
+import { memberJoin, INFO_COLOR } from "../util/util"
 
 export class RegisterCommand extends Command {
 
@@ -52,15 +53,7 @@ export class RegisterCommand extends Command {
                 guild.member(ctx.getMessage().author).addRole(role, "Enregistrement terminé")
                         .then((member) => ctx.getLogger().info(`${member.user.username}@${member.id} became member after registration`))
                         .catch((reason) => ctx.getLogger().error(`Unable to promote ${ctx.getMessage().author.username}@${ctx.getMessage().author.id} to member. Cause : ${reason}`));
-                const logsChannel: GuildChannel = guild.channels.find("name", ctx.getConfig().get("channels.logs"));
-                (logsChannel as TextChannel).send({
-                    embed: {
-                        description: `${ctx.getMessage().author.username} a rejoint le serveur`,
-                        color: 0xFF00
-                    }
-                })
-                .then((message) => {})
-                .catch((err) => ctx.getLogger().error(`Can't send message to logs channel : ${err}`));
+                memberJoin(ctx.getDiscordClient(), ctx.getConfig(), ctx.getMessage().author, ctx.getLogger());
             } else {
                 this.steps[nextStepId].enterStep(sender, ctx);
             }
@@ -73,12 +66,12 @@ export class RegisterCommand extends Command {
                 ctx.answerEmbed({
                     description: `Vous êtes à l'étape ${sender.getRegistrationStep() + 1}/${this.steps.length} de votre enregistrement.
                     Vous devez taper : \`${ctx.getConfig().get("commandPrefix")}${this.getName()} ${nextStepUsage}\``,
-                    color: 0x66FF
+                    color: INFO_COLOR
                 });
             } else {
                 ctx.answerEmbed({
                     description: "Vous avez terminé votre enregistrement.",
-                    color: 0x66FF
+                    color: INFO_COLOR
                 });
             }
         }

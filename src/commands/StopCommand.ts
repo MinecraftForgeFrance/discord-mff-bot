@@ -2,6 +2,7 @@ import { Command } from "./Command";
 import { UserInfo } from "../user/UserInfo";
 import { PermissionBuilder } from "./permission/PermissionBuilder";
 import { CommandContext } from "./CommandContext";
+import { SUCCESS_COLOR } from "../util/util";
 
 export class StopCommand extends Command {
 
@@ -24,7 +25,7 @@ export class StopCommand extends Command {
     public perform(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void): void {
         ctx.answerEmbed({
             description: ":crescent_moon: Bye bye ...",
-            color: 0xFF00,
+            color: SUCCESS_COLOR,
         });
         ctx.getDiscordClient().destroy().then(() => {
             ctx.getLogger().info("Discord bot stopped successfully.");

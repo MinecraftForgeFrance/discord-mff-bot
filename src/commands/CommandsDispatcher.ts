@@ -5,6 +5,7 @@ import { Command } from "./Command";
 import { Message } from "discord.js";
 import { UserInfo } from "../user/UserInfo";
 import { CommandContext } from "./CommandContext";
+import { ERROR_COLOR } from "../util/util";
 
 export class CommandsDispatcher {
 
@@ -71,13 +72,13 @@ export class CommandsDispatcher {
                                 description: `${err.message}
                                               Usage : \`${ctx.getConfig().get('commandPrefix')}${commandName} ${command.getUsage(sender, ctx)}\`
                                 `,
-                                color: 0xFF0000
+                                color: ERROR_COLOR
                             });
                         } else {
                             ctx.getLogger().error(`Error while performing command ${command.getName().toLowerCase()} : ${err}`);
                             ctx.answerEmbed({
                                 description: "Une erreur est survenue pendant l'exécution de la commande. Contactez un administrateur.",
-                                color: 0xFF0000
+                                color: ERROR_COLOR
                             });
                         }
                         this.usersManager.endSession(querySession);
@@ -90,7 +91,7 @@ export class CommandsDispatcher {
                     }
                     ctx.answerPrivateEmbed({
                         description: "Vous n'avez pas la permission d'utiliser cette commande.",
-                        color: 0xFF0000
+                        color: ERROR_COLOR
                     });
                     this.usersManager.endSession(querySession);
                 }

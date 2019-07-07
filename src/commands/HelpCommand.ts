@@ -3,6 +3,7 @@ import { Command } from "./Command";
 import { UserInfo } from "../user/UserInfo";
 import { CommandContext } from "./CommandContext";
 import { RichEmbed } from "discord.js";
+import { INFO_COLOR } from "../util/util"
 
 export class HelpCommand extends Command {
 
@@ -26,7 +27,7 @@ export class HelpCommand extends Command {
         const embed: RichEmbed = new RichEmbed();
         embed.setTitle("Liste des commandes");
         embed.setAuthor(ctx.getMessage().author.username, ctx.getMessage().author.avatarURL);
-        embed.setColor(0x66FF);
+        embed.setColor(INFO_COLOR);
         
         Object.values(this.dispatcher.getCommands()).forEach(command => {
             // Max : 25 fields (https://discord.js.org/#/docs/main/stable/class/RichEmbed?scrollTo=addField)

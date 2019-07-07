@@ -3,6 +3,7 @@ import { UserInfo } from "../user/UserInfo";
 import { CommandContext } from "./CommandContext";
 import { PermissionBuilder } from "./permission/PermissionBuilder";
 import { Guild, Role } from "discord.js";
+import { memberLeave } from "../util/util";
 
 export class ResetCommand extends Command {
 
@@ -32,6 +33,7 @@ export class ResetCommand extends Command {
             description: "Votre compte a bien été remis à zéro.",
             color: 0xFF00
         });
+        memberLeave(ctx.getDiscordClient(), ctx.getConfig(), ctx.getMessage().author, ctx.getLogger());
         resolve();
     }
 

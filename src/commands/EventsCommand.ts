@@ -3,7 +3,7 @@ import { CommandContext } from "./CommandContext";
 import { UserInfo } from "../user/UserInfo";
 import { AllRemainingArgument } from "../parser/ArgumentType";
 import { RichEmbed } from "discord.js";
-import { requestForum } from "../util/util";
+import { requestForum, ERROR_COLOR, SUCCESS_COLOR } from "../util/util";
 
 export class EventsCommand extends Command {
 
@@ -34,18 +34,18 @@ export class EventsCommand extends Command {
                 if(body.message === "No result") {
                     ctx.answerEmbed({
                         description: "Aucun événement ne correspond à cette recherche",
-                        color: 0xFF0000
+                        color: ERROR_COLOR
                     });
                     resolve();
                 } else {
                     if(Object.keys(body).length > 25) {
                         ctx.answerEmbed({
                             description: "Votre recherche renvoie trop de résultats",
-                            color: 0xFF0000
+                            color: ERROR_COLOR
                         });
                     } else {
                         const embed: RichEmbed = new RichEmbed();
-                        embed.setColor(0xFF00);
+                        embed.setColor(SUCCESS_COLOR);
                         embed.setTitle("Liste des événements correspondants à votre recherche");
                         embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");
                         for(let key of Object.keys(body)) {

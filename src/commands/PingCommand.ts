@@ -2,6 +2,7 @@ import { UserInfo } from "../user/UserInfo";
 import { Command } from "./Command";
 import { PermissionBuilder } from "./permission/PermissionBuilder";
 import { CommandContext } from "./CommandContext";
+import { INFO_COLOR } from "../util/util";
 
 export class PingCommand extends Command {
 
@@ -23,7 +24,7 @@ export class PingCommand extends Command {
 
     public perform(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void): void {
         ctx.answerEmbed({
-            color: 0xB9121B,
+            color: INFO_COLOR,
             description: `:ping_pong: Pong: \`${Date.now() - ctx.getMessage().createdTimestamp} ms\``,
         });
         resolve();
