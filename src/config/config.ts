@@ -29,14 +29,11 @@ export const schema: {[key: string]: JSONSchema} = {
             logs: {
                 type: "string"
             },
-            moddingSupport: {
-                type: "string"
-            },
             shoutbox: {
                 type: "string"
             }
         },
-        required: ["logs", "moddingSupport", "shoutbox"],
+        required: ["logs", "shoutbox"],
         default: {}
     },
     roles: {

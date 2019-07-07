@@ -27,10 +27,6 @@ List of configuration fields :
     * Description : The name of log channel
     * Accepted values : any string
     * No default value
-* `channels.moddingSupport`
-    * Description : The name of modding support channel
-    * Accepted values : any string
-    * No default value
 * `channels.shoutbox`
     * Description : The name of the shoutbox channel
     * Accepted values : any string
@@ -41,6 +37,10 @@ List of configuration fields :
     * No default value
 * `roles.support`
     * Description : The name of support role
+    * Accepted values : any string
+    * No default value
+* `roles.javaDancer`
+    * Description : Then name of java dancer role
     * Accepted values : any string
     * No default value
 * `commandPrefix`

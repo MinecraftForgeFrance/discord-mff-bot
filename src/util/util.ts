@@ -6,8 +6,8 @@ import { CommandContext } from "src/commands/CommandContext";
 
 export function memberJoin(client: Client, config: Conf<any>, user: User, logger: Logger): void {
     const guild: Guild = client.guilds.first();
-    const channel: GuildChannel = guild.channels.find("name", config.get("channels.log"));
-    (channel as TextChannel).sendEmbed({
+    const channel: GuildChannel = guild.channels.find("name", config.get("channels.logs"));
+    (channel as TextChannel).send({
         description: `${user.username} a rejoint le serveur`,
         color: SUCCESS_COLOR
     }).catch(logger.error);
@@ -15,8 +15,8 @@ export function memberJoin(client: Client, config: Conf<any>, user: User, logger
 
 export function memberLeave(client: Client, config: Conf<any>, user: User, logger: Logger): void {
     const guild: Guild = client.guilds.first();
-    const channel: GuildChannel = guild.channels.find("name", config.get("channels.log"));
-    (channel as TextChannel).sendEmbed({
+    const channel: GuildChannel = guild.channels.find("name", config.get("channels.logs"));
+    (channel as TextChannel).send({
         description: `${user.username} a quitté le serveur`,
         color: ERROR_COLOR
     }).catch(logger.error);
