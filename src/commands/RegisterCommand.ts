@@ -1,6 +1,6 @@
 import { Command } from "./Command";
 import { UserInfo } from "../user/UserInfo";
-import { RegistrationStep, FetchPseudoStep, ValidateTokenStep } from "../registriation/RegistrationStep";
+import { RegistrationStep, FetchPseudoStep, ValidateTokenStep, JavaLevelStep } from "../registriation/RegistrationStep";
 import { PermissionBuilder } from "./permission/PermissionBuilder";
 import { CommandContext } from "./CommandContext";
 import { Guild, Role, GuildChannel, TextChannel } from "discord.js";
@@ -16,6 +16,7 @@ export class RegisterCommand extends Command {
         this.steps.push(
             new FetchPseudoStep(),
             new ValidateTokenStep(),
+            new JavaLevelStep(),
         );
     }
     
@@ -44,6 +45,7 @@ export class RegisterCommand extends Command {
         const nextStep: () => void = () => {
             sender.setRegistrationStep(nextStepId);
             sendCurrentStep();
+
             if(sender.getRegistrationStep() === this.steps.length) {
                 const guild: Guild = ctx.getDiscordClient().guilds.first();
                 const role: Role = guild.roles.find("name", ctx.getConfig().get("roles.member"));
@@ -59,6 +61,8 @@ export class RegisterCommand extends Command {
                 })
                 .then((message) => {})
                 .catch((err) => ctx.getLogger().error(`Can't send message to logs channel : ${err}`));
+            } else {
+                this.steps[nextStepId].enterStep(sender, ctx);
             }
         };
 

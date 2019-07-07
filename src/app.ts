@@ -1,5 +1,5 @@
 import Conf = require("conf");
-import { Client, TextChannel, Message } from "discord.js";
+import { Client, TextChannel, Message, Guild, GuildChannel } from "discord.js";
 import { createLogger, Logger } from "winston";
 import { PingCommand } from "./commands/PingCommand";
 import { schema } from "./config/config";
@@ -79,7 +79,20 @@ client.on("guildMemberAdd", (member) => {
         .then((message: Message) => logger.debug(`Sent welcome embed to ${member.user.username}@${member.user.id}`))
         .catch((err) => logger.error(`Error while sending welcome embed to ${member.user.username}@${member.user.id} : ${err}`));
     }
-})
+});
+
+client.on("guildMemberRemove", (member) => {
+    if(!member.user.bot) {
+        const guild: Guild = client.guilds.first();
+        const logsChannels: GuildChannel = guild.channels.find("name", conf.get("channels.logs"));
+        (logsChannels as TextChannel).send({
+            embed: {
+                description: `${member.displayName} a quitté le serveur`,
+                color: 0xFF0000
+            }
+        });
+    }
+});
 
 client.on("debug", (info: string) => logger.debug(info));
 

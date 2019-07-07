@@ -114,7 +114,7 @@ export class UsersManager {
             if(this.usersHolders[id].entries.length === 0) {
                 const cachedValue: UserInfo = this.usersCache[id];
                 
-                this.discAccess.write(`data/users/${cachedValue.getDiscordId()}.json`, JSON.stringify(cachedValue));
+                this.discAccess.write(`data/users/${cachedValue.getDiscordId()}.json`, JSON.stringify(cachedValue, null, "\t"));
 
                 delete this.usersCache[id];
                 delete this.usersHolders[id];

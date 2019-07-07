@@ -47,9 +47,12 @@ export const schema: {[key: string]: JSONSchema} = {
             },
             support: {
                 type: "string"
+            },
+            javaDancer: {
+                type: "string"
             }
         },
-        required: ["member", "support"],
+        required: ["member", "support", "javaDancer"],
         default: {}
     },
     commandPrefix: {
@@ -65,5 +68,32 @@ export const schema: {[key: string]: JSONSchema} = {
         },
         required: ['token'],
         default: {}
+    },
+    javaQuestions: {
+        type: "array",
+        items: {
+            type: "object",
+            properties: {
+                title: {
+                    type: "string"
+                },
+                choices: {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    default: [],
+                    uniqueItems: true,
+                    minItems: 2
+                },
+                answer: {
+                    type: "integer"
+                }
+            },
+            required: ["title", "choices", "answer"]
+        },
+        default: [],
+        uniqueItems: true,
+        minItems: 5
     }
 };
