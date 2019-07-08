@@ -31,18 +31,20 @@ export class PermissionBuilder {
         return this;
     }
 
-    public channelNameIs(name: string): PermissionBuilder {
+    public channelNameIs(name: string, fromConfig: boolean = false): PermissionBuilder {
         const check = this.checker;
         this.checker = (sender, ctx) => {
-            return check(sender, ctx) && ctx.getMessage().channel.type === 'text' && (ctx.getMessage().channel as TextChannel).name === name;
+            const channelName: string = fromConfig ? name : ctx.getConfig().get(`roles.${name}`);
+            return check(sender, ctx) && ctx.getMessage().channel.type === 'text' && (ctx.getMessage().channel as TextChannel).name === channelName;
         };
         return this;
     }
 
-    public hasRole(role: string): PermissionBuilder {
+    public hasRole(role: string, fromConfig: boolean = false): PermissionBuilder {
         const check = this.checker;
         this.checker = (sender, ctx) => {
-            return check(sender, ctx) && ctx.getMessage().member && ctx.getMessage().member.roles.has(role);
+            const roleName: string = fromConfig ? role : ctx.getConfig().get(`channels.${role}`);
+            return check(sender, ctx) && ctx.getMessage().member && ctx.getMessage().member.roles.has(roleName);
         };
         return this;
     }
