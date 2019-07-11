@@ -3,6 +3,7 @@ export class UserInfo {
      private discordId: string = '';
      private forumId: string | null = null;
      private banned: boolean = false;
+     private bannedUntil: number = 0;
      private registrationStep: number = 0;
      private registrationToken: number | undefined;
      private counter: number = 0;
@@ -38,6 +39,10 @@ export class UserInfo {
         // this.javaQuestions
         if(parsed.javaQuestions)
             this.javaQuestions = parsed.javaQuestions;
+
+        // this.bannedUntil
+        if(parsed.bannedUntil !== undefined)
+            this.bannedUntil = parsed.bannedUntil;
 
         // this.registrationToken
         this.registrationToken = parsed.registrationToken;
@@ -100,6 +105,14 @@ export class UserInfo {
 
      public setBanned(banned: boolean): void {
          this.banned = banned;
+     }
+
+     public isBannedUntil(): number {
+         return this.bannedUntil;
+     }
+
+     public setBannedUntil(timestamp: number) {
+         this.bannedUntil = timestamp;
      }
 
      public setForumId(forumId: string): void {

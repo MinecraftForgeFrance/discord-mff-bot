@@ -58,7 +58,7 @@ export class CommandsDispatcher {
                 if(command.checkPermission(sender, ctx)) {
                     new Promise((resolve, reject) => {
                         try {
-                            command.perform(sender, ctx, resolve, reject);
+                            command.perform(sender, ctx, querySession, resolve, reject);
                         } catch(err) {
                             reject(err);
                         }

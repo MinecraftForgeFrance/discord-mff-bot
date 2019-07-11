@@ -3,6 +3,7 @@ import { UserInfo } from "../user/UserInfo";
 import { PermissionBuilder } from "./permission/PermissionBuilder";
 import { CommandContext } from "./CommandContext";
 import { SUCCESS_COLOR } from "../util/util";
+import { QuerySession } from "../user/UsersManager";
 
 export class StopCommand extends Command {
 
@@ -22,7 +23,7 @@ export class StopCommand extends Command {
         return "";
     }
     
-    public perform(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void): void {
+    public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
         ctx.answerEmbed({
             description: ":crescent_moon: Bye bye ...",
             color: SUCCESS_COLOR,

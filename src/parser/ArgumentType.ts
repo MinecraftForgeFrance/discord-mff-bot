@@ -1,4 +1,5 @@
 import { StringReader } from "./StringReader";
+import moment = require("moment");
 
 interface ArgumentType<T> {
 
@@ -82,6 +83,52 @@ class VersionArgument extends WordArgument {
 
 }
 
+class DurationArgument implements ArgumentType<moment.Duration> {
+
+    static DURATION_REGEX: RegExp = /^(?:(?:(?<year>\d+)y)?(?:(?<month>\d+)M)?(?:(?<day>\d+)d)?(?:(?<hour>\d+)h)?(?:(?<minute>\d+)m)?(?:(?<second>\d+)s)?)|(?:(?<timestamp>\d+)t)$/;
+
+    private wordParser: WordArgument = new WordArgument((word: string) => {
+        const result = DurationArgument.DURATION_REGEX.exec(word);
+        return result !== null && result.groups !== undefined && Object.values(result.groups).map(s => s !== undefined).reduce((prev, next) => prev || next);
+    });
+
+    parse(reader: StringReader): moment.Duration | undefined {
+        const result: string | undefined = this.wordParser.parse(reader);
+        if(result) {
+            const match: RegExpExecArray | null = DurationArgument.DURATION_REGEX.exec(result);
+            if(match && match.groups) {
+                const groups: { [key: string]: string } = match.groups;
+                let duration: moment.Duration = moment.duration(0, "ms");
+                if(groups.timestamp) {
+                    duration = duration.add(Number(groups.timestamp), "ms");
+                } else {
+                    if(groups.year) {
+                        duration.add(Number(groups.year), "year");
+                    }
+                    if(groups.month) {
+                        duration.add(Number(groups.month), "month");
+                    }
+                    if(groups.day) {
+                        duration.add(Number(groups.day), "day");
+                    }
+                    if(groups.hour) {
+                        duration.add(Number(groups.hour), "hour");
+                    }
+                    if(groups.minute) {
+                        duration.add(Number(groups.minute), "minute");
+                    }
+                    if(groups.second) {
+                        duration.add(Number(groups.second), "second");
+                    }
+                }
+                return duration;
+            }
+        }
+        return undefined;
+    }
+
+}
+
 interface WordChecker {
     (word: string): boolean;
 }
@@ -92,5 +139,6 @@ export {
     WordChecker,
     ArgumentType,
     AllRemainingArgument,
-    VersionArgument
+    VersionArgument,
+    DurationArgument
 }

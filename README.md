@@ -62,6 +62,10 @@ List of configuration fields :
         * `title` (string) : the question
         * `choices` (array&lt;string&gt;) : the differents possibilities to answer to the question. Must contains at least 2 items.
         * `answer` (integer) : the good answer
+* `ban.unbanInterval`
+    * Description : time (in ms) between to two execution of unban checks for temp bans
+    * Accepted values : any strict positive integer
+    * Default value : `5000`
 
 The JSON-Schema can be found [here](src/config/config.ts).
 

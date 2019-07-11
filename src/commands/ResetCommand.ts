@@ -4,6 +4,7 @@ import { CommandContext } from "./CommandContext";
 import { PermissionBuilder } from "./permission/PermissionBuilder";
 import { Guild, Role } from "discord.js";
 import { memberLeave, SUCCESS_COLOR } from "../util/util";
+import { QuerySession } from "../user/UsersManager";
 
 export class ResetCommand extends Command {
 
@@ -23,7 +24,7 @@ export class ResetCommand extends Command {
         return "";
     }
     
-    public perform(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void): void {
+    public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
         sender.setRegistrationStep(0);
 
         const guild: Guild = ctx.getDiscordClient().guilds.first();

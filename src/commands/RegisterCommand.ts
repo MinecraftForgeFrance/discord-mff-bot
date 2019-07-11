@@ -5,6 +5,7 @@ import { PermissionBuilder } from "./permission/PermissionBuilder";
 import { CommandContext } from "./CommandContext";
 import { Guild, Role } from "discord.js";
 import { memberJoin, INFO_COLOR } from "../util/util"
+import { QuerySession } from "../user/UsersManager";
 
 export class RegisterCommand extends Command {
 
@@ -40,7 +41,7 @@ export class RegisterCommand extends Command {
         return this.steps[step].getUsage(sender, ctx);
     }
 
-    public perform(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void): void {
+    public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
         const nextStepId = sender.getRegistrationStep() + 1;
         // Triggers next step
         const nextStep: () => void = () => {

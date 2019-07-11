@@ -4,6 +4,7 @@ import { CommandContext } from "./CommandContext";
 import { VersionArgument, AllRemainingArgument, WordArgument } from "../parser/ArgumentType";
 import { RichEmbed } from "discord.js";
 import { requestForum, ERROR_COLOR, SUCCESS_COLOR } from "../util/util";
+import { QuerySession } from "../user/UsersManager";
 
 export class ModHelpCommand extends Command {
 
@@ -23,7 +24,7 @@ export class ModHelpCommand extends Command {
        return "[-v <version>] <search>";
     }
     
-    public perform(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void): void {
+    public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
         let tagsParameter: string = "";
         if(ctx.optionalArg(new WordArgument(word => word === "-v"))) {
             const version: string = ctx.requiredArg(new VersionArgument(), "version");

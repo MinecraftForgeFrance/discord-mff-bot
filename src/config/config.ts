@@ -92,5 +92,17 @@ export const schema: {[key: string]: JSONSchema} = {
         default: [],
         uniqueItems: true,
         minItems: 5
+    },
+    ban: {
+        type: "object",
+        properties: {
+            unbanInterval: {
+                type: "integer",
+                minimum: 1,
+                default: 5_000 // = 5 seconds
+            }
+        },
+        required: ["unbanInterval"],
+        default: {}
     }
 };

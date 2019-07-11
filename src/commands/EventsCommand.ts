@@ -4,6 +4,7 @@ import { UserInfo } from "../user/UserInfo";
 import { AllRemainingArgument } from "../parser/ArgumentType";
 import { RichEmbed } from "discord.js";
 import { requestForum, ERROR_COLOR, SUCCESS_COLOR } from "../util/util";
+import { QuerySession } from "../user/UsersManager";
 
 export class EventsCommand extends Command {
 
@@ -23,7 +24,7 @@ export class EventsCommand extends Command {
         return "<recherche>";
     }
     
-    public perform(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void): void {
+    public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
         const search: string = ctx.requiredArg(new AllRemainingArgument(), "recherche");
         const config = ctx.getConfig();
         const forumUrl: string = `${config.get("forumLink.protocol")}://${config.get("forumLink.hostname")}:${config.get("forumLink.port")}`;

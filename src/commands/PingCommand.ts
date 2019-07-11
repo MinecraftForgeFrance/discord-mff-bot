@@ -3,6 +3,7 @@ import { Command } from "./Command";
 import { PermissionBuilder } from "./permission/PermissionBuilder";
 import { CommandContext } from "./CommandContext";
 import { INFO_COLOR } from "../util/util";
+import { QuerySession } from "../user/UsersManager";
 
 export class PingCommand extends Command {
 
@@ -22,7 +23,7 @@ export class PingCommand extends Command {
         return "";
     }
 
-    public perform(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void): void {
+    public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
         ctx.answerEmbed({
             color: INFO_COLOR,
             description: `:ping_pong: Pong: \`${Date.now() - ctx.getMessage().createdTimestamp} ms\``,

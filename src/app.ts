@@ -1,5 +1,5 @@
 import Conf = require("conf");
-import { Client, TextChannel, Message } from "discord.js";
+import { Client, TextChannel } from "discord.js";
 import { createLogger, Logger } from "winston";
 import { PingCommand } from "./commands/PingCommand";
 import { schema } from "./config/config";
@@ -18,6 +18,8 @@ import { EventsCommand } from "./commands/EventsCommand";
 import { TutorialCommand } from "./commands/TutorialCommand";
 import { ModHelpCommand } from "./commands/ModHelpCommand";
 import { memberLeave, INFO_COLOR } from "./util/util";
+import { BanCommand } from "./commands/BanCommand";
+import fs = require("fs");
 
 const logger: Logger = createLogger(options);
 if(process.argv.indexOf("--debug") !== -1) {
@@ -77,7 +79,7 @@ client.on("guildMemberAdd", (member) => {
                 color: INFO_COLOR
             }
         })
-        .then((message: Message) => logger.debug(`Sent welcome embed to ${member.user.username}@${member.user.id}`))
+        .then(() => logger.debug(`Sent welcome embed to ${member.user.username}@${member.user.id}`))
         .catch((err) => logger.error(`Error while sending welcome embed to ${member.user.username}@${member.user.id} : ${err}`));
     }
 });
@@ -87,6 +89,49 @@ client.on("guildMemberRemove", (member) => {
         memberLeave(client, conf, member.user, logger);
     }
 });
+
+client.on("guildBanAdd", (_, user) => {
+    const session = usersManager.beginSession();
+    const info = session.getUser(user.id);
+    if(!info.isBanned()) {
+        info.setBanned(true),
+        info.setBannedUntil(-1);
+    }
+    usersManager.endSession(session);
+});
+
+client.on("guildBanRemove", (_, user) => {
+    const session = usersManager.beginSession();
+    const info = session.getUser(user.id);
+    if(info.isBanned()) {
+        info.setBanned(false);
+    }
+    usersManager.endSession(session);
+});
+
+// Executes every minutes
+client.setInterval(() => {
+    if(fs.existsSync("data/users")) {
+        fs.readdir("data/users", (err, files) => {
+            if(!err) {
+                const session = usersManager.beginSession();
+                files.forEach((file) => {
+                    const id = file.substring(0, file.length - ".json".length);
+                    const info = session.getUser(id);
+                    if(info.isBanned() && info.isBannedUntil() > 0 && info.isBannedUntil() < Date.now()) {
+                        info.setBanned(false);
+                        client.guilds.first().unban(id)
+                            .catch((err) => logger.error(`Can't unband ${id} : ${err}`))
+                            .then(() => logger.info(`Unbanned user ${id}`));
+                    }
+                });
+                usersManager.endSession(session);
+            } else {
+                logger.error(`Error while fetching 'data/users' dir content : ${err}`);
+            }
+        })
+    }
+}, conf.get("ban.unbanInterval"));
 
 client.on("debug", (info: string) => logger.debug(info));
 
@@ -99,6 +144,7 @@ function registerAllCommands() {
     commandsDispatcher.registerCommand(new EventsCommand());
     commandsDispatcher.registerCommand(new TutorialCommand());
     commandsDispatcher.registerCommand(new ModHelpCommand());
+    commandsDispatcher.registerCommand(new BanCommand());
 }
 
 client.login(conf.get("application.token")).catch((err) => {

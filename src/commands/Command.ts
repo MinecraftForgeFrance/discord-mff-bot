@@ -1,5 +1,6 @@
 import { UserInfo } from "../user/UserInfo";
 import { CommandContext } from "./CommandContext";
+import { QuerySession } from "../user/UsersManager";
 
 export abstract class Command {
 
@@ -24,10 +25,11 @@ export abstract class Command {
      * 
      * @param sender the user who fired the command
      * @param ctx the context for this command
+     * @param querySession the query session for this command
      * @param resolve function to call once you finished performing the command
      * @param reject function to call in case of error
      */
-    public abstract perform(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void) : void;
+    public abstract perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void) : void;
 
     /**
      * Checks whether the given sender can use the command.
