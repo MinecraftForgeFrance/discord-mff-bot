@@ -18,13 +18,21 @@ export class Shoutbox {
         const members: Collection<Snowflake, GuildMember> = message.mentions.members;
 
         let forwardedMessage: string = message.content;
-        let mentions: Array<string> = [];
+        let mentions: Array<ShoutboxMention> = [];
+        let removedLength = 0;
 
         members.array().forEach(member => {
             let memberInfo : UserInfo = session.getUser(member.id);
             if(memberInfo.getForumId()) {
-                forwardedMessage = forwardedMessage.replace(`<@${memberInfo.getDiscordId()}>`, `<@${memberInfo.getForumId()}>`);
-                mentions.push(memberInfo.getForumId() as string);
+                const result = new RegExp(`<@!?${memberInfo.getDiscordId()}>`).exec(forwardedMessage);
+                if(result != null) {
+                    forwardedMessage = forwardedMessage.substring(0, result.index) + forwardedMessage.substr(result.index + result[0].length);
+                    mentions.push({
+                        id: memberInfo.getForumId() as string,
+                        index: result.index + removedLength
+                    });
+                    removedLength += result[0].length;
+                }
             }
         });
 
@@ -46,4 +54,9 @@ export class Shoutbox {
 
     }
 
+}
+
+interface ShoutboxMention {
+    id: string;
+    index: number;
 }
