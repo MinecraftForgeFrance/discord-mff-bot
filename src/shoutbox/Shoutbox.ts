@@ -40,7 +40,7 @@ export class Shoutbox {
             uri: `${this.config.get("forumLink.protocol")}://${this.config.get("forumLink.hostname")}:${this.config.get("forumLink.port")}/discordapi/sendshout`,
             method: "POST",
             json: {
-                username: sender.getForumId(),
+                senderId: sender.getForumId(),
                 token: this.config.get("forumLink.token"),
                 message: forwardedMessage,
                 mentions

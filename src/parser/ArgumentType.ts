@@ -1,5 +1,8 @@
 import { StringReader } from "./StringReader";
 import moment = require("moment");
+import { UserInfo } from "../user/UserInfo";
+import { QuerySession } from "src/user/UsersManager";
+import { MessageMentions } from "discord.js";
 
 interface ArgumentType<T> {
 
@@ -129,6 +132,21 @@ class DurationArgument implements ArgumentType<moment.Duration> {
 
 }
 
+class UserArgument implements ArgumentType<UserInfo> {
+    
+    constructor(private querySession: QuerySession) {}
+    
+    parse(reader: StringReader): UserInfo | undefined {
+        const mention: string | undefined = new WordArgument(word => MessageMentions.USERS_PATTERN.test(word)).parse(reader);
+        if(mention) {
+            const id = (/[0-9]+/.exec(mention) as RegExpExecArray)[0]
+            return this.querySession.getUser(id);
+        }
+        return undefined;
+    }
+    
+}
+
 interface WordChecker {
     (word: string): boolean;
 }
@@ -140,5 +158,6 @@ export {
     ArgumentType,
     AllRemainingArgument,
     VersionArgument,
-    DurationArgument
+    DurationArgument,
+    UserArgument
 }

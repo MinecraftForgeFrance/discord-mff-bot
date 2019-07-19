@@ -2,14 +2,15 @@ import { Command } from "./Command";
 import { UserInfo } from "../user/UserInfo";
 import { CommandContext } from "./CommandContext";
 import { PermissionBuilder } from "./permission/PermissionBuilder";
-import { Guild, Role } from "discord.js";
-import { memberLeave, SUCCESS_COLOR } from "../util/util";
+import { memberLeave, SUCCESS_COLOR, resetMember, ERROR_COLOR } from "../util/util";
 import { QuerySession } from "../user/UsersManager";
+import { UserArgument, WordArgument } from "../parser/ArgumentType";
+import { TextChannel } from "discord.js";
 
 export class ResetCommand extends Command {
 
     constructor() {
-        super(PermissionBuilder.new().channelTypeIs("dm").build());
+        super(PermissionBuilder.new().hasPermission("ADMINISTRATOR").build());
     }
 
     public getName(): string {
@@ -17,24 +18,49 @@ export class ResetCommand extends Command {
     }    
     
     public getDescription(): string {
-        return "Remet votre compte à zéro";
+        return "Remet le compte de la personne visée à zéro";
     }
     
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
-        return "";
+        return "<all | @user>";
     }
     
     public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
-        sender.setRegistrationStep(0);
+        const target: UserInfo | undefined = ctx.optionalArg(new UserArgument(querySession));
+        const all = ctx.optionalArg(new WordArgument(word => word === "all"));
 
-        const guild: Guild = ctx.getDiscordClient().guilds.first();
-        const role: Role = guild.roles.find("name", ctx.getConfig().get("roles.member"));
-        guild.member(ctx.getMessage().author).removeRole(role).catch(ctx.getLogger().error);
-        ctx.answerPrivateEmbed({
-            description: "Votre compte a bien été remis à zéro.",
-            color: SUCCESS_COLOR
-        });
-        memberLeave(ctx.getDiscordClient(), ctx.getConfig(), ctx.getMessage().author, ctx.getLogger());
+        if(!target && !all) {
+            throw {
+                errorType: "argument",
+                message: "Veuillez renseigner `all` ou mentionner un utilisateur."
+            };
+        }
+
+        if(target) {
+            resetMember(ctx.getDiscordClient(), ctx.getConfig(), target, ctx.getLogger());
+            ctx.answerPrivateEmbed({
+                description: "Votre compte a bien été remis à zéro.",
+                color: SUCCESS_COLOR
+            });
+            memberLeave(ctx.getDiscordClient(), ctx.getConfig(), ctx.getMessage().author, ctx.getLogger());
+        } else if(all) {
+            const guild = ctx.getDiscordClient().guilds.first();
+            guild.members.forEach(member => {
+                resetMember(ctx.getDiscordClient(), ctx.getConfig(), querySession.getUser(member.user.id), ctx.getLogger());
+            });
+            (guild.channels.find("name", ctx.getConfig().get("channels.logs")) as TextChannel)
+                .send({
+                    embed: {
+                        description: "Tout le monde a quitté le serveur !",
+                        color: ERROR_COLOR
+                    }
+                });
+            ctx.answerEmbed({
+                description: "Tout le monde a été remis à zéro.",
+                color: SUCCESS_COLOR
+            });
+        }
+
         resolve();
     }
 

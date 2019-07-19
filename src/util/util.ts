@@ -1,8 +1,9 @@
-import { Guild, Client, User, GuildChannel, TextChannel } from "discord.js";
+import { Guild, Client, User, GuildChannel, TextChannel, GuildMember } from "discord.js";
 import Conf = require("conf");
 import { Logger } from "winston";
 import request = require("request");
-import { CommandContext } from "src/commands/CommandContext";
+import { CommandContext } from "../commands/CommandContext";
+import { UserInfo } from "../user/UserInfo";
 
 export function memberJoin(client: Client, config: Conf<any>, user: User, logger: Logger): void {
     const guild: Guild = client.guilds.first();
@@ -41,6 +42,17 @@ export function requestForum(ctx: CommandContext, endpoint: string, method: "GET
             }
         });
     });
+}
+
+export function resetMember(client: Client, config: Conf<any>, info: UserInfo, logger: Logger): void {
+    const guild: Guild = client.guilds.first();
+    const member: GuildMember = guild.members.find("id", info.getDiscordId());
+    const memberRole = guild.roles.find("name", config.get("roles.member"));
+    const javaRole = guild.roles.find("name", config.get("roles.javaDancer"));
+    
+    member.removeRole(memberRole).catch(logger.error);
+    member.removeRole(javaRole).catch(logger.error);
+    info.setRegistrationStep(0);
 }
 
 export const SUCCESS_COLOR: number = 0xFF00;
