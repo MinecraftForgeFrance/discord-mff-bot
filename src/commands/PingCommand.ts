@@ -30,6 +30,4 @@ export class PingCommand extends Command {
         });
         resolve();
     }
-
-
 }

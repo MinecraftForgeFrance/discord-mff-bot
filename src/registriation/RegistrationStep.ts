@@ -10,17 +10,18 @@ export abstract class RegistrationStep {
 
     /**
      * This method is called when the user achieved the previous step.
-     * 
+     *
      * @param sender the user who sent the command
      * @param ctx the context for this command
      */
+
     public enterStep(sender: UserInfo, ctx: CommandContext): void {}
 
     /**
      * Processes information given by the user to achieve the step, if possible. The function reject
      * should only be called if an error the user can't influence on occurs (file access denied, http connection fail, etc ...).
      * The function resolve is called when the command is called correctly (match command usage).
-     * 
+     *
      * @param sender the user who sent the command
      * @param ctx the context for this command
      * @param resolve the function to call to tell everything executed correctly
@@ -31,7 +32,7 @@ export abstract class RegistrationStep {
 
     /**
      * The usage for this step.
-     * 
+     *
      * @param sender the user who sent the command
      * @param ctx the context for this command
      */
@@ -50,7 +51,7 @@ export class FetchPseudoStep extends RegistrationStep {
         })
         .catch(() => reject())
         .then((body: any) => {
-            if(body.error === "User not found") {
+            if (body.error === "User not found") {
                 ctx.answerEmbed({
                     description: "Le pseudo que vous avez indiqué n'existe pas, essayez encore.",
                     color: 0xFF0000
@@ -68,8 +69,8 @@ export class FetchPseudoStep extends RegistrationStep {
             }
             resolve();
         });
-    }    
-    
+    }
+
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
         return "<votre pseudo sur le forum>";
     }
@@ -84,12 +85,12 @@ export class ValidateTokenStep extends RegistrationStep {
 
     public executeStep(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void, nextStep: () => void): void {
         const token: number = ctx.requiredArg(new IntArgument(), "code");
-        if(sender.getCounter() === 0) {
+        if (sender.getCounter() === 0) {
             ctx.answerEmbed({
                 description: "Vous avez épuisé toute vos tentatives. Contactez un administrateur si nécessaire.",
                 color: 0xFF0000
             });
-        } else if(token === sender.getRegistrationToken()) {
+        } else if (token === sender.getRegistrationToken()) {
             ctx.answerEmbed({
                 description: "Code valide !",
                 color: 0xFF00,
@@ -106,11 +107,10 @@ export class ValidateTokenStep extends RegistrationStep {
         }
         resolve();
     }
-    
+
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
         return "<code>";
     }
-
 }
 
 export class JavaLevelStep extends RegistrationStep {
@@ -121,18 +121,18 @@ export class JavaLevelStep extends RegistrationStep {
 
         this.nextQuestion(sender, ctx);
     }
-    
+
     public executeStep(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void, nextStep: () => void): void {
         const answer: number = ctx.requiredArg(new IntArgument());
-        
-        if(answer - 1 === sender.getJavaQuestionsCat().expectedAnswer) {
+
+        if (answer - 1 === sender.getJavaQuestionsCat().expectedAnswer) {
             ctx.answerEmbed({
                 description: "Bonne réponse !",
                 color: 0xFF00
             });
             sender.setCounter(sender.getCounter() - 1);
 
-            if(sender.getCounter() === 0) {
+            if (sender.getCounter() === 0) {
                 const guild: Guild = ctx.getDiscordClient().guilds.first();
                 const role: Role = guild.roles.find("name", ctx.getConfig().get("roles.javaDancer"));
 
@@ -156,7 +156,7 @@ export class JavaLevelStep extends RegistrationStep {
         }
         resolve();
     }
-    
+
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
         return "<réponse>";
     }
@@ -172,7 +172,7 @@ export class JavaLevelStep extends RegistrationStep {
         embed.setDescription(question.title);
         embed.setColor(0x66FF);
 
-        for(let i = 0;  i < question.choices.length; i++) {
+        for (let i = 0;  i < question.choices.length; i++) {
             embed.addField(`Réponse ${i + 1}`, question.choices[i]);
         }
 
@@ -187,7 +187,7 @@ export class JavaLevelStep extends RegistrationStep {
 
         do {
             pickedQuestion = Math.floor(Math.random() * questions.length);
-        } while(cantPick.indexOf(pickedQuestion) !== -1);
+        } while (cantPick.indexOf(pickedQuestion) !== -1);
 
         sender.getJavaQuestionsCat().answeredQuestions.push(pickedQuestion);
         sender.getJavaQuestionsCat().expectedAnswer = questions[pickedQuestion].answer;

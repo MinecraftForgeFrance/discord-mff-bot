@@ -12,19 +12,19 @@ class StringReader {
      * Gets the given count of characters from the no-parsed part of the arg-string.
      * If the requested count of characters exceeds the length of the arg-string, then
      * the returned string is smaller than the requested one.
-     * 
+     *
      * The pooled characters will move the cursor.
-     * 
+     *
      * Subsequent call to this method (with same arg) won't return the same result.
-     * 
+     *
      * Calling this method with no argument will result in polling next character.
-     * 
+     *
      * @see peek
      * @param count The count of characters to get
      * @returns a string with a length from 0 to the given count
      */
     public read(count: number = 1): string {
-        let start = this.cursor;
+        const start = this.cursor;
         this.cursor = Math.min(this.total_length, this.cursor + count);
         return this.arg.substr(start, this.cursor - start);
     }
@@ -33,11 +33,11 @@ class StringReader {
      * Gets the given count of characters from the no-parsed part of the arg-string.
      * If the requested count of characters exceeds the length of the arg-string, then
      * the returned string is smaller than the requested one.
-     * 
+     *
      * Subsequent call to this method (with same arg) will return the same result.
-     * 
+     *
      * Calling this method with no argument will result in peeking next character.
-     * 
+     *
      * @see pool
      * @param count The count of characters to get
      * @returns a string with a length from 0 to the given count
@@ -72,4 +72,4 @@ class StringReader {
 
 export {
     StringReader
-}
+};

@@ -5,7 +5,7 @@ import { StringReader } from "../src/parser/StringReader";
 describe("WordArgument", () => {
 
     describe("#parse()", () => {
-    
+
         it("Parse first word and consume space after word", () => {
             const reader: StringReader = new StringReader("one two three");
             const arg: WordArgument = new WordArgument();
@@ -23,7 +23,7 @@ describe("WordArgument", () => {
             expect(reader.getCursor()).to.equal(0);
             expect(value).to.be.undefined;
         });
-        
+
     });
 
 });

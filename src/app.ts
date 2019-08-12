@@ -22,7 +22,7 @@ import { BanCommand } from "./commands/BanCommand";
 import fs = require("fs");
 
 const logger: Logger = createLogger(options);
-if(process.argv.indexOf("--debug") !== -1) {
+if (process.argv.indexOf("--debug") !== -1) {
     logger.level = "debug";
 }
 
@@ -62,7 +62,7 @@ client.on("message", (message) => {
     }
 
     // Shoutbox message handling
-    if(message.channel.type === "text" && (message.channel as TextChannel).name === conf.get('channels.shoutbox')) {
+    if (message.channel.type === "text" && (message.channel as TextChannel).name === conf.get('channels.shoutbox')) {
         const querySession: QuerySession = usersManager.beginSession();
         const sender: UserInfo = querySession.getUser(message.author.id);
         shoutbox.bridgeMessage(sender, message, querySession);
@@ -71,10 +71,10 @@ client.on("message", (message) => {
 });
 
 client.on("guildMemberAdd", (member) => {
-    if(!member.user.bot) {
+    if (!member.user.bot) {
         member.send({
             embed: {
-                description: `Bonjour ${member.displayName} sur le serveur Discord de Minecraft Forge France. 
+                description: `Bonjour ${member.displayName} sur le serveur Discord de Minecraft Forge France.
                 Veuillez vous enregistrer pour acquérir des droits sur le serveur. Tapez \`${commandsPrefix}register\` pour en savoir plus.`,
                 color: INFO_COLOR
             }
@@ -85,7 +85,7 @@ client.on("guildMemberAdd", (member) => {
 });
 
 client.on("guildMemberRemove", (member) => {
-    if(!member.user.bot) {
+    if (!member.user.bot) {
         memberLeave(client, conf, member.user, logger);
     }
 });
@@ -93,7 +93,7 @@ client.on("guildMemberRemove", (member) => {
 client.on("guildBanAdd", (_, user) => {
     const session = usersManager.beginSession();
     const info = session.getUser(user.id);
-    if(!info.isBanned()) {
+    if (!info.isBanned()) {
         info.setBanned(true),
         info.setBannedUntil(-1);
     }
@@ -103,7 +103,7 @@ client.on("guildBanAdd", (_, user) => {
 client.on("guildBanRemove", (_, user) => {
     const session = usersManager.beginSession();
     const info = session.getUser(user.id);
-    if(info.isBanned()) {
+    if (info.isBanned()) {
         info.setBanned(false);
     }
     usersManager.endSession(session);
@@ -111,17 +111,17 @@ client.on("guildBanRemove", (_, user) => {
 
 // Executes every minutes
 client.setInterval(() => {
-    if(fs.existsSync("data/users")) {
+    if (fs.existsSync("data/users")) {
         fs.readdir("data/users", (err, files) => {
-            if(!err) {
+            if (!err) {
                 const session = usersManager.beginSession();
                 files.forEach((file) => {
                     const id = file.substring(0, file.length - ".json".length);
                     const info = session.getUser(id);
-                    if(info.isBanned() && info.isBannedUntil() > 0 && info.isBannedUntil() < Date.now()) {
+                    if (info.isBanned() && info.isBannedUntil() > 0 && info.isBannedUntil() < Date.now()) {
                         info.setBanned(false);
                         client.guilds.first().unban(id)
-                            .catch((err) => logger.error(`Can't unband ${id} : ${err}`))
+                            .catch((unbanErr) => logger.error(`Can't unband ${id} : ${unbanErr}`))
                             .then(() => logger.info(`Unbanned user ${id}`));
                     }
                 });
@@ -129,7 +129,7 @@ client.setInterval(() => {
             } else {
                 logger.error(`Error while fetching 'data/users' dir content : ${err}`);
             }
-        })
+        });
     }
 }, conf.get("ban.unbanInterval"));
 
@@ -151,7 +151,7 @@ client.login(conf.get("application.token")).catch((err) => {
     logger.error("Unable to login to the application.");
 
     const token: string = conf.get("application.token");
-    if(token.length === 0) {
+    if (token.length === 0) {
         logger.error("The application token is empty. It's certainly the problem.");
     }
     logger.error(err);

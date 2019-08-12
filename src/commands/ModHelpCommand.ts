@@ -11,32 +11,32 @@ export class ModHelpCommand extends Command {
     constructor() {
         super((sender, ctx) => true);
     }
-    
+
     public getName(): string {
         return "modhelp";
-    }    
-    
+    }
+
     public getDescription(): string {
         return "Affiche la liste des sujets résolus crrespondants à la recherche";
     }
-    
+
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
        return "[-v <version>] <search>";
     }
-    
+
     public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
         let tagsParameter: string = "";
-        if(ctx.optionalArg(new WordArgument(word => word === "-v"))) {
+        if (ctx.optionalArg(new WordArgument(word => word === "-v"))) {
             const version: string = ctx.requiredArg(new VersionArgument(), "version");
             tagsParameter = `&hasTags[]=${version}`;
         }
         const search: string = ctx.requiredArg(new AllRemainingArgument(), "search");
         const config = ctx.getConfig();
 
-        requestForum(ctx, `discordapi/solvedthread?term=${search}${tagsParameter}&token=${config.get("forumLink.token")}`, "GET" ,true)
+        requestForum(ctx, `discordapi/solvedthread?term=${search}${tagsParameter}&token=${config.get("forumLink.token")}`, "GET", true)
             .catch(() => resolve())
             .then((body: any) => {
-                if(body.message === "No result") {
+                if (body.message === "No result") {
                     ctx.answerEmbed({
                         description: "Aucun résultat ne correspond à votre recherche",
                         color: ERROR_COLOR
@@ -46,11 +46,11 @@ export class ModHelpCommand extends Command {
                     const embed: RichEmbed = new RichEmbed();
                     embed.setColor(SUCCESS_COLOR);
                     embed.setTitle("Liste des sujets résolus");
-                    embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png")
-                    
-                    let prefixArray: string[] = [];
-                    let fieldContent: string[] = [];
-                    for (let key of Object.keys(body)) {
+                    embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");
+
+                    const prefixArray: string[] = [];
+                    const fieldContent: string[] = [];
+                    for (const key of Object.keys(body)) {
                         for (let i = 0; i < body[key].length; i++) {
                             const field: string = `- [${body[key][i].title}](${body[key][i].url})`;
                             if (!prefixArray.includes(key)) {
@@ -68,12 +68,12 @@ export class ModHelpCommand extends Command {
                             }
                         }
                     }
-    
-                    let embedSize: number = (embed.title as string).length; 
+
+                    let embedSize: number = (embed.title as string).length;
                     for (let i = 0; i < prefixArray.length; i++) {
                         embedSize += prefixArray[i].length + fieldContent[i].length;
                     }
-    
+
                     if (prefixArray.length >= 25 || embedSize >= 6000) {
                         ctx.answerEmbed({
                             description: "Votre recherche renvoie trop de résulats.",
@@ -86,11 +86,8 @@ export class ModHelpCommand extends Command {
                         }
                         ctx.answerEmbed(embed);
                     }
-                    resolve();             
+                    resolve();
                 }
             });
-
     }
-
-
 }

@@ -36,7 +36,7 @@ export class CommandContext {
 
     /**
      * Answers the given message to the user. This message is sent as a dm.
-     * 
+     *
      * @param message the message to send to the user
      */
     public answerPrivate(message: string): void {
@@ -46,7 +46,7 @@ export class CommandContext {
 
     /**
      * Answers the given embed message to the user. This embed is sent as a dm.
-     * 
+     *
      * @param embed the embed message to send to the user
      */
     public answerPrivateEmbed(embed: RichEmbed | RichEmbedOptions): void {
@@ -56,7 +56,7 @@ export class CommandContext {
 
     /**
      * Answers the given message to the user. This message is sent in the same channel the user sent the command.
-     * 
+     *
      * @param message the message to send to the user
      */
     public answer(message: string): void {
@@ -66,7 +66,7 @@ export class CommandContext {
 
     /**
      * Answers the given embed message to the user. This message is sent in the same channel the user sent the command.
-     * 
+     *
      * @param embed the embed message to send to the user
      */
     public answerEmbed(embed: RichEmbed | RichEmbedOptions): void {
@@ -76,7 +76,7 @@ export class CommandContext {
 
     /**
      * Tries to parse an argument with the given argument type.
-     * 
+     *
      * @arg arg the type of argument to parse
      * @return the parsed value or undefined if no argument can be parsed
      */
@@ -86,16 +86,17 @@ export class CommandContext {
 
     /**
      * Tries to parse an argument with the given argument type. If the argument can't be parsed, then throws an error.
-     * 
+     *
      * @param arg the type of argument to parse
      * @param name the argument name, only used to indicate the user which argument is missing (optional).
      * @return the parsed value
      */
     public requiredArg<T>(arg: ArgumentType<T>, name?: string | undefined): T {
         const value: T | undefined = arg.parse(this.reader);
-        if(value)
+        if (value) {
             return value;
-        if(name) {
+        }
+        if (name) {
             throw {
                 errorType: "argument",
                 message: `L'argument \`${name}\` est requis mais n'est pas présent ou invalide.`
@@ -106,5 +107,4 @@ export class CommandContext {
             message: "Un argument requis n'est pas présent ou invalide."
         };
     }
-
 }

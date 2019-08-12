@@ -31,11 +31,11 @@ export function requestForum(ctx: CommandContext, endpoint: string, method: "GET
             json,
             method
         }, (err, response, body) => {
-            if(body) {
+            if (body) {
                 resolve(body);
             } else {
                 ctx.getLogger().error(`Unable to reach endpoint ${endpoint}. Response code : ${response.statusCode}`);
-                if(err) {
+                if (err) {
                     ctx.getLogger().error(err);
                 }
                 reject();
@@ -49,7 +49,7 @@ export function resetMember(client: Client, config: Conf<any>, info: UserInfo, l
     const member: GuildMember = guild.members.find("id", info.getDiscordId());
     const memberRole = guild.roles.find("name", config.get("roles.member"));
     const javaRole = guild.roles.find("name", config.get("roles.javaDancer"));
-    
+
     member.removeRole(memberRole).catch(logger.error);
     member.removeRole(javaRole).catch(logger.error);
     info.setRegistrationStep(0);

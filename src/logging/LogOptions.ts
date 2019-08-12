@@ -45,4 +45,4 @@ export const options: LoggerOptions = {
         })
     ],
     exitOnError: false
-}
+};

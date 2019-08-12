@@ -10,19 +10,19 @@ export class StopCommand extends Command {
     constructor() {
         super(PermissionBuilder.new().hasPermission("ADMINISTRATOR").build());
     }
-    
+
     public getName(): string {
         return "stop";
-    }    
-    
+    }
+
     public getDescription(): string {
         return "Arrête le bot";
     }
-    
+
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
         return "";
     }
-    
+
     public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
         ctx.answerEmbed({
             description: ":crescent_moon: Bye bye ...",
@@ -33,11 +33,10 @@ export class StopCommand extends Command {
             resolve();
         }).catch((err) => {
             ctx.getLogger().error("Can't stop Discord bot ...");
-            if(err)
+            if (err) {
                 ctx.getLogger().error(err);
+            }
             reject();
         });
     }
-
-
 }

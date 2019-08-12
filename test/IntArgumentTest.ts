@@ -28,7 +28,7 @@ describe("IntArgument", () => {
 
             expect(value).to.be.undefined;
             expect(reader.getCursor()).to.equal(0);
-        })
+        });
 
         it("Stop parsing after first space.", () => {
             const reader: StringReader = new StringReader("7485 hello world");

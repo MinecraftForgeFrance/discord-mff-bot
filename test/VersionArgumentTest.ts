@@ -5,7 +5,7 @@ import { StringReader } from "../src/parser/StringReader";
 describe("VersionArgument", () => {
 
     describe("#parse()", () => {
-    
+
         it("Stops after after parsing version", () => {
             const reader: StringReader = new StringReader("1.12.2 I'm Jack");
             const arg: VersionArgument = new VersionArgument();
@@ -32,7 +32,7 @@ describe("VersionArgument", () => {
             expect(value).to.equal("1.4.x");
             expect(reader.getCursor()).to.equal(6);
         });
-        
+
     });
 
 });

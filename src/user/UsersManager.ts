@@ -11,10 +11,10 @@ export class UsersManager {
     private usersHolders: UsersHolder = {};
 
     constructor(private discAccess: DiscAccess) {
-        if(!this.discAccess.exists("data")) {
+        if (!this.discAccess.exists("data")) {
             this.discAccess.mkdir("data");
         }
-        if(!this.discAccess.exists("data/users")) {
+        if (!this.discAccess.exists("data/users")) {
             this.discAccess.mkdir("data/users");
         }
     }
@@ -26,11 +26,12 @@ export class UsersManager {
         user = this.getFromCache(userId);
 
         // If no cached value, try to load from file
-        if(user === null)
+        if (user === null) {
             user = this.getFromFile(userId);
+        }
 
         // If loading from file failed, create data
-        if(user === null) {
+        if (user === null) {
             user = new UserInfo(`
                 {
                     "discordId": "${userId}"
@@ -45,23 +46,24 @@ export class UsersManager {
     }
 
     getFromCache(userId: string): UserInfo | null {
-        if(this.usersCache[userId])
+        if (this.usersCache[userId]) {
             return this.usersCache[userId];
+        }
         return null;
     }
 
     /**
      * Tries to read user information from file.
-     * 
+     *
      * @param userId the id of the user
      * @returns the user info or null if info can't be read from file
      */
     getFromFile(userId: string): UserInfo | null {
-        if(this.discAccess.exists(`data/users/${userId}.json`)) {
+        if (this.discAccess.exists(`data/users/${userId}.json`)) {
             try {
                 const jsonStr: string = this.discAccess.read(`data/users/${userId}.json`);
                 return new UserInfo(jsonStr);
-            } catch(err) {
+            } catch (err) {
                 console.log(err);
             }
         }
@@ -70,39 +72,43 @@ export class UsersManager {
 
     /**
      * Cache the given user data to be able to retrieve it when asked twice.
-     * 
+     *
      * @param user the user to cache
      */
     cacheUser(user: UserInfo): void {
-        if(!this.usersCache[user.getDiscordId()])
+        if (!this.usersCache[user.getDiscordId()]) {
             this.usersCache[user.getDiscordId()] = user;
+        }
     }
 
     /**
      * Set the given user data owned by given query session.
      * The same user data can be owned by multiple query session.
-     * 
+     *
      * @param user the user which will be owned by the given query sessions
      * @param querySession the QuerySession chich will own the given user data
      */
     setOwned(user: UserInfo, querySession: QuerySession): void {
-        if(!this.usersHolders[user.getDiscordId()])
+        if (!this.usersHolders[user.getDiscordId()]) {
             this.usersHolders[user.getDiscordId()] = [];
-        
-        if(this.usersHolders[user.getDiscordId()].indexOf(querySession) === -1)
+        }
+
+        if (this.usersHolders[user.getDiscordId()].indexOf(querySession) === -1) {
             this.usersHolders[user.getDiscordId()].push(querySession);
+        }
     }
 
     /**
      * Free all users from the given query session.
-     * 
+     *
      * @param querySession the query session the users must be free from
      */
     freeFromOwner(querySession: QuerySession): void {
         Object.values(this.usersHolders).forEach((v: Array<QuerySession>) => {
             const index: number = v.indexOf(querySession);
-            if(index !== -1)
+            if (index !== -1) {
                 delete v[index];
+            }
         });
     }
 
@@ -111,9 +117,9 @@ export class UsersManager {
      */
     uncacheFreeData() {
         Object.keys(this.usersHolders).forEach(id => {
-            if(this.usersHolders[id].entries.length === 0) {
+            if (this.usersHolders[id].entries.length === 0) {
                 const cachedValue: UserInfo = this.usersCache[id];
-                
+
                 this.discAccess.write(`data/users/${cachedValue.getDiscordId()}.json`, JSON.stringify(cachedValue, null, "\t"));
 
                 delete this.usersCache[id];
@@ -132,7 +138,7 @@ export class UsersManager {
 
     /**
      * Ends a query sessions. All data hold for this session will be free.
-     * 
+     *
      * @param querySession the query sessions to end
      */
     public endSession(querySession: QuerySession): void {
@@ -153,11 +159,11 @@ export class QuerySession {
 }
 
 interface UsersCache {
-    [userId: string] : UserInfo
+    [userId: string]: UserInfo;
 }
 
 interface UsersHolder {
-    [userId: string]: Array<QuerySession>
+    [userId: string]: Array<QuerySession>;
 }
 
 export class DiscAccess {
@@ -177,5 +183,4 @@ export class DiscAccess {
     public write(path: string, data: any): void {
         fs.writeFileSync(path, data);
     }
-
 }

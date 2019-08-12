@@ -11,21 +11,21 @@ export class Shoutbox {
 
     public bridgeMessage(sender: UserInfo, message: Message, session: QuerySession): void {
 
-        if(!sender.getForumId()) {
+        if (!sender.getForumId()) {
             return;
         }
 
         const members: Collection<Snowflake, GuildMember> = message.mentions.members;
 
         let forwardedMessage: string = message.content;
-        let mentions: Array<ShoutboxMention> = [];
+        const mentions: Array<ShoutboxMention> = [];
         let removedLength = 0;
 
         members.array().forEach(member => {
-            let memberInfo : UserInfo = session.getUser(member.id);
-            if(memberInfo.getForumId()) {
+            const memberInfo = session.getUser(member.id);
+            if (memberInfo.getForumId()) {
                 const result = new RegExp(`<@!?${memberInfo.getDiscordId()}>`).exec(forwardedMessage);
-                if(result != null) {
+                if (result != null) {
                     forwardedMessage = forwardedMessage.substring(0, result.index) + forwardedMessage.substr(result.index + result[0].length);
                     mentions.push({
                         id: memberInfo.getForumId() as string,
@@ -46,7 +46,7 @@ export class Shoutbox {
                 mentions
             }
         }, (err, res, body)  => {
-            if(err) {
+            if (err) {
                 this.logger.error(`Error while requesting shoutbox endpoint. Response code ${res.statusCode}. ${err}`);
                 this.logger.error(body);
             }

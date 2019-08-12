@@ -4,13 +4,13 @@ import { RegistrationStep, FetchPseudoStep, ValidateTokenStep, JavaLevelStep } f
 import { PermissionBuilder } from "./permission/PermissionBuilder";
 import { CommandContext } from "./CommandContext";
 import { Guild, Role } from "discord.js";
-import { memberJoin, INFO_COLOR } from "../util/util"
+import { memberJoin, INFO_COLOR } from "../util/util";
 import { QuerySession } from "../user/UsersManager";
 
 export class RegisterCommand extends Command {
 
     private steps: Array<RegistrationStep> = [];
-    
+
     constructor() {
         super((sender, ctx) => {
             return PermissionBuilder.new().channelTypeIs('dm').build()(sender, ctx) && sender.getRegistrationStep() < this.steps.length;
@@ -21,19 +21,19 @@ export class RegisterCommand extends Command {
             new JavaLevelStep(),
         );
     }
-    
+
     public getName(): string {
         return "register";
-    }   
-    
+    }
+
     public getDescription(): string {
         return "Permet de s'enregistrer afin d'avoir accès au Discord";
     }
-    
+
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
         const step: number = sender.getRegistrationStep();
-        if(step === this.steps.length) {
-            if(step === 0) {
+        if (step === this.steps.length) {
+            if (step === 0) {
                 return "...";
             }
             return this.steps[0].getUsage(sender, ctx);
@@ -48,7 +48,7 @@ export class RegisterCommand extends Command {
             sender.setRegistrationStep(nextStepId);
             sendCurrentStep();
 
-            if(sender.getRegistrationStep() === this.steps.length) {
+            if (sender.getRegistrationStep() === this.steps.length) {
                 const guild: Guild = ctx.getDiscordClient().guilds.first();
                 const role: Role = guild.roles.find("name", ctx.getConfig().get("roles.member"));
                 guild.member(ctx.getMessage().author).addRole(role, "Enregistrement terminé")
@@ -62,7 +62,7 @@ export class RegisterCommand extends Command {
 
         // Prints current step
         const sendCurrentStep: () => void = () => {
-            if(sender.getRegistrationStep() < this.steps.length) {
+            if (sender.getRegistrationStep() < this.steps.length) {
                 const nextStepUsage: string = this.steps[sender.getRegistrationStep()].getUsage(sender, ctx);
                 ctx.answerEmbed({
                     description: `Vous êtes à l'étape ${sender.getRegistrationStep() + 1}/${this.steps.length} de votre enregistrement.
@@ -75,10 +75,10 @@ export class RegisterCommand extends Command {
                     color: INFO_COLOR
                 });
             }
-        }
+        };
 
         // If no arguments were provided, we print current state
-        if(ctx.getReader().getRemainingCharacters() === 0) {
+        if (ctx.getReader().getRemainingCharacters() === 0) {
             sendCurrentStep();
             resolve();
         } else {
@@ -86,5 +86,4 @@ export class RegisterCommand extends Command {
             step.executeStep(sender, ctx, resolve, reject, nextStep);
         }
     }
-
 }

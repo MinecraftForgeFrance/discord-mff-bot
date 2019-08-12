@@ -15,35 +15,35 @@ export class ResetCommand extends Command {
 
     public getName(): string {
         return "reset";
-    }    
-    
+    }
+
     public getDescription(): string {
         return "Remet le compte de la personne visée à zéro";
     }
-    
+
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
         return "<all | @user>";
     }
-    
+
     public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
         const target: UserInfo | undefined = ctx.optionalArg(new UserArgument(querySession));
         const all = ctx.optionalArg(new WordArgument(word => word === "all"));
 
-        if(!target && !all) {
+        if (!target && !all) {
             throw {
                 errorType: "argument",
                 message: "Veuillez renseigner `all` ou mentionner un utilisateur."
             };
         }
 
-        if(target) {
+        if (target) {
             resetMember(ctx.getDiscordClient(), ctx.getConfig(), target, ctx.getLogger());
             ctx.answerPrivateEmbed({
                 description: "Votre compte a bien été remis à zéro.",
                 color: SUCCESS_COLOR
             });
             memberLeave(ctx.getDiscordClient(), ctx.getConfig(), ctx.getMessage().author, ctx.getLogger());
-        } else if(all) {
+        } else if (all) {
             const guild = ctx.getDiscordClient().guilds.first();
             guild.members.forEach(member => {
                 resetMember(ctx.getDiscordClient(), ctx.getConfig(), querySession.getUser(member.user.id), ctx.getLogger());
@@ -60,8 +60,6 @@ export class ResetCommand extends Command {
                 color: SUCCESS_COLOR
             });
         }
-
         resolve();
     }
-
 }

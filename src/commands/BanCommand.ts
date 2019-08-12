@@ -15,27 +15,28 @@ export class BanCommand extends Command {
         super(PermissionBuilder.new().hasPermission("ADMINISTRATOR").build());
         moment.locale("fr");
     }
-    
+
     public getName(): string {
         return "ban";
-    }    
-    
+    }
+
     public getDescription(): string {
         return "[duration] <target> [reason]";
     }
-    
+
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
         return "[duration] <targets>";
     }
-    
+
     public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
         const duration: moment.Duration | undefined = ctx.optionalArg(new DurationArgument());
 
-        if(duration)
+        if (duration) {
             ctx.getLogger().debug(`Ban duration : ${duration.asDays()} days`);
+        }
 
         const target = ctx.requiredArg(new WordArgument((word: string) => MessageMentions.USERS_PATTERN.test(word)), "target");
-        let result: RegExpExecArray | null = /([0-9]+)/.exec(target);
+        const result: RegExpExecArray | null = /([0-9]+)/.exec(target);
         assert(result != null && result.length > 0);
         const userId: string = (result as RegExpExecArray)[0];
         const targetedUser: UserInfo = querySession.getUser(userId);
@@ -76,6 +77,4 @@ export class BanCommand extends Command {
                     .then(() => resolve());
             });
     }
-
-
 }

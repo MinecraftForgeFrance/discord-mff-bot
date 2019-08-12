@@ -12,7 +12,7 @@ export class PermissionBuilder {
     public hasPermission(permission: PermissionResolvable): PermissionBuilder {
         const check = this.checker;
         this.checker = (sender, ctx) => {
-            if(ctx.getMessage().member) {
+            if (ctx.getMessage().member) {
                 return check(sender, ctx) && ctx.getMessage().member.hasPermission(permission);
             } else {
                 const guild: Guild = ctx.getDiscordClient().guilds.first();
