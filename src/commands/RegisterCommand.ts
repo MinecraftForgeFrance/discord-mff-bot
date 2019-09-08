@@ -18,7 +18,6 @@ export class RegisterCommand extends Command {
         this.steps.push(
             new FetchPseudoStep(),
             new ValidateTokenStep(),
-            new JavaLevelStep(),
         );
     }
 
