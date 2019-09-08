@@ -32,7 +32,7 @@ export class HelpCommand extends Command {
 
         Object.values(this.dispatcher.getCommands()).forEach(command => {
             // Max : 25 fields (https://discord.js.org/#/docs/main/stable/class/RichEmbed?scrollTo=addField)
-            if ((!embed.fields || embed.fields.length < 25) && command.checkPermission(sender, ctx)) {
+            if ((!embed.fields || embed.fields.length < 25) && command.shouldDisplayInHelp(sender, ctx)) {
                 embed.addField(
                     command.getName().toLowerCase(),
                     `${command.getDescription()}

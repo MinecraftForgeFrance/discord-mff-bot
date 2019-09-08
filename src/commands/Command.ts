@@ -41,6 +41,18 @@ export abstract class Command {
         return this.permission(sender, ctx);
     }
 
+    /**
+     * Indicates if this command should be displayed in the help message when help command
+     * is fired. Default behavior is to display the command only if the user has the permission to
+     * execute it in the given context.
+     * 
+     * @param sender the user who fired the help command
+     * @param ctx the context the help command has been fired
+     */
+    public shouldDisplayInHelp(sender: UserInfo, ctx: CommandContext): boolean {
+        return this.checkPermission(sender, ctx);
+    }
+
 }
 
 export type PermissionCheck = (sender: UserInfo, ctx: CommandContext) => boolean;
