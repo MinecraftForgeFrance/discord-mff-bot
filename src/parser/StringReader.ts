@@ -1,7 +1,7 @@
 class StringReader {
 
     private cursor: number;
-    private total_length: number;
+    private readonly total_length: number;
 
     constructor(private arg: string) {
         this.cursor = 0;

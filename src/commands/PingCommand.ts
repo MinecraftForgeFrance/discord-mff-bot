@@ -1,9 +1,9 @@
-import { UserInfo } from "../user/UserInfo";
-import { Command } from "./Command";
-import { PermissionBuilder } from "./permission/PermissionBuilder";
-import { CommandContext } from "./CommandContext";
-import { INFO_COLOR } from "../util/util";
-import { QuerySession } from "../user/UsersManager";
+import {UserInfo} from "../user/UserInfo";
+import {Command} from "./Command";
+import {PermissionBuilder} from "./permission/PermissionBuilder";
+import {CommandContext} from "./CommandContext";
+import {INFO_COLOR} from "../util/util";
+import {QuerySession} from "../user/UsersManager";
 
 export class PingCommand extends Command {
 

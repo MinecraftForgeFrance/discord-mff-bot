@@ -1,8 +1,8 @@
-import { StringReader } from "./StringReader";
+import {StringReader} from "./StringReader";
+import {UserInfo} from "../user/UserInfo";
+import {QuerySession} from "src/user/UsersManager";
+import {MessageMentions} from "discord.js";
 import moment = require("moment");
-import { UserInfo } from "../user/UserInfo";
-import { QuerySession } from "src/user/UsersManager";
-import { MessageMentions } from "discord.js";
 
 interface ArgumentType<T> {
 
@@ -15,8 +15,7 @@ class IntArgument implements ArgumentType<number> {
     public parse(reader: StringReader): number | undefined {
         const start = reader.getCursor();
         let space_less: string = "";
-        while (reader.canRead() && reader.peek() != " ")
-        {
+        while (reader.canRead() && reader.peek() != " ") {
             space_less += reader.read();
         }
 
@@ -37,7 +36,8 @@ class IntArgument implements ArgumentType<number> {
 
 class WordArgument implements ArgumentType<string> {
 
-    constructor(private predicate: WordChecker = (word) => word.length > 0) {}
+    constructor(private predicate: WordChecker = (word) => word.length > 0) {
+    }
 
     public parse(parser: StringReader): string | undefined {
         const start = parser.getCursor();
@@ -61,13 +61,14 @@ class WordArgument implements ArgumentType<string> {
 
 class AllRemainingArgument implements ArgumentType<string> {
 
-    constructor(private predicate: WordChecker = (sentence: string) => sentence.length > 0) {}
+    constructor(private predicate: WordChecker = (sentence: string) => sentence.length > 0) {
+    }
 
     parse(reader: StringReader): string | undefined {
         const start: number = reader.getCursor();
         const length: number = reader.getRemainingCharacters();
         const sentence: string = reader.read(length);
-        if (this.predicate(sentence))  {
+        if (this.predicate(sentence)) {
             return sentence;
         } else {
             reader.setCursor(start);
@@ -132,7 +133,8 @@ class DurationArgument implements ArgumentType<moment.Duration> {
 
 class UserArgument implements ArgumentType<UserInfo> {
 
-    constructor(private querySession: QuerySession) {}
+    constructor(private querySession: QuerySession) {
+    }
 
     parse(reader: StringReader): UserInfo | undefined {
         const mention: string | undefined = new WordArgument(word => MessageMentions.USERS_PATTERN.test(word)).parse(reader);

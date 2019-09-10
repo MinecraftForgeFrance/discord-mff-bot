@@ -1,10 +1,10 @@
-import { Command } from "./Command";
-import { UserInfo } from "../user/UserInfo";
-import { CommandContext } from "./CommandContext";
-import { VersionArgument, AllRemainingArgument, WordArgument } from "../parser/ArgumentType";
-import { RichEmbed } from "discord.js";
-import { requestForum, ERROR_COLOR, SUCCESS_COLOR } from "../util/util";
-import { QuerySession } from "../user/UsersManager";
+import {Command} from "./Command";
+import {UserInfo} from "../user/UserInfo";
+import {CommandContext} from "./CommandContext";
+import {AllRemainingArgument, VersionArgument, WordArgument} from "../parser/ArgumentType";
+import {RichEmbed} from "discord.js";
+import {ERROR_COLOR, requestForum, SUCCESS_COLOR} from "../util/util";
+import {QuerySession} from "../user/UsersManager";
 
 export class TutorialCommand extends Command {
 
@@ -21,7 +21,7 @@ export class TutorialCommand extends Command {
     }
 
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
-       return "[-v <version>] <search>";
+        return "[-v <version>] <search>";
     }
 
     public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
@@ -55,12 +55,10 @@ export class TutorialCommand extends Command {
                             if (!prefixArray.includes(key)) {
                                 prefixArray.push(key);
                                 fieldContent.push(field);
-                            }
-                            else {
+                            } else {
                                 if (fieldContent[prefixArray.lastIndexOf(key)].length <= (1024 - field.length)) {
                                     fieldContent[prefixArray.lastIndexOf(key)] += `\n${field}`;
-                                }
-                                else {
+                                } else {
                                     prefixArray.push(key);
                                     fieldContent.push(field);
                                 }
@@ -78,8 +76,7 @@ export class TutorialCommand extends Command {
                             description: "Votre recherche renvoie trop de résulats.",
                             color: ERROR_COLOR
                         });
-                    }
-                    else {
+                    } else {
                         for (let i = 0; i < prefixArray.length; i++) {
                             embed.addField(prefixArray[i], fieldContent[i]);
                         }

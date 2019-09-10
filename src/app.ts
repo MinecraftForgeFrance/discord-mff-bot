@@ -1,25 +1,25 @@
 import Conf = require("conf");
-import { Client, TextChannel } from "discord.js";
-import { createLogger, Logger } from "winston";
-import { PingCommand } from "./commands/PingCommand";
-import { schema } from "./config/config";
-import { options } from "./logging/LogOptions";
-import { StringReader } from "./parser/StringReader";
-import { DiscAccess, UsersManager, QuerySession } from "./user/UsersManager";
-import { UserInfo } from "./user/UserInfo";
-import { Shoutbox } from "./shoutbox/Shoutbox";
-import { RegisterCommand } from "./commands/RegisterCommand";
-import { StopCommand } from "./commands/StopCommand";
-import { CommandsDispatcher } from "./commands/CommandsDispatcher";
-import { CommandContext } from "./commands/CommandContext";
-import { ResetCommand } from "./commands/ResetCommand";
-import { HelpCommand } from "./commands/HelpCommand";
-import { EventsCommand } from "./commands/EventsCommand";
-import { TutorialCommand } from "./commands/TutorialCommand";
-import { ModHelpCommand } from "./commands/ModHelpCommand";
-import { memberLeave, INFO_COLOR } from "./util/util";
-import { BanCommand } from "./commands/BanCommand";
 import fs = require("fs");
+import {Client, TextChannel} from "discord.js";
+import {createLogger, Logger} from "winston";
+import {PingCommand} from "./commands/PingCommand";
+import {schema} from "./config/config";
+import {options} from "./logging/LogOptions";
+import {StringReader} from "./parser/StringReader";
+import {DiscAccess, QuerySession, UsersManager} from "./user/UsersManager";
+import {UserInfo} from "./user/UserInfo";
+import {Shoutbox} from "./shoutbox/Shoutbox";
+import {RegisterCommand} from "./commands/RegisterCommand";
+import {StopCommand} from "./commands/StopCommand";
+import {CommandsDispatcher} from "./commands/CommandsDispatcher";
+import {CommandContext} from "./commands/CommandContext";
+import {ResetCommand} from "./commands/ResetCommand";
+import {HelpCommand} from "./commands/HelpCommand";
+import {EventsCommand} from "./commands/EventsCommand";
+import {TutorialCommand} from "./commands/TutorialCommand";
+import {ModHelpCommand} from "./commands/ModHelpCommand";
+import {INFO_COLOR, memberLeave} from "./util/util";
+import {BanCommand} from "./commands/BanCommand";
 
 const logger: Logger = createLogger(options);
 if (process.argv.indexOf("--debug") !== -1) {
@@ -79,8 +79,8 @@ client.on("guildMemberAdd", (member) => {
                 color: INFO_COLOR
             }
         })
-        .then(() => logger.debug(`Sent welcome embed to ${member.user.username}@${member.user.id}`))
-        .catch((err) => logger.error(`Error while sending welcome embed to ${member.user.username}@${member.user.id} : ${err}`));
+            .then(() => logger.debug(`Sent welcome embed to ${member.user.username}@${member.user.id}`))
+            .catch((err) => logger.error(`Error while sending welcome embed to ${member.user.username}@${member.user.id} : ${err}`));
     }
 });
 
@@ -94,7 +94,7 @@ client.on("guildBanAdd", (_, user) => {
     const session = usersManager.beginSession();
     const info = session.getUser(user.id);
     if (!info.isBanned()) {
-        info.setBanned(true),
+        info.setBanned(true);
         info.setBannedUntil(-1);
     }
     usersManager.endSession(session);
@@ -121,7 +121,7 @@ client.setInterval(() => {
                     if (info.isBanned() && info.isBannedUntil() > 0 && info.isBannedUntil() < Date.now()) {
                         info.setBanned(false);
                         client.guilds.first().unban(id)
-                            .catch((unbanErr) => logger.error(`Can't unband ${id} : ${unbanErr}`))
+                            .catch((unbanErr) => logger.error(`Can't unbanned ${id} : ${unbanErr}`))
                             .then(() => logger.info(`Unbanned user ${id}`));
                     }
                 });

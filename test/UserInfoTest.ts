@@ -1,5 +1,5 @@
-import { expect } from "chai";
-import { UserInfo } from "../src/user/UserInfo";
+import {expect} from "chai";
+import {UserInfo} from "../src/user/UserInfo";
 
 describe("UserInfo", () => {
 
@@ -33,7 +33,7 @@ describe("UserInfo", () => {
         });
 
         it("Must throw an error if 'discordId' field is missing", () => {
-             expect(() => new UserInfo("{}")).to.throw("Field 'discordId' must be specified.");
+            expect(() => new UserInfo("{}")).to.throw("Field 'discordId' must be specified.");
         });
 
     });

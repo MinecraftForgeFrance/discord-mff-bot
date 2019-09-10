@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import { anyString, instance, mock, resetCalls, spy, verify, when } from "ts-mockito";
-import { UserInfo } from "../src/user/UserInfo";
-import { DiscAccess, QuerySession, UsersManager } from "../src/user/UsersManager";
+import {expect} from "chai";
+import {anyString, instance, mock, resetCalls, spy, verify, when} from "ts-mockito";
+import {UserInfo} from "../src/user/UserInfo";
+import {DiscAccess, QuerySession, UsersManager} from "../src/user/UsersManager";
 
 describe("UsersManager", () => {
 

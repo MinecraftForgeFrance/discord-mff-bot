@@ -1,11 +1,11 @@
-import { Command } from "./Command";
-import { UserInfo } from "../user/UserInfo";
-import { RegistrationStep, FetchPseudoStep, ValidateTokenStep, JavaLevelStep } from "../registriation/RegistrationStep";
-import { PermissionBuilder } from "./permission/PermissionBuilder";
-import { CommandContext } from "./CommandContext";
-import { Guild, Role } from "discord.js";
-import { memberJoin, INFO_COLOR } from "../util/util";
-import { QuerySession } from "../user/UsersManager";
+import {Command} from "./Command";
+import {UserInfo} from "../user/UserInfo";
+import {FetchPseudoStep, RegistrationStep, ValidateTokenStep} from "../registriation/RegistrationStep";
+import {PermissionBuilder} from "./permission/PermissionBuilder";
+import {CommandContext} from "./CommandContext";
+import {Guild, Role} from "discord.js";
+import {INFO_COLOR, memberJoin} from "../util/util";
+import {QuerySession} from "../user/UsersManager";
 
 export class RegisterCommand extends Command {
 
@@ -51,8 +51,8 @@ export class RegisterCommand extends Command {
                 const guild: Guild = ctx.getDiscordClient().guilds.first();
                 const role: Role = guild.roles.find("name", ctx.getConfig().get("roles.member"));
                 guild.member(ctx.getMessage().author).addRole(role, "Enregistrement terminé")
-                        .then((member) => ctx.getLogger().info(`${member.user.username}@${member.id} became member after registration`))
-                        .catch((reason) => ctx.getLogger().error(`Unable to promote ${ctx.getMessage().author.username}@${ctx.getMessage().author.id} to member. Cause : ${reason}`));
+                    .then((member) => ctx.getLogger().info(`${member.user.username}@${member.id} became member after registration`))
+                    .catch((reason) => ctx.getLogger().error(`Unable to promote ${ctx.getMessage().author.username}@${ctx.getMessage().author.id} to member. Cause : ${reason}`));
                 memberJoin(ctx.getDiscordClient(), ctx.getConfig(), ctx.getMessage().author, ctx.getLogger());
             } else {
                 this.steps[nextStepId].enterStep(sender, ctx);

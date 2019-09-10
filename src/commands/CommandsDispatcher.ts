@@ -1,10 +1,10 @@
-import { WordArgument } from "../parser/ArgumentType";
-import { UsersManager, QuerySession } from "../user/UsersManager";
-import { Logger } from "winston";
-import { Command } from "./Command";
-import { UserInfo } from "../user/UserInfo";
-import { CommandContext } from "./CommandContext";
-import { ERROR_COLOR } from "../util/util";
+import {WordArgument} from "../parser/ArgumentType";
+import {QuerySession, UsersManager} from "../user/UsersManager";
+import {Logger} from "winston";
+import {Command} from "./Command";
+import {UserInfo} from "../user/UserInfo";
+import {CommandContext} from "./CommandContext";
+import {ERROR_COLOR} from "../util/util";
 
 export class CommandsDispatcher {
 
@@ -21,7 +21,7 @@ export class CommandsDispatcher {
     public registerCommand(command: Command): void {
         if (this.commands[command.getName().toLowerCase()]) {
             this.logger.error(`Tried to register two commands with the name : ${command.getName().toLowerCase()}`);
-            this.logger.error(`Those classes are ${typeof(this.commands[command.getName().toLowerCase()])} and ${typeof(command)}`);
+            this.logger.error(`Those classes are ${typeof (this.commands[command.getName().toLowerCase()])} and ${typeof (command)}`);
             process.exit(2);
         } else {
             this.commands[command.getName().toLowerCase()] = command;
@@ -62,31 +62,31 @@ export class CommandsDispatcher {
                             reject(err);
                         }
                     })
-                    .then(() => {
-                        this.usersManager.endSession(querySession);
-                    })
-                    .catch((err) => {
-                        if (typeof(err) === "object" && err.errorType === "argument") {
-                            ctx.answerEmbed({
-                                description: `${err.message}
+                        .then(() => {
+                            this.usersManager.endSession(querySession);
+                        })
+                        .catch((err) => {
+                            if (typeof (err) === "object" && err.errorType === "argument") {
+                                ctx.answerEmbed({
+                                    description: `${err.message}
                                               Usage : \`${ctx.getConfig().get('commandPrefix')}${commandName} ${command.getUsage(sender, ctx)}\`
                                 `,
-                                color: ERROR_COLOR
-                            });
-                        } else {
-                            ctx.getLogger().error(`Error while performing command ${command.getName().toLowerCase()} : ${err}`);
-                            ctx.answerEmbed({
-                                description: "Une erreur est survenue pendant l'exécution de la commande. Contactez un administrateur.",
-                                color: ERROR_COLOR
-                            });
-                        }
-                        this.usersManager.endSession(querySession);
-                    });
+                                    color: ERROR_COLOR
+                                });
+                            } else {
+                                ctx.getLogger().error(`Error while performing command ${command.getName().toLowerCase()} : ${err}`);
+                                ctx.answerEmbed({
+                                    description: "Une erreur est survenue pendant l'exécution de la commande. Contactez un administrateur.",
+                                    color: ERROR_COLOR
+                                });
+                            }
+                            this.usersManager.endSession(querySession);
+                        });
                 } else {
                     if (ctx.getMessage().channel.type !== "dm") {
                         ctx.getMessage().delete()
-                                    .then((message) => ctx.getLogger().debug(`Deleted message ${message.id}`))
-                                    .catch((err: any) => ctx.getLogger().error(`Unable to delete message ${ctx.getMessage().id} : ${err}`));
+                            .then((message) => ctx.getLogger().debug(`Deleted message ${message.id}`))
+                            .catch((err: any) => ctx.getLogger().error(`Unable to delete message ${ctx.getMessage().id} : ${err}`));
                     }
                     ctx.answerPrivateEmbed({
                         description: "Vous n'avez pas la permission d'utiliser cette commande.",
@@ -101,4 +101,4 @@ export class CommandsDispatcher {
     }
 }
 
-type CommandsStorage = {[id: string]: Command};
+type CommandsStorage = { [id: string]: Command };

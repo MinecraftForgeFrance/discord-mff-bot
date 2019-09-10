@@ -1,10 +1,10 @@
-import { UserInfo } from "../user/UserInfo";
-import { CommandContext } from "../commands/CommandContext";
-import { IntArgument } from "../parser/ArgumentType";
+import {UserInfo} from "../user/UserInfo";
+import {CommandContext} from "../commands/CommandContext";
+import {IntArgument} from "../parser/ArgumentType";
+import {Guild, RichEmbed, Role} from "discord.js";
+import {requestForum} from "../util/util";
 import Conf = require("conf");
 import assert = require("assert");
-import { RichEmbed, Guild, Role } from "discord.js";
-import { requestForum } from "../util/util";
 
 export abstract class RegistrationStep {
 
@@ -15,7 +15,8 @@ export abstract class RegistrationStep {
      * @param ctx the context for this command
      */
 
-    public enterStep(sender: UserInfo, ctx: CommandContext): void {}
+    public enterStep(sender: UserInfo, ctx: CommandContext): void {
+    }
 
     /**
      * Processes information given by the user to achieve the step, if possible. The function reject
@@ -46,29 +47,29 @@ export class FetchPseudoStep extends RegistrationStep {
         const pseudo: string = ctx.getReader().read(ctx.getReader().getRemainingCharacters()).trim();
 
         requestForum(ctx, "discordapi/register", "POST", {
-                username: pseudo,
-                token: ctx.getConfig().get("forumLink.token")
+            username: pseudo,
+            token: ctx.getConfig().get("forumLink.token")
         })
-        .catch(() => reject())
-        .then((body: any) => {
-            if (body.error === "User not found") {
-                ctx.answerEmbed({
-                    description: "Le pseudo que vous avez indiqué n'existe pas, essayez encore.",
-                    color: 0xFF0000
-                });
-            } else {
-                const token: number = body.result;
-                const userId: string = body.userId;
-                sender.setRegistrationToken(token);
-                sender.setForumId(userId);
-                ctx.answerEmbed({
-                    description: "Vous avez reçu un message privé sur le forum contenant un code activation. Veuillez le récupérer et passer à la suite.",
-                    color: 0xFF00,
-                });
-                nextStep();
-            }
-            resolve();
-        });
+            .catch(() => reject())
+            .then((body: any) => {
+                if (body.error === "User not found") {
+                    ctx.answerEmbed({
+                        description: "Le pseudo que vous avez indiqué n'existe pas, essayez encore.",
+                        color: 0xFF0000
+                    });
+                } else {
+                    const token: number = body.result;
+                    const userId: string = body.userId;
+                    sender.setRegistrationToken(token);
+                    sender.setForumId(userId);
+                    ctx.answerEmbed({
+                        description: "Vous avez reçu un message privé sur le forum contenant un code activation. Veuillez le récupérer et passer à la suite.",
+                        color: 0xFF00,
+                    });
+                    nextStep();
+                }
+                resolve();
+            });
     }
 
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
@@ -172,7 +173,7 @@ export class JavaLevelStep extends RegistrationStep {
         embed.setDescription(question.title);
         embed.setColor(0x66FF);
 
-        for (let i = 0;  i < question.choices.length; i++) {
+        for (let i = 0; i < question.choices.length; i++) {
             embed.addField(`Réponse ${i + 1}`, question.choices[i]);
         }
 

@@ -1,10 +1,10 @@
-import { expect } from "chai";
-import { GuildMember, Message, TextChannel, Role, Snowflake, Collection } from "discord.js";
-import { instance, mock, reset, when } from "ts-mockito";
-import { PermissionCheck } from "../src/commands/Command";
-import { UserInfo } from "../src/user/UserInfo";
-import { CommandContext } from "../src/commands/CommandContext";
-import { PermissionBuilder } from "../src/commands/permission/PermissionBuilder";
+import {expect} from "chai";
+import {Collection, GuildMember, Message, Role, Snowflake, TextChannel} from "discord.js";
+import {instance, mock, reset, when} from "ts-mockito";
+import {PermissionCheck} from "../src/commands/Command";
+import {UserInfo} from "../src/user/UserInfo";
+import {CommandContext} from "../src/commands/CommandContext";
+import {PermissionBuilder} from "../src/commands/permission/PermissionBuilder";
 
 describe("PermissionBuilder", () => {
 

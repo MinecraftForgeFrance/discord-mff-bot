@@ -17,7 +17,7 @@ describe("WordArgument", () => {
 
         it("Fail if the WordChecker rejects the parsed word.", () => {
             const reader: StringReader = new StringReader("once upon a time");
-            const arg: WordArgument = new WordArgument((value: string) => value.indexOf("a") !== -1);
+            const arg: WordArgument = new WordArgument((word: string) => word.indexOf("a") !== -1);
             const value: string | undefined = arg.parse(reader);
 
             expect(reader.getCursor()).to.equal(0);

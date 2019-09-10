@@ -1,11 +1,11 @@
-import { Command } from "./Command";
-import { UserInfo } from "../user/UserInfo";
-import { CommandContext } from "./CommandContext";
-import { PermissionBuilder } from "./permission/PermissionBuilder";
-import { memberLeave, SUCCESS_COLOR, resetMember, ERROR_COLOR } from "../util/util";
-import { QuerySession } from "../user/UsersManager";
-import { UserArgument, WordArgument } from "../parser/ArgumentType";
-import { TextChannel } from "discord.js";
+import {Command} from "./Command";
+import {UserInfo} from "../user/UserInfo";
+import {CommandContext} from "./CommandContext";
+import {PermissionBuilder} from "./permission/PermissionBuilder";
+import {ERROR_COLOR, memberLeave, resetMember, SUCCESS_COLOR} from "../util/util";
+import {QuerySession} from "../user/UsersManager";
+import {UserArgument, WordArgument} from "../parser/ArgumentType";
+import {TextChannel} from "discord.js";
 
 export class ResetCommand extends Command {
 

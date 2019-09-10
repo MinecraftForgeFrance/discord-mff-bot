@@ -1,18 +1,18 @@
-import { Command } from "./Command";
-import { UserInfo } from "../user/UserInfo";
-import { CommandContext } from "./CommandContext";
-import { DurationArgument, WordArgument, AllRemainingArgument } from "../parser/ArgumentType";
+import {Command} from "./Command";
+import {UserInfo} from "../user/UserInfo";
+import {CommandContext} from "./CommandContext";
+import {AllRemainingArgument, DurationArgument, WordArgument} from "../parser/ArgumentType";
+import {GuildMember, MessageMentions} from "discord.js";
+import {QuerySession} from "../user/UsersManager";
+import {ERROR_COLOR, SUCCESS_COLOR} from "../util/util";
+import {PermissionBuilder} from "./permission/PermissionBuilder";
 import moment = require("moment");
-import { MessageMentions, GuildMember } from "discord.js";
 import assert = require("assert");
-import { QuerySession } from "../user/UsersManager";
-import { ERROR_COLOR, SUCCESS_COLOR } from "../util/util";
-import { PermissionBuilder } from "./permission/PermissionBuilder";
 
 export class BanCommand extends Command {
 
     constructor() {
-        super(PermissionBuilder.new().hasPermission("ADMINISTRATOR").build());
+        super(PermissionBuilder.new().hasPermission("BAN_MEMBERS").build());
         moment.locale("fr");
     }
 

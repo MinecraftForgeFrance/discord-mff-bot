@@ -1,13 +1,14 @@
 import Conf = require("conf");
-import { Message, Collection, Snowflake, GuildMember } from "discord.js";
-import { UserInfo } from "../user/UserInfo";
-import { QuerySession } from "src/user/UsersManager";
 import request = require("request");
-import { Logger } from "winston";
+import {Collection, GuildMember, Message, Snowflake} from "discord.js";
+import {UserInfo} from "../user/UserInfo";
+import {QuerySession} from "src/user/UsersManager";
+import {Logger} from "winston";
 
 export class Shoutbox {
 
-    constructor(private config: Conf<unknown>, private logger: Logger) {}
+    constructor(private config: Conf<unknown>, private logger: Logger) {
+    }
 
     public bridgeMessage(sender: UserInfo, message: Message, session: QuerySession): void {
 
@@ -45,7 +46,7 @@ export class Shoutbox {
                 message: forwardedMessage,
                 mentions
             }
-        }, (err, res, body)  => {
+        }, (err, res, body) => {
             if (err) {
                 this.logger.error(`Error while requesting shoutbox endpoint. Response code ${res.statusCode}. ${err}`);
                 this.logger.error(body);

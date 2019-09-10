@@ -1,7 +1,7 @@
-import { StringReader } from "src/parser/StringReader";
-import { Client, Message, RichEmbed, RichEmbedOptions } from "discord.js";
-import { Logger } from "winston";
-import { ArgumentType } from "src/parser/ArgumentType";
+import {StringReader} from "src/parser/StringReader";
+import {Client, Message, RichEmbed, RichEmbedOptions} from "discord.js";
+import {Logger} from "winston";
+import {ArgumentType} from "src/parser/ArgumentType";
 import Conf = require("conf");
 
 export class CommandContext {
@@ -51,7 +51,7 @@ export class CommandContext {
      */
     public answerPrivateEmbed(embed: RichEmbed | RichEmbedOptions): void {
         this.message.author.send({embed})
-                            .catch(err => this.logger.error(`Got error while sending private embed message : ${err}`));
+            .catch(err => this.logger.error(`Got error while sending private embed message : ${err}`));
     }
 
     /**
@@ -71,7 +71,7 @@ export class CommandContext {
      */
     public answerEmbed(embed: RichEmbed | RichEmbedOptions): void {
         this.message.channel.send({embed})
-                            .catch(err => this.logger.error(`Got error while sending embed message : ${err}`));
+            .catch(err => this.logger.error(`Got error while sending embed message : ${err}`));
     }
 
     /**
@@ -99,7 +99,7 @@ export class CommandContext {
         if (name) {
             throw {
                 errorType: "argument",
-                message: `L'argument \`${name}\` est requis mais n'est pas présent ou invalide.`
+                message: `L'argument \`${name}\` est requis, mais n'est pas présent ou invalide.`
             };
         }
         throw {

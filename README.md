@@ -56,11 +56,11 @@ List of configuration fields :
     * Accepted values : array of java question object
     * No default value
     * Must have at least 5 items
-* `javaQuestions`.item
+* `javaQuestions.item`
     * Description : A question that can be picked up for java level validation
     * Attributes
         * `title` (string) : the question
-        * `choices` (array&lt;string&gt;) : the differents possibilities to answer to the question. Must contains at least 2 items.
+        * `choices` (array\<string\>) : the differents possibilities to answer to the question. Must contains at least 2 items.
         * `answer` (integer) : the good answer
 * `ban.unbanInterval`
     * Description : time (in ms) between to two execution of unban checks for temp bans

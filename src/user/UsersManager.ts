@@ -1,4 +1,4 @@
-import { UserInfo } from './UserInfo';
+import {UserInfo} from './UserInfo';
 import fs = require('fs');
 
 /**
@@ -150,7 +150,8 @@ export class UsersManager {
 
 export class QuerySession {
 
-    constructor(private manager: UsersManager) {}
+    constructor(private manager: UsersManager) {
+    }
 
     public getUser(userId: string): UserInfo {
         return this.manager.getUser(this, userId);
@@ -173,11 +174,11 @@ export class DiscAccess {
     }
 
     public read(path: string): string {
-        return fs.readFileSync(path, { encoding: 'utf8' });
+        return fs.readFileSync(path, {encoding: 'utf8'});
     }
 
     public mkdir(path: string): void {
-        fs.mkdirSync(path, { recursive: true });
+        fs.mkdirSync(path, {recursive: true});
     }
 
     public write(path: string, data: any): void {

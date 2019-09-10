@@ -1,5 +1,5 @@
-import { PermissionCheck } from "../Command";
-import { PermissionResolvable, TextChannel, Guild, GuildMember } from "discord.js";
+import {PermissionCheck} from "../Command";
+import {Guild, GuildMember, PermissionResolvable, TextChannel} from "discord.js";
 
 export class PermissionBuilder {
 

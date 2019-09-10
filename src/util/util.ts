@@ -1,9 +1,9 @@
-import { Guild, Client, User, GuildChannel, TextChannel, GuildMember } from "discord.js";
+import {Client, Guild, GuildChannel, GuildMember, TextChannel, User} from "discord.js";
+import {Logger} from "winston";
+import {CommandContext} from "../commands/CommandContext";
+import {UserInfo} from "../user/UserInfo";
 import Conf = require("conf");
-import { Logger } from "winston";
 import request = require("request");
-import { CommandContext } from "../commands/CommandContext";
-import { UserInfo } from "../user/UserInfo";
 
 export function memberJoin(client: Client, config: Conf<any>, user: User, logger: Logger): void {
     const guild: Guild = client.guilds.first();

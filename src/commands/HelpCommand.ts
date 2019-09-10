@@ -1,10 +1,10 @@
-import { CommandsDispatcher } from "./CommandsDispatcher";
-import { Command } from "./Command";
-import { UserInfo } from "../user/UserInfo";
-import { CommandContext } from "./CommandContext";
-import { RichEmbed } from "discord.js";
-import { INFO_COLOR } from "../util/util";
-import { QuerySession } from "../user/UsersManager";
+import {CommandsDispatcher} from "./CommandsDispatcher";
+import {Command} from "./Command";
+import {UserInfo} from "../user/UserInfo";
+import {CommandContext} from "./CommandContext";
+import {RichEmbed} from "discord.js";
+import {INFO_COLOR} from "../util/util";
+import {QuerySession} from "../user/UsersManager";
 
 export class HelpCommand extends Command {
 

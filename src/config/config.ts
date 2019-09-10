@@ -1,6 +1,6 @@
-import { JSONSchema } from "json-schema-typed";
+import {JSONSchema} from "json-schema-typed";
 
-export const schema: {[key: string]: JSONSchema} = {
+export const schema: { [key: string]: JSONSchema } = {
     forumLink: {
         type: "object",
         properties: {
@@ -16,7 +16,7 @@ export const schema: {[key: string]: JSONSchema} = {
             hostname: {
                 type: "string"
             },
-            token : {
+            token: {
                 type: "string"
             }
         },

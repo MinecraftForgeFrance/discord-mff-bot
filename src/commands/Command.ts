@@ -1,10 +1,10 @@
-import { UserInfo } from "../user/UserInfo";
-import { CommandContext } from "./CommandContext";
-import { QuerySession } from "../user/UsersManager";
+import {UserInfo} from "../user/UserInfo";
+import {CommandContext} from "./CommandContext";
+import {QuerySession} from "../user/UsersManager";
 
 export abstract class Command {
 
-    constructor(private permission: PermissionCheck) {}
+    protected constructor(private permission: PermissionCheck) {}
 
     public abstract getName(): string;
 
@@ -45,7 +45,7 @@ export abstract class Command {
      * Indicates if this command should be displayed in the help message when help command
      * is fired. Default behavior is to display the command only if the user has the permission to
      * execute it in the given context.
-     * 
+     *
      * @param sender the user who fired the help command
      * @param ctx the context the help command has been fired
      */
