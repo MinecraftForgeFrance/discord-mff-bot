@@ -27,7 +27,7 @@ export function requestForum(ctx: CommandContext, endpoint: string, method: "GET
     const config = ctx.getConfig();
     return new Promise((resolve, reject) => {
         request({
-            uri: `${config.get("forumLink.protocol")}://${config.get("forumLink.hostname")}:${config.get("forumLink.port")}/${endpoint}`,
+            uri: `${config.get("forumLink.protocol")}://${config.get("forumLink.hostname")}:${config.get("forumLink.port")}/discordapi/${endpoint}`,
             json,
             method
         }, (err, response, body) => {

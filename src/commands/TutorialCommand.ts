@@ -32,7 +32,7 @@ export class TutorialCommand extends Command {
         }
         const search: string = ctx.requiredArg(new AllRemainingArgument(), "search");
         const config = ctx.getConfig();
-        requestForum(ctx, `discordapi/tutorial?term=${search}${tagsParameter}&token=${config.get("forumLink.token")}`, "GET", true)
+        requestForum(ctx, `tutorial?term=${search}${tagsParameter}&token=${config.get("forumLink.token")}`, "GET", true)
             .catch(() => reject())
             .then((body: any) => {
                 if (body.message === "No result") {

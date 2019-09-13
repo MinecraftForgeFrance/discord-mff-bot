@@ -46,7 +46,7 @@ export class FetchPseudoStep extends RegistrationStep {
     public executeStep(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void, nextStep: () => void): void {
         const pseudo: string = ctx.getReader().read(ctx.getReader().getRemainingCharacters()).trim();
 
-        requestForum(ctx, "discordapi/register", "POST", {
+        requestForum(ctx, "register", "POST", {
             username: pseudo,
             token: ctx.getConfig().get("forumLink.token")
         })

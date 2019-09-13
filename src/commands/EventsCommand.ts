@@ -29,7 +29,7 @@ export class EventsCommand extends Command {
         const config = ctx.getConfig();
         const forumUrl: string = `${config.get("forumLink.protocol")}://${config.get("forumLink.hostname")}:${config.get("forumLink.port")}`;
 
-        requestForum(ctx, `discordapi/forgeevents?term=${search}`, "GET", true)
+        requestForum(ctx, `forgeevents?term=${search}`, "GET", true)
             .catch(() => reject())
             .then((body: any) => {
                 if (body.message === "No result") {
