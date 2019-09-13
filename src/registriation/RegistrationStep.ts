@@ -63,7 +63,7 @@ export class FetchPseudoStep extends RegistrationStep {
                     sender.setRegistrationToken(token);
                     sender.setForumId(userId);
                     ctx.answerEmbed({
-                        description: "Vous avez reçu un message privé sur le forum contenant un code activation. Veuillez le récupérer et passer à la suite.",
+                        description: "Vous avez reçu un message privé sur le forum contenant un code d'activation. Veuillez le récupérer et passer à la suite.",
                         color: 0xFF00,
                     });
                     nextStep();

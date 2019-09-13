@@ -20,7 +20,7 @@ List of configuration fields :
     * Accepted values : any integer
     * Default value : `80`
 * `forumLink.token`
-    * Description : The token to get authentificated on the forum bridge
+    * Description : The token to get authenticated on the forum bridge
     * Accepted values : any string
     * No default value
 * `channels.logs`

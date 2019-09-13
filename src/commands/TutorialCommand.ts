@@ -17,7 +17,7 @@ export class TutorialCommand extends Command {
     }
 
     public getDescription(): string {
-        return "Affiche la liste des tutoriels crrespondants à la recherche";
+        return "Affiche la liste des tutoriels correspondants à la recherche";
     }
 
     public getUsage(sender: UserInfo, ctx: CommandContext): string {
