@@ -62,7 +62,12 @@ export class EventsCommand extends Command {
                             [Pour plus d'info](${urlAnchor})
                             `);
                         }
-                        ctx.answerEmbed(embed);
+
+                        if (embed.length >= 6000) {
+                            ctx.answer("Votre recherche renvoie trop de résultats, merci de l'affiner.");
+                        } else {
+                            ctx.answerEmbed(embed);
+                        }
                     }
                     resolve();
                 }
