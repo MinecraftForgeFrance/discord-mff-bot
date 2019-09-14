@@ -1,6 +1,7 @@
 import Conf = require("conf");
 import fs = require("fs");
-import {Client, TextChannel} from "discord.js";
+import moment = require("moment");
+import {Client, Message, TextChannel} from "discord.js";
 import {createLogger, Logger} from "winston";
 import {PingCommand} from "./commands/PingCommand";
 import {schema} from "./config/config";
@@ -38,6 +39,8 @@ const client = new Client();
 const usersManager = new UsersManager(new DiscAccess());
 const commandsDispatcher = new CommandsDispatcher(usersManager, logger);
 registerAllCommands();
+
+let isNewYear = true;
 
 client.on("ready", () => {
     logger.info("Discord client ready !");
@@ -132,6 +135,20 @@ client.setInterval(() => {
         });
     }
 }, conf.get("ban.unbanInterval"));
+
+client.setInterval(() => {
+    moment.locale("fr");
+    const newYear = moment().set({hour: 0, minute: 0, second: 0, date: 1, month: 0, year: 2019});
+    const now = moment();
+    if (now >= newYear && !isNewYear) {
+        isNewYear = true;
+        const channel = client.channels.find(value => (value as TextChannel).name === "annonces") as TextChannel;
+        channel.send(`@everyone\n\nL'équipe de Minecraft Forge France vous souhaite une bonne année ${now.format("YYYY")} !`)
+            .then(async (message: Message) => logger.info(`Send message : ${message.content}`))
+            .catch(console.error);
+
+    }
+}, 1_000);
 
 client.on("debug", (info: string) => logger.debug(info));
 
