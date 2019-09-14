@@ -11,7 +11,7 @@ export const schema: { [key: string]: JSONSchema } = {
             },
             port: {
                 type: "integer",
-                default: 80
+                default: 443
             },
             hostname: {
                 type: "string"

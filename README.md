@@ -11,14 +11,14 @@ List of configuration fields :
     * Description : The protocol to use to connect to the forum bridge 
     * Accepted values : `https`, `http`
     * Default value : `https`
-* `forumLink.host`
+* `forumLink.hostname`
     * Description : The domain the forum bridge is hosted on
     * Accepted values : any string
     * No default value
 * `forumLink.port`
     * Description : The port for the forum bridge
     * Accepted values : any integer
-    * Default value : `80`
+    * Default value : `443`
 * `forumLink.token`
     * Description : The token to get authenticated on the forum bridge
     * Accepted values : any string
