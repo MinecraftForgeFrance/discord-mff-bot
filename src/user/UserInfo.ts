@@ -97,10 +97,7 @@ export class UserInfo {
     }
 
     public isBanned(): boolean {
-        if (this.banned) {
-            return true;
-        }
-        return false;
+        return this.banned;
     }
 
     public setBanned(banned: boolean): void {
