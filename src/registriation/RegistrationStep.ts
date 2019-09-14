@@ -1,6 +1,6 @@
 import {UserInfo} from "../user/UserInfo";
 import {CommandContext} from "../commands/CommandContext";
-import {IntArgument} from "../parser/ArgumentType";
+import {IntArgument, WordArgument} from "../parser/ArgumentType";
 import {Guild, RichEmbed, Role} from "discord.js";
 import {requestForum} from "../util/util";
 import Conf = require("conf");
@@ -58,8 +58,8 @@ export class FetchPseudoStep extends RegistrationStep {
                         color: 0xFF0000
                     });
                 } else {
-                    const token: number = body.result;
-                    const userId: string = body.userId;
+                    const token: string = body.result;
+                    const userId: number = body.userId;
                     sender.setRegistrationToken(token);
                     sender.setForumId(userId);
                     ctx.answerEmbed({
@@ -85,7 +85,7 @@ export class ValidateTokenStep extends RegistrationStep {
     }
 
     public executeStep(sender: UserInfo, ctx: CommandContext, resolve: () => void, reject: () => void, nextStep: () => void): void {
-        const token: number = ctx.requiredArg(new IntArgument(), "code");
+        const token: string = ctx.requiredArg(new WordArgument(), "code");
         if (sender.getCounter() === 0) {
             ctx.answerEmbed({
                 description: "Vous avez épuisé toute vos tentatives. Contactez un administrateur si nécessaire.",

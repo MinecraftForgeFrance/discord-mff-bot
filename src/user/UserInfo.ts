@@ -1,11 +1,11 @@
 export class UserInfo {
 
     private readonly discordId: string = '';
-    private forumId: string | null = null;
+    private forumId: number | null = null;
     private banned: boolean = false;
     private bannedUntil: number = 0;
     private registrationStep: number = 0;
-    private registrationToken: number | undefined;
+    private registrationToken: string | undefined;
     private counter: number = 0;
     private readonly javaQuestions: JavaQuestions = {answeredQuestions: []};
 
@@ -57,7 +57,7 @@ export class UserInfo {
     /**
      * @returns the id of the user on the forum. Can be null if the user isn't registered
      */
-    public getForumId(): string | null {
+    public getForumId(): number | null {
         return this.forumId;
     }
 
@@ -84,11 +84,11 @@ export class UserInfo {
     /**
      * Sets the token the user will receive on the forum
      */
-    public setRegistrationToken(token: number): void {
+    public setRegistrationToken(token: string): void {
         this.registrationToken = token;
     }
 
-    public getRegistrationToken(): number | undefined {
+    public getRegistrationToken(): string | undefined {
         return this.registrationToken;
     }
 
@@ -115,7 +115,7 @@ export class UserInfo {
         this.bannedUntil = timestamp;
     }
 
-    public setForumId(forumId: string): void {
+    public setForumId(forumId: number): void {
         this.forumId = forumId;
     }
 

@@ -29,7 +29,7 @@ export class Shoutbox {
                 if (result != null) {
                     forwardedMessage = forwardedMessage.substring(0, result.index) + forwardedMessage.substr(result.index + result[0].length);
                     mentions.push({
-                        id: memberInfo.getForumId() as string,
+                        id: memberInfo.getForumId() as number,
                         index: result.index + removedLength
                     });
                     removedLength += result[0].length;
@@ -58,6 +58,6 @@ export class Shoutbox {
 }
 
 interface ShoutboxMention {
-    id: string;
+    id: number;
     index: number;
 }
