@@ -11,6 +11,7 @@ import {DiscAccess, QuerySession, UsersManager} from "./user/UsersManager";
 import {UserInfo} from "./user/UserInfo";
 import {Shoutbox} from "./shoutbox/Shoutbox";
 import {RegisterCommand} from "./commands/RegisterCommand";
+import {RuleCommand} from "./commands/RuleCommand";
 import {StopCommand} from "./commands/StopCommand";
 import {CommandsDispatcher} from "./commands/CommandsDispatcher";
 import {CommandContext} from "./commands/CommandContext";
@@ -162,6 +163,7 @@ function registerAllCommands() {
     commandsDispatcher.registerCommand(new TutorialCommand());
     commandsDispatcher.registerCommand(new ModHelpCommand());
     commandsDispatcher.registerCommand(new BanCommand());
+    commandsDispatcher.registerCommand(new RuleCommand());
 }
 
 client.login(conf.get("application.token")).catch((err) => {

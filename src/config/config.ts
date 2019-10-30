@@ -31,9 +31,21 @@ export const schema: { [key: string]: JSONSchema } = {
             },
             shoutbox: {
                 type: "string"
+            },
+            rules: {
+                type: "string"
+            },
+            aide_modding: {
+                type: "string"
+            },
+            recrutement: {
+                type: "string"
+            },
+            flood: {
+                type: "string"
             }
         },
-        required: ["logs", "shoutbox"],
+        required: ["logs", "shoutbox", "rules", "aide_modding", "recrutement", "flood"],
         default: {}
     },
     roles: {
