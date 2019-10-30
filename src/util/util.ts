@@ -1,4 +1,4 @@
-import {Client, Guild, GuildChannel, GuildMember, TextChannel, User} from "discord.js";
+import {Client, Guild, GuildChannel, GuildMember, RichEmbed, TextChannel, User} from "discord.js";
 import {Logger} from "winston";
 import {CommandContext} from "../commands/CommandContext";
 import {UserInfo} from "../user/UserInfo";
@@ -8,19 +8,19 @@ import request = require("request");
 export function memberJoin(client: Client, config: Conf<any>, user: User, logger: Logger): void {
     const guild: Guild = client.guilds.first();
     const channel: GuildChannel = guild.channels.find("name", config.get("channels.logs"));
-    (channel as TextChannel).send({
-        description: `${user.username} a rejoint le serveur`,
-        color: SUCCESS_COLOR
-    }).catch(logger.error);
+    const embed = new RichEmbed();
+    embed.setDescription(`**${user.username}** a rejoint le serveur.`);
+    embed.setColor(SUCCESS_COLOR);
+    (channel as TextChannel).send(embed).catch(logger.error);
 }
 
 export function memberLeave(client: Client, config: Conf<any>, user: User, logger: Logger): void {
     const guild: Guild = client.guilds.first();
     const channel: GuildChannel = guild.channels.find("name", config.get("channels.logs"));
-    (channel as TextChannel).send({
-        description: `${user.username} a quitté le serveur`,
-        color: ERROR_COLOR
-    }).catch(logger.error);
+    const embed = new RichEmbed();
+    embed.setDescription(`**${user.username}** a quitté le serveur.`);
+    embed.setColor(ERROR_COLOR);
+    (channel as TextChannel).send(embed).catch(logger.error);
 }
 
 export function requestForum(ctx: CommandContext, endpoint: string, method: "GET" | "POST", json: object | boolean): Promise<any> {
