@@ -30,7 +30,7 @@ if (process.argv.indexOf("--debug") !== -1) {
 
 const conf = new Conf<any>({
     configName: "bot-config",
-    cwd: "./dist/config",
+    cwd: "./config",
     schema,
 });
 
