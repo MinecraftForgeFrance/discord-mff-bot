@@ -62,7 +62,9 @@ export class RuleCommand extends Command {
                         return temp;
                     });
                 }
-                embed.addField(`${i + 1}.`, fileContent[i]);
+                if (fileContent[i]) {
+                    embed.addField(`${i + 1}.`, fileContent[i]);
+                }
             }
 
             channel.send(embed);
