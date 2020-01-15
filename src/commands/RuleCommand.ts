@@ -42,33 +42,35 @@ export class RuleCommand extends Command {
             } while (fetched.size >= 2);
         }
 
-        clear().then(() => ctx.getLogger().info("Delete all message with success"));
-        embed.setTitle(":scroll: RÈGLES DU DISCORD DE MINECRAFT FORGE FRANCE");
-        embed.setDescription("───────────────────────────────────");
-        embed.setColor(INFO_COLOR);
-        embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");
+        clear().then(() => {
+            ctx.getLogger().info("Delete all message with success");
+            embed.setTitle(":scroll: RÈGLES DU DISCORD DE MINECRAFT FORGE FRANCE");
+            embed.setDescription("───────────────────────────────────");
+            embed.setColor(INFO_COLOR);
+            embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");
 
-        if (fs.existsSync("rule.md")) {
-            const fileContent = fs.readFileSync("rule.md").toString().split("\n");
-            for (let i = 0; i < fileContent.length; i++) {
-                if (fileContent[i].match(/#([a-zA-Z-]+)/g)) {
-                    fileContent[i] = fileContent[i].replace(/#([a-zA-Z-]+)/g, (match, name) => {
-                        let temp: string = "";
-                        for (const value of channels) {
-                            if (value.name === name) {
-                                temp = value.toString();
+            if (fs.existsSync("rule.md")) {
+                const fileContent = fs.readFileSync("rule.md").toString().split("\n");
+                for (let i = 0; i < fileContent.length; i++) {
+                    if (fileContent[i].match(/#([a-zA-Z-]+)/g)) {
+                        fileContent[i] = fileContent[i].replace(/#([a-zA-Z-]+)/g, (match, name) => {
+                            let temp: string = "";
+                            for (const value of channels) {
+                                if (value.name === name) {
+                                    temp = value.toString();
+                                }
                             }
-                        }
-                        return temp;
-                    });
+                            return temp;
+                        });
+                    }
+                    if (fileContent[i]) {
+                        embed.addField(`${i + 1}.`, fileContent[i]);
+                    }
                 }
-                if (fileContent[i]) {
-                    embed.addField(`${i + 1}.`, fileContent[i]);
-                }
-            }
 
-            channel.send(embed);
-        }
-        resolve();
+                channel.send(embed);
+            }
+            resolve();
+        });
     }
 }
