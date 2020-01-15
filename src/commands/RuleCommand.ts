@@ -48,8 +48,8 @@ export class RuleCommand extends Command {
         embed.setColor(INFO_COLOR);
         embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");
 
-        if (fs.existsSync("rule.txt")) {
-            const fileContent = fs.readFileSync("rule.txt").toString().split("\n");
+        if (fs.existsSync("rule.md")) {
+            const fileContent = fs.readFileSync("rule.md").toString().split("\n");
             for (let i = 0; i < fileContent.length; i++) {
                 if (fileContent[i].match(/#([a-zA-Z-]+)/g)) {
                     fileContent[i] = fileContent[i].replace(/#([a-zA-Z-]+)/g, (match, name) => {
