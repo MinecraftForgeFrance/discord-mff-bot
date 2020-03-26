@@ -68,6 +68,8 @@ client.on("message", message => {
         const args = message.content.slice(defaultConfig.bot.prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
         //userLastCommand[messageUser] = command;
+        // This makes the bot not responding to only prefix.
+        if(!command) return;
         // The list of if/else is replaced with those simple 2 lines:
         try {
             if (fs.existsSync(`./commands/${message.channel.type}_${command}.js`)) {
