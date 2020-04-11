@@ -29,9 +29,9 @@ export class EventsCommand extends Command {
         const config = ctx.getConfig();
         const forumUrl: string = `${config.get("forumLink.protocol")}://${config.get("forumLink.hostname")}:${config.get("forumLink.port")}`;
 
-        requestForum(ctx, `forgeevents?term=${search}`, "GET", true)
+        requestForum(ctx, `forgeevents?term=${search}`, "GET")
             .catch(() => reject())
-            .then((body: any) => {
+            .then(body => {
                 if (body.message === "No result") {
                     ctx.answerEmbed({
                         description: "Aucun événement ne correspond à cette recherche",

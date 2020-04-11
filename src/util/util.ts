@@ -1,9 +1,9 @@
-import {Client, Guild, GuildChannel, GuildMember, RichEmbed, TextChannel, User} from "discord.js";
-import {Logger} from "winston";
-import {CommandContext} from "../commands/CommandContext";
-import {UserInfo} from "../user/UserInfo";
+import axios from "axios";
 import Conf = require("conf");
-import request = require("request");
+import { Client, Guild, GuildChannel, GuildMember, RichEmbed, TextChannel, User } from "discord.js";
+import { Logger } from "winston";
+import { CommandContext } from "../commands/CommandContext";
+import { UserInfo } from "../user/UserInfo";
 
 export function memberJoin(client: Client, config: Conf<any>, user: User, logger: Logger): void {
     const guild: Guild = client.guilds.first();
@@ -23,25 +23,21 @@ export function memberLeave(client: Client, config: Conf<any>, user: User, logge
     (channel as TextChannel).send(embed).catch(logger.error);
 }
 
-export function requestForum(ctx: CommandContext, endpoint: string, method: "GET" | "POST", json: object | boolean): Promise<any> {
+export async function requestForum(ctx: CommandContext, endpoint: string, method: "GET" | "POST", data?: object) {
     const config = ctx.getConfig();
-    return new Promise((resolve, reject) => {
-        request({
-            uri: `${config.get("forumLink.protocol")}://${config.get("forumLink.hostname")}:${config.get("forumLink.port")}/discordapi/${endpoint}`,
-            json,
-            method
-        }, (err, response, body) => {
-            if (body) {
-                resolve(body);
-            } else {
-                ctx.getLogger().error(`Unable to reach endpoint ${endpoint}. Response code : ${response.statusCode}`);
-                if (err) {
-                    ctx.getLogger().error(err);
-                }
-                reject();
-            }
+    try {
+        const resp = await axios({
+            method: method,
+            url: `${config.get("forumLink.protocol")}://${config.get("forumLink.hostname")}:${config.get("forumLink.port")}/discordapi/${endpoint}`,
+            data,
+            responseType: 'json'
         });
-    });
+        return resp.data;
+    }
+    catch (err) {
+        ctx.getLogger().error(`Unable to reach endpoint ${endpoint}. Err:`, err);
+        throw err;
+    }
 }
 
 export function resetMember(client: Client, config: Conf<any>, info: UserInfo, logger: Logger): void {

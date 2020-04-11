@@ -32,9 +32,9 @@ export class TutorialCommand extends Command {
         }
         const search: string = ctx.requiredArg(new AllRemainingArgument(), "search");
         const config = ctx.getConfig();
-        requestForum(ctx, `tutorial?term=${search}${tagsParameter}&token=${config.get("forumLink.token")}`, "GET", true)
+        requestForum(ctx, `tutorial?term=${search}${tagsParameter}&token=${config.get("forumLink.token")}`, "GET")
             .catch(() => reject())
-            .then((body: any) => {
+            .then(body => {
                 if (body.message === "No result") {
                     ctx.answerEmbed({
                         description: "Aucun résultat ne correspond à votre recherche",
