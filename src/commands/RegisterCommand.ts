@@ -3,7 +3,6 @@ import {UserInfo} from "../user/UserInfo";
 import {FetchPseudoStep, RegistrationStep, ValidateTokenStep} from "../registriation/RegistrationStep";
 import {PermissionBuilder} from "./permission/PermissionBuilder";
 import {CommandContext} from "./CommandContext";
-import {Guild, Role} from "discord.js";
 import {INFO_COLOR, memberJoin, addMemberRole} from "../util/util";
 import {QuerySession} from "../user/UsersManager";
 
