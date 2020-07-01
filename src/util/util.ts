@@ -1,13 +1,19 @@
 import axios from "axios";
 import Conf = require("conf");
-import { Client, Guild, GuildChannel, GuildMember, RichEmbed, TextChannel, User } from "discord.js";
+import { Client, Guild, GuildChannel, GuildMember, RichEmbed, TextChannel, User, Role } from "discord.js";
 import { Logger } from "winston";
 import { CommandContext } from "../commands/CommandContext";
 import { UserInfo } from "../user/UserInfo";
 
+export function addMemberRole(client: Client, config: Conf<any>, user: User) {
+    const guild: Guild = client.guilds.first();
+    const role: Role = guild.roles.find("name", config.get("roles.member"));
+    return guild.member(user).addRole(role, "Ancien membre de retour");
+}
+
 export function memberJoin(client: Client, config: Conf<any>, user: User, logger: Logger): void {
     const guild: Guild = client.guilds.first();
-    const channel: GuildChannel = guild.channels.find("name", config.get("channels.logs"));
+    const channel: GuildChannel = guild.channels.find(c => c.name === config.get("channels.logs"));
     const embed = new RichEmbed();
     embed.setDescription(`**${user.username}** a rejoint le serveur.`);
     embed.setColor(SUCCESS_COLOR);
@@ -16,7 +22,7 @@ export function memberJoin(client: Client, config: Conf<any>, user: User, logger
 
 export function memberLeave(client: Client, config: Conf<any>, user: User, logger: Logger): void {
     const guild: Guild = client.guilds.first();
-    const channel: GuildChannel = guild.channels.find("name", config.get("channels.logs"));
+    const channel: GuildChannel = guild.channels.find(c => c.name === config.get("channels.logs"));
     const embed = new RichEmbed();
     embed.setDescription(`**${user.username}** a quitté le serveur.`);
     embed.setColor(ERROR_COLOR);

@@ -4,7 +4,7 @@ import {FetchPseudoStep, RegistrationStep, ValidateTokenStep} from "../registria
 import {PermissionBuilder} from "./permission/PermissionBuilder";
 import {CommandContext} from "./CommandContext";
 import {Guild, Role} from "discord.js";
-import {INFO_COLOR, memberJoin} from "../util/util";
+import {INFO_COLOR, memberJoin, addMemberRole} from "../util/util";
 import {QuerySession} from "../user/UsersManager";
 
 export class RegisterCommand extends Command {
@@ -48,9 +48,7 @@ export class RegisterCommand extends Command {
             sendCurrentStep();
 
             if (sender.getRegistrationStep() === this.steps.length) {
-                const guild: Guild = ctx.getDiscordClient().guilds.first();
-                const role: Role = guild.roles.find("name", ctx.getConfig().get("roles.member"));
-                guild.member(ctx.getMessage().author).addRole(role, "Enregistrement terminé")
+                addMemberRole(ctx.getDiscordClient(), ctx.getConfig(), ctx.getMessage().author)
                     .then((member) => ctx.getLogger().info(`${member.user.username}@${member.id} became member after registration`))
                     .catch((reason) => ctx.getLogger().error(`Unable to promote ${ctx.getMessage().author.username}@${ctx.getMessage().author.id} to member. Cause : ${reason}`));
                 memberJoin(ctx.getDiscordClient(), ctx.getConfig(), ctx.getMessage().author, ctx.getLogger());

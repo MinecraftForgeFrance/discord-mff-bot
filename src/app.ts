@@ -20,7 +20,7 @@ import {HelpCommand} from "./commands/HelpCommand";
 import {EventsCommand} from "./commands/EventsCommand";
 import {TutorialCommand} from "./commands/TutorialCommand";
 import {ModHelpCommand} from "./commands/ModHelpCommand";
-import {INFO_COLOR, memberLeave} from "./util/util";
+import {INFO_COLOR, memberLeave, addMemberRole} from "./util/util";
 import {BanCommand} from "./commands/BanCommand";
 
 const logger: Logger = createLogger(options);
@@ -76,15 +76,25 @@ client.on("message", (message) => {
 
 client.on("guildMemberAdd", (member) => {
     if (!member.user.bot) {
-        member.send({
-            embed: {
-                description: `Bonjour ${member.displayName} sur le serveur Discord de Minecraft Forge France.
-                Veuillez vous enregistrer pour acquérir des droits sur le serveur. Tapez \`${commandsPrefix}register\` pour en savoir plus.`,
-                color: INFO_COLOR
-            }
-        })
-            .then(() => logger.debug(`Sent welcome embed to ${member.user.username}@${member.user.id}`))
-            .catch((err) => logger.error(`Error while sending welcome embed to ${member.user.username}@${member.user.id} : ${err}`));
+        const querySession: QuerySession = usersManager.beginSession();
+        const sender: UserInfo = querySession.getUser(member.user.id);
+        const forumId = sender.getForumId();
+        usersManager.endSession(querySession);
+        if (forumId != null) {
+            addMemberRole(client, conf, member.user)
+            .then((member) => logger.info(`${member.user.username}@${member.id} became member after registration`))
+            .catch((reason) => logger.error(`Unable to promote ${member.user.username}@${member.user.id} to member. Cause : ${reason}`));
+        } else {
+            member.send({
+                embed: {
+                    description: `Bonjour ${member.displayName} sur le serveur Discord de Minecraft Forge France.
+                    Veuillez vous enregistrer pour acquérir des droits sur le serveur. Tapez \`${commandsPrefix}register\` pour en savoir plus.`,
+                    color: INFO_COLOR
+                }
+            })
+                .then(() => logger.debug(`Sent welcome embed to ${member.user.username}@${member.user.id}`))
+                .catch((err) => logger.error(`Error while sending welcome embed to ${member.user.username}@${member.user.id} : ${err}`));
+        }
     }
 });
 
