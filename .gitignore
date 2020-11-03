@@ -229,3 +229,7 @@ pidfile
 ideas.txt
 dist/
 log/
+
+.idea/discord.xml
+
+.idea/sshConfigs.xml

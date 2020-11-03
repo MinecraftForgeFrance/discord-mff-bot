@@ -11,7 +11,8 @@ export class CommandsDispatcher {
     private commands: CommandsStorage = {};
     private commandNameParser: WordArgument = new WordArgument((v: string) => v.length !== 0);
 
-    constructor(private usersManager: UsersManager, private logger: Logger) {}
+    constructor(private usersManager: UsersManager, private logger: Logger) {
+    }
 
     /**
      * Registers a command.

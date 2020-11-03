@@ -2,7 +2,7 @@ import {CommandsDispatcher} from "./CommandsDispatcher";
 import {Command} from "./Command";
 import {UserInfo} from "../user/UserInfo";
 import {CommandContext} from "./CommandContext";
-import {RichEmbed} from "discord.js";
+import {MessageEmbed} from "discord.js";
 import {INFO_COLOR} from "../util/util";
 import {QuerySession} from "../user/UsersManager";
 
@@ -25,9 +25,9 @@ export class HelpCommand extends Command {
     }
 
     public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
-        const embed: RichEmbed = new RichEmbed();
+        const embed = new MessageEmbed();
         embed.setTitle("Liste des commandes");
-        embed.setAuthor(ctx.getMessage().author.username, ctx.getMessage().author.avatarURL);
+        embed.setAuthor(ctx.getMessage().author.username, ctx.getMessage().author.displayAvatarURL());
         embed.setColor(INFO_COLOR);
 
         Object.values(this.dispatcher.getCommands()).forEach(command => {

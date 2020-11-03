@@ -2,7 +2,7 @@ import {Command} from "./Command";
 import {CommandContext} from "./CommandContext";
 import {UserInfo} from "../user/UserInfo";
 import {AllRemainingArgument} from "../parser/ArgumentType";
-import {RichEmbed} from "discord.js";
+import {MessageEmbed} from "discord.js";
 import {ERROR_COLOR, requestForum, SUCCESS_COLOR} from "../util/util";
 import {QuerySession} from "../user/UsersManager";
 
@@ -45,7 +45,7 @@ export class EventsCommand extends Command {
                             color: ERROR_COLOR
                         });
                     } else {
-                        const embed: RichEmbed = new RichEmbed();
+                        const embed = new MessageEmbed();
                         embed.setColor(SUCCESS_COLOR);
                         embed.setTitle("Liste des événements correspondants à votre recherche");
                         embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");

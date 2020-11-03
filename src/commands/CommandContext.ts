@@ -1,5 +1,5 @@
 import {StringReader} from "src/parser/StringReader";
-import {Client, Message, RichEmbed, RichEmbedOptions} from "discord.js";
+import {Client, Message, MessageEmbed, MessageEmbedOptions} from "discord.js";
 import {Logger} from "winston";
 import {ArgumentType} from "src/parser/ArgumentType";
 import Conf = require("conf");
@@ -12,7 +12,8 @@ export class CommandContext {
         private message: Message,
         private config: Conf<any>,
         private logger: Logger
-    ) {}
+    ) {
+    }
 
     public getReader(): StringReader {
         return this.reader;
@@ -49,7 +50,7 @@ export class CommandContext {
      *
      * @param embed the embed message to send to the user
      */
-    public answerPrivateEmbed(embed: RichEmbed | RichEmbedOptions): void {
+    public answerPrivateEmbed(embed: MessageEmbed | MessageEmbedOptions): void {
         this.message.author.send({embed})
             .catch(err => this.logger.error(`Got error while sending private embed message : ${err}`));
     }
@@ -69,7 +70,7 @@ export class CommandContext {
      *
      * @param embed the embed message to send to the user
      */
-    public answerEmbed(embed: RichEmbed | RichEmbedOptions): void {
+    public answerEmbed(embed: MessageEmbed | MessageEmbedOptions): void {
         this.message.channel.send({embed})
             .catch(err => this.logger.error(`Got error while sending embed message : ${err}`));
     }

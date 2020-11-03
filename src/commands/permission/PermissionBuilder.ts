@@ -1,5 +1,5 @@
 import {PermissionCheck} from "../Command";
-import {Guild, GuildMember, PermissionResolvable, TextChannel} from "discord.js";
+import {PermissionResolvable, TextChannel} from "discord.js";
 
 export class PermissionBuilder {
 
@@ -13,10 +13,10 @@ export class PermissionBuilder {
         const check = this.checker;
         this.checker = (sender, ctx) => {
             if (ctx.getMessage().member) {
-                return check(sender, ctx) && ctx.getMessage().member.hasPermission(permission);
+                return check(sender, ctx) && ctx.getMessage().member?.hasPermission(permission);
             } else {
-                const guild: Guild = ctx.getDiscordClient().guilds.first();
-                const member: GuildMember = guild.member(ctx.getMessage().author);
+                const guild = ctx.getDiscordClient().guilds.cache.first();
+                const member = guild?.member(ctx.getMessage().author);
                 return check(sender, ctx) && member && member.hasPermission(permission);
             }
         };
@@ -44,7 +44,7 @@ export class PermissionBuilder {
         const check = this.checker;
         this.checker = (sender, ctx) => {
             const roleName: string = fromConfig ? role : ctx.getConfig().get(`channels.${role}`);
-            return check(sender, ctx) && ctx.getMessage().member && ctx.getMessage().member.roles.has(roleName);
+            return check(sender, ctx) && ctx.getMessage().member && ctx.getMessage().member?.roles.cache.has(roleName);
         };
         return this;
     }

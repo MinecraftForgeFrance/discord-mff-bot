@@ -1,7 +1,7 @@
 import Conf = require("conf");
 import fs = require("fs");
 import moment = require("moment");
-import {Client, Message, TextChannel} from "discord.js";
+import {Client, Message, TextChannel, User} from "discord.js";
 import {createLogger, Logger} from "winston";
 import {PingCommand} from "./commands/PingCommand";
 import {schema} from "./config/config";
@@ -20,7 +20,7 @@ import {HelpCommand} from "./commands/HelpCommand";
 import {EventsCommand} from "./commands/EventsCommand";
 import {TutorialCommand} from "./commands/TutorialCommand";
 import {ModHelpCommand} from "./commands/ModHelpCommand";
-import {INFO_COLOR, memberLeave, addMemberRole} from "./util/util";
+import {addMemberRole, INFO_COLOR, memberLeave} from "./util/util";
 import {BanCommand} from "./commands/BanCommand";
 
 const logger: Logger = createLogger(options);
@@ -82,8 +82,8 @@ client.on("guildMemberAdd", (member) => {
         usersManager.endSession(querySession);
         if (forumId != null) {
             addMemberRole(client, conf, member.user)
-            .then((member) => logger.info(`${member.user.username}@${member.id} became member after registration`))
-            .catch((reason) => logger.error(`Unable to promote ${member.user.username}@${member.user.id} to member. Cause : ${reason}`));
+                .then((member) => logger.info(`${member.user.username}@${member.id} became member after registration`))
+                .catch((reason) => logger.error(`Unable to promote ${member.user.username}@${member.user.id} to member. Cause : ${reason}`));
         } else {
             member.send({
                 embed: {
@@ -99,8 +99,8 @@ client.on("guildMemberAdd", (member) => {
 });
 
 client.on("guildMemberRemove", (member) => {
-    if (!member.user.bot) {
-        memberLeave(client, conf, member.user, logger);
+    if (!member.user?.bot) {
+        memberLeave(client, conf, member.user as User, logger);
     }
 });
 
@@ -134,7 +134,7 @@ client.setInterval(() => {
                     const info = session.getUser(id);
                     if (info.isBanned() && info.isBannedUntil() > 0 && info.isBannedUntil() < Date.now()) {
                         info.setBanned(false);
-                        client.guilds.first().unban(id)
+                        client.guilds.cache.first()?.members.unban(id)
                             .catch((unbanErr) => logger.error(`Can't unbanned ${id} : ${unbanErr}`))
                             .then(() => logger.info(`Unbanned user ${id}`));
                     }
@@ -153,13 +153,17 @@ client.setInterval(() => {
     const now = moment();
     if (now >= newYear && !isNewYear) {
         isNewYear = true;
-        const channel = client.channels.find(value => (value as TextChannel).name === "annonces") as TextChannel;
+        const channel = client.channels.cache.find(value => (value as TextChannel).name === "annonces") as TextChannel;
         channel.send(`@everyone\n\nL'équipe de Minecraft Forge France vous souhaite une bonne année ${now.format("YYYY")} !`)
             .then(async (message: Message) => logger.info(`Send message : ${message.content}`))
             .catch(console.error);
 
     }
 }, 1_000);
+
+client.on("error", (error) => logger.error(error));
+
+client.on("warn", (warn: string) => logger.warn(warn));
 
 client.on("debug", (info: string) => logger.debug(info));
 

@@ -20,7 +20,7 @@ export class UsersManager {
     }
 
     public getUser(querySession: QuerySession, userId: string): UserInfo {
-        let user: UserInfo | null = null;
+        let user: UserInfo | null;
 
         // First search for cached value
         user = this.getFromCache(userId);

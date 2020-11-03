@@ -1,7 +1,7 @@
 import {UserInfo} from "../user/UserInfo";
 import {CommandContext} from "../commands/CommandContext";
 import {IntArgument, WordArgument} from "../parser/ArgumentType";
-import {Guild, RichEmbed, Role} from "discord.js";
+import {MessageEmbed, Role} from "discord.js";
 import {requestForum} from "../util/util";
 import Conf = require("conf");
 import assert = require("assert");
@@ -134,10 +134,10 @@ export class JavaLevelStep extends RegistrationStep {
             sender.setCounter(sender.getCounter() - 1);
 
             if (sender.getCounter() === 0) {
-                const guild: Guild = ctx.getDiscordClient().guilds.first();
-                const role: Role = guild.roles.find("name", ctx.getConfig().get("roles.javaDancer"));
+                const guild = ctx.getDiscordClient().guilds.cache.first();
+                const role = guild?.roles.cache.find(c => c.name === ctx.getConfig().get("roles.javaDancer"));
 
-                guild.member(ctx.getMessage().author).addRole(role).catch(ctx.getLogger().error);
+                guild?.member(ctx.getMessage().author)?.roles.add(role as Role).catch(ctx.getLogger().error);
 
                 ctx.answerEmbed({
                     description: "Vous avez le niveau requis en Java. Bravo !",
@@ -168,7 +168,7 @@ export class JavaLevelStep extends RegistrationStep {
     }
 
     sendQuestion(sender: UserInfo, ctx: CommandContext, question: JavaQuestion): void {
-        const embed: RichEmbed = new RichEmbed();
+        const embed = new MessageEmbed();
         embed.setTitle(`Question ${6 - sender.getCounter()} sur 5`);
         embed.setDescription(question.title);
         embed.setColor(0x66FF);

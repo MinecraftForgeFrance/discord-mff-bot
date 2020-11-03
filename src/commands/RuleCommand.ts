@@ -3,7 +3,7 @@ import {CommandContext} from "./CommandContext";
 import {QuerySession} from "../user/UsersManager";
 import {UserInfo} from "../user/UserInfo";
 import {PermissionBuilder} from "./permission/PermissionBuilder";
-import {RichEmbed, TextChannel} from "discord.js";
+import {MessageEmbed, TextChannel} from "discord.js";
 import {INFO_COLOR} from "../util/util";
 import fs = require("fs");
 
@@ -26,18 +26,18 @@ export class RuleCommand extends Command {
     }
 
     perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
-        const embed: RichEmbed = new RichEmbed();
+        const embed = new MessageEmbed();
         const channels: TextChannel[] = [
-            ctx.getDiscordClient().channels.find(value => (value as TextChannel).name === ctx.getConfig().get("channels.aide_modding")) as TextChannel,
-            ctx.getDiscordClient().channels.find(value => (value as TextChannel).name === ctx.getConfig().get("channels.recrutement")) as TextChannel,
-            ctx.getDiscordClient().channels.find(value => (value as TextChannel).name === ctx.getConfig().get("channels.flood")) as TextChannel
+            ctx.getDiscordClient().channels.cache.find(value => (value as TextChannel).name === ctx.getConfig().get("channels.aide_modding")) as TextChannel,
+            ctx.getDiscordClient().channels.cache.find(value => (value as TextChannel).name === ctx.getConfig().get("channels.recrutement")) as TextChannel,
+            ctx.getDiscordClient().channels.cache.find(value => (value as TextChannel).name === ctx.getConfig().get("channels.flood")) as TextChannel
         ];
-        const channel: TextChannel = ctx.getDiscordClient().channels.find(value => (value as TextChannel).name === ctx.getConfig().get('channels.rules')) as TextChannel;
+        const channel = ctx.getDiscordClient().channels.cache.find(value => (value as TextChannel).name === ctx.getConfig().get('channels.rules')) as TextChannel;
 
         async function clear() {
             let fetched;
             do {
-                fetched = await channel.fetchMessages({limit: 1});
+                fetched = await channel.messages.fetch({limit: 1});
                 await channel.bulkDelete(fetched);
             } while (fetched.size >= 2);
         }

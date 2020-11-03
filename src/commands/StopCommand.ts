@@ -28,15 +28,16 @@ export class StopCommand extends Command {
             description: ":crescent_moon: Bye bye ...",
             color: SUCCESS_COLOR,
         });
-        ctx.getDiscordClient().destroy().then(() => {
+        try {
+            ctx.getDiscordClient().destroy();
             ctx.getLogger().info("Discord bot stopped successfully.");
             resolve();
-        }).catch((err) => {
+        } catch (err) {
             ctx.getLogger().error("Can't stop Discord bot ...");
             if (err) {
                 ctx.getLogger().error(err);
             }
             reject();
-        });
+        }
     }
 }

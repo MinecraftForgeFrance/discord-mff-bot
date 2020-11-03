@@ -2,7 +2,7 @@ import {Command} from "./Command";
 import {UserInfo} from "../user/UserInfo";
 import {CommandContext} from "./CommandContext";
 import {AllRemainingArgument, VersionArgument, WordArgument} from "../parser/ArgumentType";
-import {RichEmbed} from "discord.js";
+import {MessageEmbed} from "discord.js";
 import {ERROR_COLOR, requestForum, SUCCESS_COLOR} from "../util/util";
 import {QuerySession} from "../user/UsersManager";
 
@@ -42,7 +42,7 @@ export class TutorialCommand extends Command {
                     });
                     resolve();
                 } else {
-                    const embed: RichEmbed = new RichEmbed();
+                    const embed = new MessageEmbed();
                     embed.setColor(SUCCESS_COLOR);
                     embed.setTitle("Liste des tutoriels");
                     embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");

@@ -44,11 +44,11 @@ export class ResetCommand extends Command {
             });
             memberLeave(ctx.getDiscordClient(), ctx.getConfig(), ctx.getMessage().author, ctx.getLogger());
         } else if (all) {
-            const guild = ctx.getDiscordClient().guilds.first();
-            guild.members.forEach(member => {
+            const guild = ctx.getDiscordClient().guilds.cache.first();
+            guild?.members.cache.forEach(member => {
                 resetMember(ctx.getDiscordClient(), ctx.getConfig(), querySession.getUser(member.user.id), ctx.getLogger());
             });
-            (guild.channels.find("name", ctx.getConfig().get("channels.logs")) as TextChannel)
+            (guild?.channels.cache.find(c => c.name === ctx.getConfig().get("channels.logs")) as TextChannel)
                 .send({
                     embed: {
                         description: "Tout le monde a quitté le serveur !",

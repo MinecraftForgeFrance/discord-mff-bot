@@ -3,7 +3,7 @@ import {UserInfo} from "../user/UserInfo";
 import {FetchPseudoStep, RegistrationStep, ValidateTokenStep} from "../registriation/RegistrationStep";
 import {PermissionBuilder} from "./permission/PermissionBuilder";
 import {CommandContext} from "./CommandContext";
-import {INFO_COLOR, memberJoin, addMemberRole} from "../util/util";
+import {addMemberRole, INFO_COLOR, memberJoin} from "../util/util";
 import {QuerySession} from "../user/UsersManager";
 
 export class RegisterCommand extends Command {

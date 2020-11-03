@@ -2,7 +2,7 @@ import {Command} from "./Command";
 import {UserInfo} from "../user/UserInfo";
 import {CommandContext} from "./CommandContext";
 import {AllRemainingArgument, DurationArgument, WordArgument} from "../parser/ArgumentType";
-import {GuildMember, MessageMentions} from "discord.js";
+import {MessageMentions} from "discord.js";
 import {QuerySession} from "../user/UsersManager";
 import {ERROR_COLOR, SUCCESS_COLOR} from "../util/util";
 import {PermissionBuilder} from "./permission/PermissionBuilder";
@@ -49,15 +49,15 @@ export class BanCommand extends Command {
 
         ctx.getLogger().info(`Banned user ${userId} ${banEnd ? "until " + banEnd.valueOf() : "permanently"}. ${reason ? "Reason : " + reason : ""}`);
 
-        const member: GuildMember = ctx.getDiscordClient().guilds.first().members.find("id", userId);
+        const member = ctx.getDiscordClient().guilds.cache.first()?.members.cache.find(m => m.id === userId);
 
         ctx.answerEmbed({
-            description: `L'utilisateur ${member.user.username} a bien été bannis ${banEnd ? "jusqu'à la date du " + banEnd.format("dddd D MMMM YYYY à H:mm:ss") : "de manière permanente"}.
+            description: `L'utilisateur ${member?.user.username} a bien été bannis ${banEnd ? "jusqu'à la date du " + banEnd.format("dddd D MMMM YYYY à H:mm:ss") : "de manière permanente"}.
             ${reason ? "Raison : " + reason : ""}`,
             color: SUCCESS_COLOR
         });
 
-        member.user.send({
+        member?.user.send({
             embed: {
                 description: `Vous avez été banni ${banEnd ? "jusqu'à la date du " + banEnd.format("dddd D MMMM YYYY à H:mm:ss") : "de manière permanente"}.
                 ${reason ? "Raison : " + reason : ""}`,
@@ -69,7 +69,7 @@ export class BanCommand extends Command {
                 reject();
             })
             .then(() => {
-                ctx.getDiscordClient().guilds.first().ban(member)
+                ctx.getDiscordClient().guilds.cache.first()?.members.ban(member)
                     .catch(err => {
                         ctx.getLogger().error(`Can't ban member ${err}`);
                         reject();
