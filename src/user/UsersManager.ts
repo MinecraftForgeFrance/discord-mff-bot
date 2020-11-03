@@ -1,5 +1,6 @@
-import {UserInfo} from './UserInfo';
 import fs = require('fs');
+
+import { UserInfo } from './UserInfo';
 
 /**
  * A manager which will handle all user data queries. It will load and save data on disc when needed and will avoid

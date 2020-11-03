@@ -1,6 +1,6 @@
-import {expect} from "chai";
-import {VersionArgument} from "../src/parser/ArgumentType";
-import {StringReader} from "../src/parser/StringReader";
+import { expect } from "chai";
+import { StringReader } from "../src/parser/StringReader";
+import { VersionArgument } from "../src/parser/ArgumentType";
 
 describe("VersionArgument", () => {
 

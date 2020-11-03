@@ -1,5 +1,5 @@
-import {expect} from "chai";
-import {StringReader} from "../src/parser/StringReader";
+import { expect } from "chai";
+import { StringReader } from "../src/parser/StringReader";
 
 describe("StringReader", () => {
     describe("#read()", () => {

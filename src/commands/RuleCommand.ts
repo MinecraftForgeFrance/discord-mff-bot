@@ -1,11 +1,12 @@
-import {Command} from "./Command";
-import {CommandContext} from "./CommandContext";
-import {QuerySession} from "../user/UsersManager";
-import {UserInfo} from "../user/UserInfo";
-import {PermissionBuilder} from "./permission/PermissionBuilder";
-import {MessageEmbed, TextChannel} from "discord.js";
-import {INFO_COLOR} from "../util/util";
 import fs = require("fs");
+import { MessageEmbed, TextChannel } from "discord.js";
+
+import { Command } from "./Command";
+import { INFO_COLOR } from "../util/util";
+import { UserInfo } from "../user/UserInfo";
+import { CommandContext } from "./CommandContext";
+import { QuerySession } from "../user/UsersManager";
+import { PermissionBuilder } from "./permission/PermissionBuilder";
 
 export class RuleCommand extends Command {
 
@@ -37,7 +38,7 @@ export class RuleCommand extends Command {
         async function clear() {
             let fetched;
             do {
-                fetched = await channel.messages.fetch({limit: 1});
+                fetched = await channel.messages.fetch({ limit: 1 });
                 await channel.bulkDelete(fetched);
             } while (fetched.size >= 2);
         }

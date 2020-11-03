@@ -1,10 +1,10 @@
-import {Command} from "./Command";
-import {UserInfo} from "../user/UserInfo";
-import {FetchPseudoStep, RegistrationStep, ValidateTokenStep} from "../registriation/RegistrationStep";
-import {PermissionBuilder} from "./permission/PermissionBuilder";
-import {CommandContext} from "./CommandContext";
-import {addMemberRole, INFO_COLOR, memberJoin} from "../util/util";
-import {QuerySession} from "../user/UsersManager";
+import { Command } from "./Command";
+import { UserInfo } from "../user/UserInfo";
+import { CommandContext } from "./CommandContext";
+import { QuerySession } from "../user/UsersManager";
+import { PermissionBuilder } from "./permission/PermissionBuilder";
+import { addMemberRole, INFO_COLOR, memberJoin } from "../util/util";
+import { FetchPseudoStep, RegistrationStep, ValidateTokenStep } from "../registriation/RegistrationStep";
 
 export class RegisterCommand extends Command {
 

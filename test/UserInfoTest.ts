@@ -1,5 +1,5 @@
-import {expect} from "chai";
-import {UserInfo} from "../src/user/UserInfo";
+import { expect } from "chai";
+import { UserInfo } from "../src/user/UserInfo";
 
 describe("UserInfo", () => {
 

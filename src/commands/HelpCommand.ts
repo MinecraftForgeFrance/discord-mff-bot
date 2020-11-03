@@ -1,10 +1,11 @@
-import {CommandsDispatcher} from "./CommandsDispatcher";
-import {Command} from "./Command";
-import {UserInfo} from "../user/UserInfo";
-import {CommandContext} from "./CommandContext";
-import {MessageEmbed} from "discord.js";
-import {INFO_COLOR} from "../util/util";
-import {QuerySession} from "../user/UsersManager";
+import { MessageEmbed } from "discord.js";
+
+import { Command } from "./Command";
+import { INFO_COLOR } from "../util/util";
+import { UserInfo } from "../user/UserInfo";
+import { CommandContext } from "./CommandContext";
+import { QuerySession } from "../user/UsersManager";
+import { CommandsDispatcher } from "./CommandsDispatcher";
 
 export class HelpCommand extends Command {
 
@@ -31,7 +32,7 @@ export class HelpCommand extends Command {
         embed.setColor(INFO_COLOR);
 
         Object.values(this.dispatcher.getCommands()).forEach(command => {
-            // Max : 25 fields (https://discord.js.org/#/docs/main/stable/class/RichEmbed?scrollTo=addField)
+            // Max : 25 fields (https://discord.js.org/#/docs/main/stable/class/MessageEmbed?scrollTo=addField)
             if ((!embed.fields || embed.fields.length < 25) && command.shouldDisplayInHelp(sender, ctx)) {
                 embed.addField(
                     command.getName().toLowerCase(),

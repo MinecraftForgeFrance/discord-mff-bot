@@ -1,9 +1,9 @@
-import {Command} from "./Command";
-import {UserInfo} from "../user/UserInfo";
-import {PermissionBuilder} from "./permission/PermissionBuilder";
-import {CommandContext} from "./CommandContext";
-import {SUCCESS_COLOR} from "../util/util";
-import {QuerySession} from "../user/UsersManager";
+import { Command } from "./Command";
+import { UserInfo } from "../user/UserInfo";
+import { SUCCESS_COLOR } from "../util/util";
+import { CommandContext } from "./CommandContext";
+import { QuerySession } from "../user/UsersManager";
+import { PermissionBuilder } from "./permission/PermissionBuilder";
 
 export class StopCommand extends Command {
 

@@ -1,10 +1,11 @@
-import {Command} from "./Command";
-import {CommandContext} from "./CommandContext";
-import {UserInfo} from "../user/UserInfo";
-import {AllRemainingArgument} from "../parser/ArgumentType";
-import {MessageEmbed} from "discord.js";
-import {ERROR_COLOR, requestForum, SUCCESS_COLOR} from "../util/util";
-import {QuerySession} from "../user/UsersManager";
+import { MessageEmbed } from "discord.js";
+
+import { Command } from "./Command";
+import { UserInfo } from "../user/UserInfo";
+import { CommandContext } from "./CommandContext";
+import { QuerySession } from "../user/UsersManager";
+import { AllRemainingArgument } from "../parser/ArgumentType";
+import { ERROR_COLOR, requestForum, SUCCESS_COLOR } from "../util/util";
 
 export class EventsCommand extends Command {
 

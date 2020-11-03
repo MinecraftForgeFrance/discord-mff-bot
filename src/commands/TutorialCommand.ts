@@ -1,10 +1,11 @@
-import {Command} from "./Command";
-import {UserInfo} from "../user/UserInfo";
-import {CommandContext} from "./CommandContext";
-import {AllRemainingArgument, VersionArgument, WordArgument} from "../parser/ArgumentType";
-import {MessageEmbed} from "discord.js";
-import {ERROR_COLOR, requestForum, SUCCESS_COLOR} from "../util/util";
-import {QuerySession} from "../user/UsersManager";
+import { MessageEmbed } from "discord.js";
+
+import { Command } from "./Command";
+import { UserInfo } from "../user/UserInfo";
+import { CommandContext } from "./CommandContext";
+import { QuerySession } from "../user/UsersManager";
+import { ERROR_COLOR, requestForum, SUCCESS_COLOR } from "../util/util";
+import { AllRemainingArgument, VersionArgument, WordArgument } from "../parser/ArgumentType";
 
 export class TutorialCommand extends Command {
 

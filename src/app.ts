@@ -1,27 +1,28 @@
-import Conf = require("conf");
 import fs = require("fs");
 import moment = require("moment");
-import {Client, Message, TextChannel, User} from "discord.js";
-import {createLogger, Logger} from "winston";
-import {PingCommand} from "./commands/PingCommand";
-import {schema} from "./config/config";
-import {options} from "./logging/LogOptions";
-import {StringReader} from "./parser/StringReader";
-import {DiscAccess, QuerySession, UsersManager} from "./user/UsersManager";
-import {UserInfo} from "./user/UserInfo";
-import {Shoutbox} from "./shoutbox/Shoutbox";
-import {RegisterCommand} from "./commands/RegisterCommand";
-import {RuleCommand} from "./commands/RuleCommand";
-import {StopCommand} from "./commands/StopCommand";
-import {CommandsDispatcher} from "./commands/CommandsDispatcher";
-import {CommandContext} from "./commands/CommandContext";
-import {ResetCommand} from "./commands/ResetCommand";
-import {HelpCommand} from "./commands/HelpCommand";
-import {EventsCommand} from "./commands/EventsCommand";
-import {TutorialCommand} from "./commands/TutorialCommand";
-import {ModHelpCommand} from "./commands/ModHelpCommand";
-import {addMemberRole, INFO_COLOR, memberLeave} from "./util/util";
-import {BanCommand} from "./commands/BanCommand";
+import Conf from "conf/dist/source";
+import { createLogger, Logger } from "winston";
+import { Client, Message, TextChannel } from "discord.js";
+
+import { schema } from "./config/config";
+import { UserInfo } from "./user/UserInfo";
+import { Shoutbox } from "./shoutbox/Shoutbox";
+import { options } from "./logging/LogOptions";
+import { BanCommand } from "./commands/BanCommand";
+import { PingCommand } from "./commands/PingCommand";
+import { StringReader } from "./parser/StringReader";
+import { HelpCommand } from "./commands/HelpCommand";
+import { RuleCommand } from "./commands/RuleCommand";
+import { StopCommand } from "./commands/StopCommand";
+import { ResetCommand } from "./commands/ResetCommand";
+import { EventsCommand } from "./commands/EventsCommand";
+import { CommandContext } from "./commands/CommandContext";
+import { ModHelpCommand } from "./commands/ModHelpCommand";
+import { RegisterCommand } from "./commands/RegisterCommand";
+import { TutorialCommand } from "./commands/TutorialCommand";
+import { CommandsDispatcher } from "./commands/CommandsDispatcher";
+import { INFO_COLOR, memberLeave, addMemberRole } from "./util/util";
+import { DiscAccess, QuerySession, UsersManager } from "./user/UsersManager";
 
 const logger: Logger = createLogger(options);
 if (process.argv.indexOf("--debug") !== -1) {
@@ -74,7 +75,7 @@ client.on("message", (message) => {
 
 });
 
-client.on("guildMemberAdd", (member) => {
+client.on("guildMemberAdd", async (member) => {
     if (!member.user.bot) {
         const querySession: QuerySession = usersManager.beginSession();
         const sender: UserInfo = querySession.getUser(member.user.id);
@@ -99,8 +100,8 @@ client.on("guildMemberAdd", (member) => {
 });
 
 client.on("guildMemberRemove", (member) => {
-    if (!member.user?.bot) {
-        memberLeave(client, conf, member.user as User, logger);
+    if (member.user && !member.user.bot) {
+        memberLeave(client, conf, member.user, logger);
     }
 });
 

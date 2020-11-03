@@ -1,14 +1,28 @@
 import axios from "axios";
-import {Client, GuildMember, MessageEmbed, Role, TextChannel, User} from "discord.js";
-import {Logger} from "winston";
-import {CommandContext} from "../commands/CommandContext";
-import {UserInfo} from "../user/UserInfo";
-import Conf = require("conf");
+import { Logger } from "winston";
+import Conf from "conf/dist/source";
+import { Client, TextChannel, User, MessageEmbed } from "discord.js";
 
-export function addMemberRole(client: Client, config: Conf<any>, user: User): Promise<GuildMember> {
+import { UserInfo } from "../user/UserInfo";
+import { CommandContext } from "../commands/CommandContext";
+
+export function addMemberRole(client: Client, config: Conf<any>, user: User) {
     const guild = client.guilds.cache.first();
-    const role = guild?.roles.cache.find(c => c.name === config.get("roles.member"));
-    return guild?.member(user)?.roles.add(role as Role, "Ancien membre de retour") as Promise<GuildMember>;
+    if (!guild) {
+        throw new Error('guild is undefined');
+    }
+    const role = guild.roles.cache.find(r => r.name === config.get("roles.member"));
+    if (!role) {
+        throw new Error('role is undefined');
+    }
+
+    const member = guild.member(user);
+
+    if (!member) {
+        throw new Error('member is undefined');
+    }
+
+    return member.roles.add(role, "Ancien membre de retour");
 }
 
 export function memberJoin(client: Client, config: Conf<any>, user: User, logger: Logger): void {
@@ -47,12 +61,15 @@ export async function requestForum(ctx: CommandContext, endpoint: string, method
 
 export function resetMember(client: Client, config: Conf<any>, info: UserInfo, logger: Logger): void {
     const guild = client.guilds.cache.first();
-    const member = guild?.members.cache.find(m => m.id === info.getDiscordId());
+    const member = guild?.member(info.getDiscordId());
     const memberRole = guild?.roles.cache.find(r => r.name === config.get("roles.member"));
     const javaRole = guild?.roles.cache.find(r => r.name === config.get("roles.javaDancer"));
 
-    member?.roles.remove(memberRole as Role).catch(logger.error);
-    member?.roles.remove(javaRole as Role).catch(logger.error);
+    if (member && memberRole && javaRole) {
+        member.roles.remove(memberRole).catch(logger.error);
+        member.roles.remove(javaRole).catch(logger.error);
+    }
+
     info.setRegistrationStep(0);
 }
 

@@ -1,6 +1,6 @@
-import {expect} from "chai";
-import {IntArgument} from "../src/parser/ArgumentType";
-import {StringReader} from "../src/parser/StringReader";
+import { expect } from "chai";
+import { IntArgument } from "../src/parser/ArgumentType";
+import { StringReader } from "../src/parser/StringReader";
 
 describe("IntArgument", () => {
     describe("#parse()", () => {

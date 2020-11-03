@@ -1,10 +1,11 @@
-import {UserInfo} from "../user/UserInfo";
-import {CommandContext} from "../commands/CommandContext";
-import {IntArgument, WordArgument} from "../parser/ArgumentType";
-import {MessageEmbed, Role} from "discord.js";
-import {requestForum} from "../util/util";
-import Conf = require("conf");
 import assert = require("assert");
+import Conf from "conf/dist/source";
+import { MessageEmbed } from "discord.js";
+
+import { requestForum } from "../util/util";
+import { UserInfo } from "../user/UserInfo";
+import { CommandContext } from "../commands/CommandContext";
+import { IntArgument, WordArgument } from "../parser/ArgumentType";
 
 export abstract class RegistrationStep {
 
@@ -135,15 +136,24 @@ export class JavaLevelStep extends RegistrationStep {
 
             if (sender.getCounter() === 0) {
                 const guild = ctx.getDiscordClient().guilds.cache.first();
-                const role = guild?.roles.cache.find(c => c.name === ctx.getConfig().get("roles.javaDancer"));
+                if (guild) {
+                    const role = guild.roles.cache.find(r => r.name == ctx.getConfig().get("roles.javaDancer"));
 
-                guild?.member(ctx.getMessage().author)?.roles.add(role as Role).catch(ctx.getLogger().error);
-
-                ctx.answerEmbed({
-                    description: "Vous avez le niveau requis en Java. Bravo !",
-                    color: 0xFF00
-                });
-                nextStep();
+                    if (role) {
+                        guild.member(ctx.getMessage().author)?.roles.add(role).catch(ctx.getLogger().error);
+                        ctx.answerEmbed({
+                            description: "Vous avez le niveau requis en Java. Bravo !",
+                            color: 0xFF00
+                        });
+                        nextStep();
+                    }
+                    else {
+                        reject();
+                    }
+                }
+                else {
+                    reject();
+                }
             } else {
                 this.nextQuestion(sender, ctx);
             }
@@ -195,13 +205,10 @@ export class JavaLevelStep extends RegistrationStep {
 
         return questions[pickedQuestion];
     }
-
 }
 
 interface JavaQuestion {
-
     title: string;
     choices: Array<string>;
     answer: number;
-
 }

@@ -13,11 +13,11 @@ export class PermissionBuilder {
         const check = this.checker;
         this.checker = (sender, ctx) => {
             if (ctx.getMessage().member) {
-                return check(sender, ctx) && ctx.getMessage().member?.hasPermission(permission);
+                return check(sender, ctx) && ctx.getMessage().member?.hasPermission(permission) || false;
             } else {
                 const guild = ctx.getDiscordClient().guilds.cache.first();
                 const member = guild?.member(ctx.getMessage().author);
-                return check(sender, ctx) && member && member.hasPermission(permission);
+                return check(sender, ctx) && member && member.hasPermission(permission) || false;
             }
         };
         return this;
@@ -44,7 +44,7 @@ export class PermissionBuilder {
         const check = this.checker;
         this.checker = (sender, ctx) => {
             const roleName: string = fromConfig ? role : ctx.getConfig().get(`channels.${role}`);
-            return check(sender, ctx) && ctx.getMessage().member && ctx.getMessage().member?.roles.cache.has(roleName);
+            return check(sender, ctx) && ctx.getMessage().member && ctx.getMessage().member?.roles.cache.has(roleName) || false;
         };
         return this;
     }
