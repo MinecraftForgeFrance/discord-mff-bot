@@ -31,6 +31,10 @@ List of configuration fields :
     * Description : The name of the shoutbox channel
     * Accepted values : any string
     * No default value
+* `channels.welcome`
+    * Description : The name of welcome channel
+    * Accepted values : any string
+    * No default value
 * `roles.member`
     * Description : The name of member role
     * Accepted values : any string

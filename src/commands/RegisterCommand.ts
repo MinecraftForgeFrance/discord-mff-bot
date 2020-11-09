@@ -2,7 +2,6 @@ import { Command } from "./Command";
 import { UserInfo } from "../user/UserInfo";
 import { CommandContext } from "./CommandContext";
 import { QuerySession } from "../user/UsersManager";
-import { PermissionBuilder } from "./permission/PermissionBuilder";
 import { addMemberRole, INFO_COLOR, memberJoin } from "../util/util";
 import { FetchPseudoStep, RegistrationStep, ValidateTokenStep } from "../registriation/RegistrationStep";
 
@@ -11,8 +10,8 @@ export class RegisterCommand extends Command {
     private steps: Array<RegistrationStep> = [];
 
     constructor() {
-        super((sender, ctx) => {
-            return PermissionBuilder.new().channelTypeIs('dm').build()(sender, ctx) && sender.getRegistrationStep() < this.steps.length;
+        super((sender) => {
+            return sender.getRegistrationStep() < this.steps.length;
         });
         this.steps.push(
             new FetchPseudoStep(),

@@ -32,6 +32,9 @@ export const schema: { [key: string]: JSONSchema } = {
             shoutbox: {
                 type: "string"
             },
+            welcome: {
+                type: "string"
+            },
             rules: {
                 type: "string"
             },

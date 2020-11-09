@@ -25,22 +25,37 @@ export function addMemberRole(client: Client, config: Conf<any>, user: User) {
     return member.roles.add(role, "Ancien membre de retour");
 }
 
-export function memberJoin(client: Client, config: Conf<any>, user: User, logger: Logger): void {
-    const guild = client.guilds.cache.first();
-    const channel = guild?.channels.cache.find(c => c.name === config.get("channels.logs"));
+export async function guestJoin(client: Client, config: Conf<any>, user: User, commandsPrefix: string)
+{
+    const channel = getChannel(client, config.get("channels.welcome"));
+    const embed = new MessageEmbed();
+    embed.setDescription(`Bonjour ${user.username} sur le serveur Discord de **Minecraft Forge France** !
+    Ce discord est reservé aux membres de notre [forum](https://www.minecraftforgefrance.fr/). Il est nécessaire d'y avoir un compte pour continuer.
+    Afin d'obtenir l'accès au serveur, veuillez vous enregistrer à l'aide de la commande \`${commandsPrefix}register <pseudo sur le forum>\`.`,);
+    embed.setColor(INFO_COLOR);
+    await (channel as TextChannel).send(embed);
+}
+
+export function memberJoin(client: Client, config: Conf<any>, user: User, logger: Logger) {
+    const channel = getChannel(client, config.get("channels.logs"));
     const embed = new MessageEmbed();
     embed.setDescription(`**${user.username}** a rejoint le serveur.`);
     embed.setColor(SUCCESS_COLOR);
     (channel as TextChannel).send(embed).catch(logger.error);
 }
 
-export function memberLeave(client: Client, config: Conf<any>, user: User, logger: Logger): void {
-    const guild = client.guilds.cache.first();
-    const channel = guild?.channels.cache.find(c => c.name === config.get("channels.logs"));
+export function memberLeave(client: Client, config: Conf<any>, user: User, logger: Logger) {
+    const channel = getChannel(client, config.get("channels.logs"));
     const embed = new MessageEmbed();
     embed.setDescription(`**${user.username}** a quitté le serveur.`);
     embed.setColor(ERROR_COLOR);
     (channel as TextChannel).send(embed).catch(logger.error);
+}
+
+export function getChannel(client: Client, name: string)
+{
+    const guild = client.guilds.cache.first();
+    return guild?.channels.cache.find(c => c.name === name);
 }
 
 export async function requestForum(ctx: CommandContext, endpoint: string, method: "GET" | "POST", data?: object) {

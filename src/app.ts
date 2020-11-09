@@ -21,7 +21,7 @@ import { ModHelpCommand } from "./commands/ModHelpCommand";
 import { RegisterCommand } from "./commands/RegisterCommand";
 import { TutorialCommand } from "./commands/TutorialCommand";
 import { CommandsDispatcher } from "./commands/CommandsDispatcher";
-import { INFO_COLOR, memberLeave, addMemberRole } from "./util/util";
+import { memberLeave, addMemberRole, guestJoin } from "./util/util";
 import { DiscAccess, QuerySession, UsersManager } from "./user/UsersManager";
 
 const logger: Logger = createLogger(options);
@@ -72,7 +72,6 @@ client.on("message", (message) => {
         const sender: UserInfo = querySession.getUser(message.author.id);
         shoutbox.bridgeMessage(sender, message, querySession);
     }
-
 });
 
 client.on("guildMemberAdd", async (member) => {
@@ -86,15 +85,10 @@ client.on("guildMemberAdd", async (member) => {
                 .then((member) => logger.info(`${member.user.username}@${member.id} became member after registration`))
                 .catch((reason) => logger.error(`Unable to promote ${member.user.username}@${member.user.id} to member. Cause : ${reason}`));
         } else {
-            member.send({
-                embed: {
-                    description: `Bonjour ${member.displayName} sur le serveur Discord de Minecraft Forge France.
-                    Veuillez vous enregistrer pour acquérir des droits sur le serveur. Tapez \`${commandsPrefix}register\` pour en savoir plus.`,
-                    color: INFO_COLOR
-                }
-            })
-                .then(() => logger.debug(`Sent welcome embed to ${member.user.username}@${member.user.id}`))
-                .catch((err) => logger.error(`Error while sending welcome embed to ${member.user.username}@${member.user.id} : ${err}`));
+
+            guestJoin(client, conf, member.user, commandsPrefix)
+                .then(() => logger.debug(`Sent welcome embed for ${member.user.username}@${member.user.id}`))
+                .catch((err) => logger.error(`Error while sending welcome embed for ${member.user.username}@${member.user.id} : ${err}`));
         }
     }
 });
