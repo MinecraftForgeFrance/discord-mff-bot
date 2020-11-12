@@ -29,7 +29,7 @@ export async function guestJoin(client: Client, config: Conf<any>, user: User, c
 {
     const channel = getChannel(client, config.get("channels.welcome"));
     const embed = new MessageEmbed();
-    embed.setDescription(`Bonjour ${user.username} sur le serveur Discord de **Minecraft Forge France** !
+    embed.setDescription(`Bonjour ${user.username} et bienvenue sur le serveur Discord de **Minecraft Forge France** !
     Ce discord est reservé aux membres de notre [forum](https://www.minecraftforgefrance.fr/). Il est nécessaire d'y avoir un compte pour continuer.
     Afin d'obtenir l'accès au serveur, veuillez vous enregistrer à l'aide de la commande \`${commandsPrefix}register <pseudo sur le forum>\`.`,);
     embed.setColor(INFO_COLOR);
