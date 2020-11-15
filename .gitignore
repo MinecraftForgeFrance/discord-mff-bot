@@ -233,3 +233,5 @@ log/
 .idea/discord.xml
 
 .idea/sshConfigs.xml
+
+.vscode/
