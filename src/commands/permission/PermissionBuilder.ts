@@ -23,7 +23,7 @@ export class PermissionBuilder {
         return this;
     }
 
-    public channelTypeIs(type: 'dm' | 'text' | 'news'): PermissionBuilder {
+    public channelTypeIs(type: 'dm' | 'group' | 'text' | 'voice' | 'category'): PermissionBuilder {
         const check = this.checker;
         this.checker = (sender, ctx) => {
             return check(sender, ctx) && ctx.getMessage().channel.type == type;
