@@ -9,7 +9,7 @@
     "debug": "tsc && node ./dist/src/app.js --debug"
   },
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "conf": "^7.1.2",
     "discord.js": "^12.4.1",
     "jsonfile": "^6.1.0",
