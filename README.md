@@ -4,7 +4,7 @@ This repository contains the source code for Minecraft Forge France's Discord bo
 
 ## Configuration
 
-The configuration file must be located at `dist/config/bot-config.json`.
+The configuration file must be located at `$pwd/config/bot-config.json`.
 List of configuration fields :
 
 * `forumLink.protocol`
