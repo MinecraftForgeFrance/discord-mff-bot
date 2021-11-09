@@ -56,7 +56,7 @@ export class CommandsDispatcher {
                 ctx.getLogger().debug(`User ${ctx.getMessage().author.username}@${userId} sent command ${commandName}`);
 
                 if (command.checkPermission(sender, ctx)) {
-                    new Promise((resolve, reject) => {
+                    new Promise<void>((resolve, reject) => {
                         try {
                             command.perform(sender, ctx, querySession, resolve, reject);
                         } catch (err) {
