@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2020",
     "module": "commonjs",
     "outDir": "dist",
     "sourceMap": true,
@@ -12,8 +12,9 @@
     "noUnusedLocals": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
+    "skipLibCheck": true,
     "lib": [
-      "es2018"
+      "es2020"
     ],
     "baseUrl": ".",
     "paths": {
