@@ -1,42 +1,45 @@
 {
-  "compilerOptions": {
-    "target": "es2020",
-    "module": "commonjs",
-    "outDir": "dist",
-    "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
-    "skipLibCheck": true,
-    "lib": [
-      "es2020"
+    "compilerOptions": {
+        "target": "es2020",
+        "module": "node16",
+        "moduleResolution": "Node16",
+        "outDir": "dist",
+        "sourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "skipLibCheck": true,
+        "lib": [
+            "es2020"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "discord.js": [
+                "./node_modules/discord.js/typings"
+            ],
+            "node": [
+                "./node_modules/@types/node"
+            ],
+            "mocha": [
+                "./node_modules/@types/mocha"
+            ]
+        }
+    },
+    "include": [
+        "./src/**/*.ts",
+        "./test/**/*.ts"
     ],
-    "baseUrl": ".",
-    "paths": {
-      "discord.js": [
-        "./node_modules/discord.js/typings"
-      ],
-      "mocha": [
-        "./node_modules/@types/mocha"
-      ],
-      "node": [
-        "./node_modules/@types/node"
-      ],
-      "winston": [
-        "./node_modules/@types/winston"
-      ]
+    "exclude": [
+        "./node_modules"
+    ],
+    "ts-node": {
+        "transpileOnly": true,
+        "files": true,
+        "experimentalResolver": true
     }
-  },
-  "include": [
-    "./src/**/*.ts",
-    "./test/**/*.ts"
-  ],
-  "exclude": [
-    "./node_modules"
-  ]
 }

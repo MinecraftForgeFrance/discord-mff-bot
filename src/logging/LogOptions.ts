@@ -1,5 +1,5 @@
 import {format, LoggerOptions, transports} from "winston";
-import DailyRotateFile = require('winston-daily-rotate-file');
+import DailyRotateFile = require("winston-daily-rotate-file");
 
 const fileFormat = format.combine(
     format.timestamp({
@@ -10,12 +10,7 @@ const fileFormat = format.combine(
     })
 );
 
-const consoleFormat = format.combine(
-    fileFormat,
-    format.colorize({
-        all: true
-    })
-);
+const consoleFormat = format.combine(fileFormat, format.colorize({all: true}));
 
 export const options: LoggerOptions = {
     transports: [

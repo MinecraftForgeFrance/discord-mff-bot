@@ -224,7 +224,7 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/node,linux,eclipse,windows,intellij
 
 data/
-config/
+config/bot-config.json
 pidfile
 ideas.txt
 dist/

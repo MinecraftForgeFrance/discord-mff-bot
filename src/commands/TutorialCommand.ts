@@ -1,49 +1,57 @@
-import { MessageEmbed } from "discord.js";
+import {Command} from "./Command.js";
+import {ApplicationCommandOptionType, ApplicationCommandType} from "discord-api-types/v10";
+import {ChatInputCommandInteraction, Client, EmbedBuilder} from "discord.js";
+import {ERROR_COLOR, requestForum, SUCCESS_COLOR} from "../util/util.js";
+import {conf} from "../app.js";
 
-import { Command } from "./Command";
-import { UserInfo } from "../user/UserInfo";
-import { CommandContext } from "./CommandContext";
-import { QuerySession } from "../user/UsersManager";
-import { ERROR_COLOR, requestForum, SUCCESS_COLOR } from "../util/util";
-import { AllRemainingArgument, VersionArgument, WordArgument } from "../parser/ArgumentType";
-
-export class TutorialCommand extends Command {
-
-    constructor() {
-        super((sender, ctx) => true);
-    }
-
-    public getName(): string {
-        return "tutorial";
-    }
-
-    public getDescription(): string {
-        return "Affiche la liste des tutoriels correspondants à la recherche";
-    }
-
-    public getUsage(sender: UserInfo, ctx: CommandContext): string {
-        return "[-v <version>] <search>";
-    }
-
-    public perform(sender: UserInfo, ctx: CommandContext, querySession: QuerySession, resolve: () => void, reject: () => void): void {
-        let tagsParameter: string = "";
-        if (ctx.optionalArg(new WordArgument(word => word === "-v"))) {
-            const version: string = ctx.requiredArg(new VersionArgument(), "version");
+export const TutorialCommand: Command = {
+    name: "tutorial",
+    nameLocalizations: {
+        fr: "tutoriel"
+    },
+    description: "Displays the list of tutorials matching the search",
+    descriptionLocalizations: {
+        fr: "Affiche la liste des tutoriels correspondants à la recherche"
+    },
+    type: ApplicationCommandType["ChatInput"],
+    options: [
+        {
+            name: "subject",
+            description: "This subject of research",
+            type: ApplicationCommandOptionType.String,
+            required: true
+        },
+        {
+            name: "version",
+            description: "This version of research", // TODO : Add description is required
+            type: ApplicationCommandOptionType.String,
+            /*choices: [
+                {
+                    name: "",
+                    value: ""
+                }
+            ],*/
+        }
+    ],
+    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
+        let tagsParameter = "";
+        const version = interaction.options.getString("version") ?? "";
+        if (version != "") {
             tagsParameter = `&hasTags[]=${version}`;
         }
-        const search: string = ctx.requiredArg(new AllRemainingArgument(), "search");
-        const config = ctx.getConfig();
-        requestForum(ctx, `tutorial?term=${search}${tagsParameter}&token=${config.get("forumLink.token")}`, "GET")
-            .catch(() => reject())
+        const subject = interaction.options.getString("subject");
+
+        requestForum(`tutorial?term=${subject}${tagsParameter}&token=${conf.get("forumLink.token")}`, "GET")
             .then(body => {
                 if (body.message === "No result") {
-                    ctx.answerEmbed({
-                        description: "Aucun résultat ne correspond à votre recherche",
-                        color: ERROR_COLOR
+                    interaction.reply({
+                        embeds: [{
+                            color: ERROR_COLOR,
+                            description: "Aucun résultat ne correspond à votre recherche"
+                        }]
                     });
-                    resolve();
                 } else {
-                    const embed = new MessageEmbed();
+                    const embed = new EmbedBuilder();
                     embed.setColor(SUCCESS_COLOR);
                     embed.setTitle("Liste des tutoriels");
                     embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");
@@ -67,24 +75,25 @@ export class TutorialCommand extends Command {
                         }
                     }
 
-                    let embedSize: number = (embed.title as string).length;
+                    let embedSize: number = (embed.data.title as string).length;
                     for (let i = 0; i < prefixArray.length; i++) {
                         embedSize += prefixArray[i].length + fieldContent[i].length;
                     }
 
-                    if (prefixArray.length >= 25 || embedSize >= 6000) {
-                        ctx.answerEmbed({
-                            description: "Votre recherche renvoie trop de résulats.",
-                            color: ERROR_COLOR
+                    if (prefixArray.length >= 25 || embedSize >= 6000) { // TODO Change for use bouton
+                        interaction.reply({
+                            embeds: [{
+                                description: "Votre recherche renvoie trop de résulats.",
+                                color: ERROR_COLOR
+                            }]
                         });
                     } else {
                         for (let i = 0; i < prefixArray.length; i++) {
-                            embed.addField(prefixArray[i], fieldContent[i]);
+                            embed.addFields({name: prefixArray[i], value: fieldContent[i]});
                         }
-                        ctx.answerEmbed(embed);
+                        interaction.reply({embeds: [embed]});
                     }
-                    resolve();
                 }
             });
     }
-}
+};
