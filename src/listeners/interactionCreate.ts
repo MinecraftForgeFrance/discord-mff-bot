@@ -18,7 +18,7 @@ const handleSlashCommand = async (client: Client, interaction: ChatInputCommandI
         return;
     }
     try {
-        await slashCommand.run(client, interaction);
+        slashCommand.run(client, interaction);
     } catch (error) {
         logger.error(error);
         if (interaction.replied || interaction.deferred) {

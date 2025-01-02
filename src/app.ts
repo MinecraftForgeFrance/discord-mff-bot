@@ -21,7 +21,7 @@ export const conf = new Conf<any>({
     schema
 });
 
-const client = new Client({intents: [GatewayIntentBits["Guilds"]]});
+const client = new Client({intents: [GatewayIntentBits.Guilds]});
 
 const rest = new REST({version: "10"}).setToken(conf.get("application.token"));
 try {

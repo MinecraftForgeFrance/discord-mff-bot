@@ -13,11 +13,15 @@ export const TutorialCommand: Command = {
     descriptionLocalizations: {
         fr: "Affiche la liste des tutoriels correspondants à la recherche"
     },
-    type: ApplicationCommandType["ChatInput"],
+    type: ApplicationCommandType.ChatInput,
     options: [
         {
             name: "subject",
+            nameLocalizations: {
+                fr: "sujet"
+            },
             description: "This subject of research",
+            descriptionLocalizations: {fr: "Le sujet de la recherche"},
             type: ApplicationCommandOptionType.String,
             required: true
         },
@@ -33,7 +37,7 @@ export const TutorialCommand: Command = {
             ],*/
         }
     ],
-    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
+    run: async (_: Client, interaction: ChatInputCommandInteraction) => {
         let tagsParameter = "";
         const version = interaction.options.getString("version") ?? "";
         if (version != "") {
@@ -83,7 +87,7 @@ export const TutorialCommand: Command = {
                     if (prefixArray.length >= 25 || embedSize >= 6000) { // TODO Change for use bouton
                         interaction.reply({
                             embeds: [{
-                                description: "Votre recherche renvoie trop de résulats.",
+                                description: "Votre recherche renvoie trop de résultats.",
                                 color: ERROR_COLOR
                             }]
                         });
