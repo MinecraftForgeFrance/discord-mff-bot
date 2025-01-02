@@ -1,10 +1,10 @@
 import Conf from "conf";
-import {createLogger, Logger} from "winston";
-import {schema} from "./config/config.js";
-import {options} from "./logging/LogOptions.js";
-import {Client, GatewayIntentBits, REST} from "discord.js";
-import {Routes} from "discord-api-types/v10";
-import {GlobalCommands, GuildCommands} from "./commands/Command.js";
+import { createLogger, Logger } from "winston";
+import { BotConfig, schema } from "./config/config.js";
+import { options } from "./logging/LogOptions.js";
+import { Client, GatewayIntentBits, REST } from "discord.js";
+import { Routes } from "discord-api-types/v10";
+import { GlobalCommands, GuildCommands } from "./commands/Command.js";
 
 import * as process from "process";
 import ready from "./listeners/ready.js";
@@ -15,7 +15,7 @@ if (process.argv.indexOf("--debug") !== -1) {
     logger.level = "debug";
 }
 
-export const conf = new Conf<any>({
+export const conf = new Conf<BotConfig>({
     configName: "bot-config",
     cwd: "./config",
     schema
@@ -23,7 +23,7 @@ export const conf = new Conf<any>({
 
 const client = new Client({intents: [GatewayIntentBits.Guilds]});
 
-const rest = new REST({version: "10"}).setToken(conf.get("application.token"));
+const rest = new REST({ version: "10" }).setToken(conf.get("application.token"));
 try {
     logger.info("Started refreshing application (/) commands.");
     await rest.put(
@@ -44,7 +44,7 @@ interactionCreate(client);
 
 client.login(conf.get("application.token")).catch((err) => {
     logger.error("Unable to login to the application.");
-    const token = conf.get("application.token");
+    const token: string = conf.get("application.token");
     if (token.length === 0) {
         logger.error("The application token is empty. It's certainly the problem.");
     }
