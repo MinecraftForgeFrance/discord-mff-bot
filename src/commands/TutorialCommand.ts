@@ -1,33 +1,34 @@
-import {Command} from "./Command.js";
-import {ApplicationCommandOptionType, ApplicationCommandType} from "discord-api-types/v10";
-import {ChatInputCommandInteraction, Client, EmbedBuilder} from "discord.js";
-import {ERROR_COLOR, requestForum, SUCCESS_COLOR} from "../util/util.js";
-import {conf} from "../app.js";
+import { ChatInputCommandInteraction, Client, EmbedBuilder } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
+
+import { Command } from './Command.js';
+import { conf } from '../config/config.js';
+import { ERROR_COLOR, requestForum, SUCCESS_COLOR } from '../util/util.js';
 
 export const TutorialCommand: Command = {
-    name: "tutorial",
+    name: 'tutorial',
     nameLocalizations: {
-        fr: "tutoriel"
+        fr: 'tutoriel'
     },
-    description: "Displays the list of tutorials matching the search",
+    description: 'Displays the list of tutorials matching the search',
     descriptionLocalizations: {
-        fr: "Affiche la liste des tutoriels correspondants à la recherche"
+        fr: 'Affiche la liste des tutoriels correspondants à la recherche'
     },
     type: ApplicationCommandType.ChatInput,
     options: [
         {
-            name: "subject",
+            name: 'subject',
             nameLocalizations: {
-                fr: "sujet"
+                fr: 'sujet'
             },
-            description: "This subject of research",
-            descriptionLocalizations: {fr: "Le sujet de la recherche"},
+            description: 'This subject of research',
+            descriptionLocalizations: { fr: 'Le sujet de la recherche' },
             type: ApplicationCommandOptionType.String,
             required: true
         },
         {
-            name: "version",
-            description: "This version of research", // TODO : Add description is required
+            name: 'version',
+            description: 'This version of research', // TODO : Add description is required
             type: ApplicationCommandOptionType.String,
             /*choices: [
                 {
@@ -37,28 +38,30 @@ export const TutorialCommand: Command = {
             ],*/
         }
     ],
+    dmPermission: true,
+    allowedChannels: [conf.get('channels.moddingSupport')],
     run: async (_: Client, interaction: ChatInputCommandInteraction) => {
-        let tagsParameter = "";
-        const version = interaction.options.getString("version") ?? "";
-        if (version != "") {
+        let tagsParameter = '';
+        const version = interaction.options.getString('version') ?? '';
+        if (version != '') {
             tagsParameter = `&hasTags[]=${version}`;
         }
-        const subject = interaction.options.getString("subject");
+        const subject = interaction.options.getString('subject');
 
-        requestForum(`tutorial?term=${subject}${tagsParameter}&token=${conf.get("forumLink.token")}`, "GET")
+        requestForum(`tutorial?term=${subject}${tagsParameter}&token=${conf.get('forumLink.token')}`, 'GET')
             .then(body => {
-                if (body.message === "No result") {
+                if (body.message === 'No result') {
                     interaction.reply({
                         embeds: [{
                             color: ERROR_COLOR,
-                            description: "Aucun résultat ne correspond à votre recherche"
+                            description: 'Aucun résultat ne correspond à votre recherche'
                         }]
                     });
                 } else {
                     const embed = new EmbedBuilder();
                     embed.setColor(SUCCESS_COLOR);
-                    embed.setTitle("Liste des tutoriels");
-                    embed.setThumbnail("https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png");
+                    embed.setTitle('Liste des tutoriels');
+                    embed.setThumbnail('https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png');
 
                     const prefixArray: string[] = [];
                     const fieldContent: string[] = [];
@@ -87,15 +90,15 @@ export const TutorialCommand: Command = {
                     if (prefixArray.length >= 25 || embedSize >= 6000) { // TODO Change for use bouton
                         interaction.reply({
                             embeds: [{
-                                description: "Votre recherche renvoie trop de résultats.",
+                                description: 'Votre recherche renvoie trop de résultats.',
                                 color: ERROR_COLOR
                             }]
                         });
                     } else {
                         for (let i = 0; i < prefixArray.length; i++) {
-                            embed.addFields({name: prefixArray[i], value: fieldContent[i]});
+                            embed.addFields({ name: prefixArray[i], value: fieldContent[i] });
                         }
-                        interaction.reply({embeds: [embed]});
+                        interaction.reply({ embeds: [embed] });
                     }
                 }
             });

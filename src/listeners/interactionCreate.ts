@@ -1,6 +1,7 @@
-import {ChatInputCommandInteraction, Client, Events} from "discord.js";
-import {logger} from "../app.js";
-import {GlobalCommands} from "../commands/Command.js";
+import { ChatInputCommandInteraction, Client, Events, MessageFlags } from 'discord.js';
+
+import { logger } from '../app.js';
+import { GlobalCommands } from '../commands/Command.js';
 
 export default (client: Client): void => {
     client.on(Events.InteractionCreate, async interaction => {
@@ -17,6 +18,15 @@ const handleSlashCommand = async (client: Client, interaction: ChatInputCommandI
         logger.error(`No command matching ${interaction.commandName} was found.`);
         return;
     }
+
+    if (interaction.guild && slashCommand.allowedChannels && !slashCommand.allowedChannels.includes(interaction.channelId)) {
+        await interaction.reply({
+            content: 'This command can\'t be used in this channel.',
+            flags: MessageFlags.Ephemeral
+        });
+        return;
+    }
+
     try {
         slashCommand.run(client, interaction);
     } catch (error) {
@@ -24,10 +34,13 @@ const handleSlashCommand = async (client: Client, interaction: ChatInputCommandI
         if (interaction.replied || interaction.deferred) {
             await interaction.followUp({
                 content: 'There was an error while executing this command!',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         } else {
-            await interaction.reply({content: 'There was an error while executing this command!', ephemeral: true});
+            await interaction.reply({
+                content: 'There was an error while executing this command!',
+                flags: MessageFlags.Ephemeral
+            });
         }
     }
 };

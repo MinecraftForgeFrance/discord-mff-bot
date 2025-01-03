@@ -1,4 +1,6 @@
-export interface BotConfig {
+import Conf from 'conf';
+
+interface BotConfig {
     application: {
         token: string;
         clientId: string;
@@ -21,7 +23,7 @@ export interface BotConfig {
     }
 }
 
-export const schema = {
+const schema = {
     application: {
         type: "object",
         properties: {
@@ -77,3 +79,9 @@ export const schema = {
         default: {}
     }
 };
+
+export const conf = new Conf<BotConfig>({
+    configName: "bot-config",
+    cwd: "./config",
+    schema
+});

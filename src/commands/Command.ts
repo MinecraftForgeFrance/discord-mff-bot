@@ -4,6 +4,7 @@ import {TutorialCommand} from "./TutorialCommand.js";
 import {RegisterCommand} from "./RegisterCommand.js";
 
 export interface Command extends ChatInputApplicationCommandData {
+    allowedChannels?: string[];
     run: (client: Client, interaction: ChatInputCommandInteraction) => void;
 }
 

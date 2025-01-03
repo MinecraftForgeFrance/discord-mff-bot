@@ -1,13 +1,14 @@
-import axios from "axios";
-import {conf, logger} from "../app.js";
+import axios from 'axios';
+import { logger } from '../app.js';
+import { conf } from '../config/config.js';
 
-export async function requestForum(endpoint: string, method: "GET" | "POST", data?: object) {
+export async function requestForum(endpoint: string, method: 'GET' | 'POST', data?: object) {
     try {
         const resp = await axios({
             method,
-            url: `${conf.get("forumLink.protocol")}://${conf.get("forumLink.hostname")}:${conf.get("forumLink.port")}/discordapi/${endpoint}`,
+            url: `${conf.get('forumLink.protocol')}://${conf.get('forumLink.hostname')}:${conf.get('forumLink.port')}/discordapi/${endpoint}`,
             data,
-            responseType: "json"
+            responseType: 'json'
         });
         return resp.data;
     } catch (err) {
