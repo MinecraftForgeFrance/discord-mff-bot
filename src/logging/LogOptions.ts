@@ -3,14 +3,14 @@ import DailyRotateFile from 'winston-daily-rotate-file';
 
 const fileFormat = format.combine(
     format.timestamp({
-        format: "YYYY-MM-DD HH:mm:ss"
+        format: 'YYYY-MM-DD HH:mm:ss'
     }),
-    format.printf(({level, message, timestamp}) => {
+    format.printf(({ level, message, timestamp }) => {
         return `${timestamp} [${level.toUpperCase()}]: ${message}`;
     })
 );
 
-const consoleFormat = format.combine(fileFormat, format.colorize({all: true}));
+const consoleFormat = format.combine(fileFormat, format.colorize({ all: true }));
 
 export const options: LoggerOptions = {
     transports: [

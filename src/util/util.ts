@@ -11,7 +11,8 @@ export async function requestForum(endpoint: string, method: 'GET' | 'POST', dat
             responseType: 'json'
         });
         return resp.data;
-    } catch (err) {
+    }
+ catch (err) {
         logger.error(`Unable to reach endpoint ${endpoint}. Err:`, err);
     }
 }

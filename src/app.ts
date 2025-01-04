@@ -1,11 +1,12 @@
 import * as process from 'process';
 import { createLogger, Logger } from 'winston';
-import { Client, GatewayIntentBits, REST } from 'discord.js';
+import { Client, GatewayIntentBits, Partials, REST } from 'discord.js';
 import { Routes } from 'discord-api-types/v10';
 
 import ready from './listeners/ready.js';
 import { conf } from './config/config.js';
 import { options } from './logging/LogOptions.js';
+import messageCreate from './listeners/messageCreate.js';
 import interactionCreate from './listeners/interactionCreate.js';
 import { GlobalCommands, GuildCommands } from './commands/Command.js';
 
@@ -14,7 +15,16 @@ if (process.argv.indexOf('--debug') !== -1) {
     logger.level = 'debug';
 }
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.MessageContent
+    ],
+    partials: [Partials.Channel, Partials.Message]
+});
 
 const rest = new REST().setToken(conf.get('application.token'));
 try {
@@ -28,12 +38,14 @@ try {
         { body: GuildCommands }
     );
     logger.info('Successfully reloaded application (/) commands.');
-} catch (error) {
+}
+ catch (error) {
     logger.error(error);
 }
 
 ready(client);
 interactionCreate(client);
+messageCreate(client);
 
 client.login(conf.get('application.token')).catch((err) => {
     logger.error('Unable to login to the application.');

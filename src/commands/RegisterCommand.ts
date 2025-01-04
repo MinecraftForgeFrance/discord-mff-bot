@@ -1,35 +1,35 @@
-import {Command} from "./Command.js";
-import {ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, Client} from "discord.js";
-import {logger} from "../app.js";
+import { Command } from './Command.js';
+import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, Client } from 'discord.js';
+import { logger } from '../app.js';
 
 export const RegisterCommand: Command = {
-    name: "register",
+    name: 'register',
     description: "Permet de s'enregistrer afin d'avoir accès au Discord",
     type: ApplicationCommandType.ChatInput,
     dmPermission: true,
     options: [
         {
-            name: "pseudo",
-            description: "Votre pseudo sur le forum",
+            name: 'pseudo',
+            description: 'Votre pseudo sur le forum',
             type: ApplicationCommandOptionType.Subcommand,
             options: [
                 {
-                    name: "pseudo",
-                    description: "Votre pseudo sur le forum",
+                    name: 'pseudo',
+                    description: 'Votre pseudo sur le forum',
                     type: ApplicationCommandOptionType.String,
                     required: true
                 }
             ]
         },
         {
-            name: "code",
-            description: "Code reçu sur le forum",
+            name: 'code',
+            description: 'Code reçu sur le forum',
             type: ApplicationCommandOptionType.Subcommand
         }
     ],
     run: async (_: Client, interaction: ChatInputCommandInteraction) => {
-        if (interaction.options.getSubcommand(true) === "pseudo") {
-            logger.info(interaction.options.getString("pseudo"));
+        if (interaction.options.getSubcommand(true) === 'pseudo') {
+            logger.info(interaction.options.getString('pseudo'));
             /*requestForum("register", "POST", {
                 username: pseudo,
                 token: conf.get("forumLink.token")

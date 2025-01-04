@@ -25,63 +25,63 @@ interface BotConfig {
 
 const schema = {
     application: {
-        type: "object",
+        type: 'object',
         properties: {
-            token: { type: "string" },
-            clientId: { type: "string" },
-            guildId: { type: "string" }
+            token: { type: 'string' },
+            clientId: { type: 'string' },
+            guildId: { type: 'string' }
         },
-        required: ["token", "clientId", "guildId"],
+        required: ['token', 'clientId', 'guildId'],
         default: {}
     },
     forumLink: {
-        type: "object",
+        type: 'object',
         properties: {
             protocol: {
-                type: "string",
-                pattern: "https?",
-                default: "https"
+                type: 'string',
+                pattern: 'https?',
+                default: 'https'
             },
-            port: { type: "integer", default: 443 },
-            hostname: { type: "string" },
-            token: { type: "string" }
+            port: { type: 'integer', default: 443 },
+            hostname: { type: 'string' },
+            token: { type: 'string' }
         },
-        required: ["hostname", "token"],
+        required: ['hostname', 'token'],
         default: {}
     },
     channels: {
-        type: "object",
+        type: 'object',
         properties: {
             logs: {
-                type: "string"
+                type: 'string'
             },
             moddingSupport: {
-                type: "string"
+                type: 'string'
             },
             shoutbox: {
-                type: "string"
+                type: 'string'
             }
         },
-        required: ["logs", "moddingSupport", "shoutbox"],
+        required: ['logs', 'moddingSupport', 'shoutbox'],
         default: {}
     },
     roles: {
-        type: "object",
+        type: 'object',
         properties: {
             member: {
-                type: "string"
+                type: 'string'
             },
             support: {
-                type: "string"
+                type: 'string'
             }
         },
-        required: ["member", "support"],
+        required: ['member', 'support'],
         default: {}
     }
 };
 
 export const conf = new Conf<BotConfig>({
-    configName: "bot-config",
-    cwd: "./config",
+    configName: 'bot-config',
+    cwd: './config',
     schema
 });

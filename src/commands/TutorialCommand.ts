@@ -57,7 +57,8 @@ export const TutorialCommand: Command = {
                             description: 'Aucun résultat ne correspond à votre recherche'
                         }]
                     });
-                } else {
+                }
+ else {
                     const embed = new EmbedBuilder();
                     embed.setColor(SUCCESS_COLOR);
                     embed.setTitle('Liste des tutoriels');
@@ -71,10 +72,12 @@ export const TutorialCommand: Command = {
                             if (!prefixArray.includes(key)) {
                                 prefixArray.push(key);
                                 fieldContent.push(field);
-                            } else {
+                            }
+ else {
                                 if (fieldContent[prefixArray.lastIndexOf(key)].length <= (1024 - field.length)) {
                                     fieldContent[prefixArray.lastIndexOf(key)] += `\n${field}`;
-                                } else {
+                                }
+ else {
                                     prefixArray.push(key);
                                     fieldContent.push(field);
                                 }
@@ -94,7 +97,8 @@ export const TutorialCommand: Command = {
                                 color: ERROR_COLOR
                             }]
                         });
-                    } else {
+                    }
+ else {
                         for (let i = 0; i < prefixArray.length; i++) {
                             embed.addFields({ name: prefixArray[i], value: fieldContent[i] });
                         }
