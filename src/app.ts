@@ -39,7 +39,7 @@ try {
     );
     logger.info('Successfully reloaded application (/) commands.');
 }
- catch (error) {
+catch (error) {
     logger.error(error);
 }
 

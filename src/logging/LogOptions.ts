@@ -18,12 +18,12 @@ export const options: LoggerOptions = {
             format: consoleFormat
         }),
         new DailyRotateFile({
-            format: fileFormat,
+            datePattern: 'YYYY-MM-DD',
             dirname: 'log/',
             filename: 'success_bot_%DATE%.log',
-            datePattern: 'YYYY-MM-DD',
-            zippedArchive: true,
-            maxSize: '20m'
+            format: fileFormat,
+            maxSize: '20m',
+            zippedArchive: true
         })
     ],
     exceptionHandlers: [
@@ -31,12 +31,12 @@ export const options: LoggerOptions = {
             format: consoleFormat
         }),
         new DailyRotateFile({
-            format: fileFormat,
+            datePattern: 'YYYY-MM-DD',
             dirname: 'log/',
             filename: 'error_bot_%DATE%.log',
-            datePattern: 'YYYY-MM-DD',
-            zippedArchive: true,
-            maxSize: '20m'
+            format: fileFormat,
+            maxSize: '20m',
+            zippedArchive: true
         })
     ],
     exitOnError: false

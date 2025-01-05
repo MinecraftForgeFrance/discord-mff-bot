@@ -12,7 +12,7 @@ export async function requestForum(endpoint: string, method: 'GET' | 'POST', dat
         });
         return resp.data;
     }
- catch (err) {
+    catch (err) {
         logger.error(`Unable to reach endpoint ${endpoint}. Err:`, err);
     }
 }

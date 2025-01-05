@@ -11,8 +11,7 @@
         "noImplicitAny": true,
         "noImplicitThis": true,
         "noUnusedLocals": true,
-        "strictNullChecks": true,
-        "strictPropertyInitialization": true,
+        "strict": true,
         "skipLibCheck": true,
         "lib": [
             "es2020"
