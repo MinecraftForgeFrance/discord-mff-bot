@@ -13,8 +13,10 @@ interface BotConfig {
         token: string;
     },
     channels: {
+        bot: string;
         logs: string;
         moddingSupport: string;
+        rules: string;
         shoutbox: string;
     },
     roles: {
@@ -52,10 +54,16 @@ const schema = {
     channels: {
         type: 'object',
         properties: {
+            bot: {
+                type: 'string'
+            },
             logs: {
                 type: 'string'
             },
             moddingSupport: {
+                type: 'string'
+            },
+            rules: {
                 type: 'string'
             },
             shoutbox: {

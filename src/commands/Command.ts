@@ -1,5 +1,7 @@
 import { ChatInputApplicationCommandData, ChatInputCommandInteraction, Client } from 'discord.js';
+
 import { PingCommand } from './PingCommand.js';
+import { ModHelpCommand } from './ModHelpCommand.js';
 import { TutorialCommand } from './TutorialCommand.js';
 
 export interface Command extends ChatInputApplicationCommandData {
@@ -9,6 +11,7 @@ export interface Command extends ChatInputApplicationCommandData {
 
 export const GlobalCommands: Command[] = [
     PingCommand,
-    TutorialCommand
+    TutorialCommand,
+    ModHelpCommand
 ];
 export const GuildCommands: Command[] = [];

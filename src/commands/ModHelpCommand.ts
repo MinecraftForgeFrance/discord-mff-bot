@@ -5,14 +5,11 @@ import { Command } from './Command.js';
 import { conf } from '../config/config.js';
 import { AVATAR_URL, ERROR_COLOR, requestForum, SUCCESS_COLOR } from '../util/util.js';
 
-export const TutorialCommand: Command = {
-    name: 'tutorial',
-    nameLocalizations: {
-        fr: 'tutoriel'
-    },
-    description: 'Displays the list of tutorials matching the search',
+export const ModHelpCommand: Command = {
+    name: 'modhelp',
+    description: 'Displays the list of solved topics matching the search',
     descriptionLocalizations: {
-        fr: 'Affiche la liste des tutoriels correspondants à la recherche'
+        fr: 'Affiche la liste des sujets résolus correspondants à la recherche'
     },
     type: ApplicationCommandType.ChatInput,
     options: [
@@ -49,8 +46,7 @@ export const TutorialCommand: Command = {
             tagsParameter = `&hasTags[]=${version}`;
         }
         const subject = interaction.options.getString('subject');
-
-        requestForum(`tutorial?term=${subject}${tagsParameter}&token=${conf.get('forumLink.token')}`, 'GET')
+        requestForum(`solvedthread?term=${subject}${tagsParameter}&token=${conf.get('forumLink.token')}`, 'GET')
             .then(body => {
                 if (body.message === 'No result') {
                     interaction.reply({
@@ -63,7 +59,7 @@ export const TutorialCommand: Command = {
                 else {
                     const embed = new EmbedBuilder();
                     embed.setColor(SUCCESS_COLOR);
-                    embed.setTitle('Liste des tutoriels');
+                    embed.setTitle('Liste des sujets résolus');
                     embed.setThumbnail(AVATAR_URL);
 
                     const prefixArray: string[] = [];
@@ -109,4 +105,4 @@ export const TutorialCommand: Command = {
                 }
             });
     }
-};
+}
