@@ -21,7 +21,7 @@ const handleSlashCommand = async (client: Client, interaction: ChatInputCommandI
 
     if (interaction.guild && slashCommand.allowedChannels && !slashCommand.allowedChannels.includes(interaction.channelId)) {
         await interaction.reply({
-            content: 'This command can\'t be used in this channel.',
+            content: 'This command cannot be used in this channel.',
             flags: MessageFlags.Ephemeral
         });
         return;

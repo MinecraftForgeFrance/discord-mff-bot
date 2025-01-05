@@ -1,9 +1,10 @@
-import { ChatInputCommandInteraction, Client, EmbedBuilder } from 'discord.js';
 import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
+import { ChatInputCommandInteraction, Client, EmbedBuilder, MessageFlags } from 'discord.js';
 
+import { logger } from '../app.js';
 import { Command } from './Command.js';
 import { conf } from '../config/config.js';
-import { AVATAR_URL, ERROR_COLOR, requestForum, SUCCESS_COLOR } from '../util/util.js';
+import { AVATAR_URL, ERROR_COLOR, isOk, requestForum, SUCCESS_COLOR } from '../util/util.js';
 
 export const ModHelpCommand: Command = {
     name: 'modhelp',
@@ -18,17 +19,24 @@ export const ModHelpCommand: Command = {
             nameLocalizations: {
                 fr: 'sujet'
             },
-            description: 'This subject of research',
+            description: 'The subject to research for',
             descriptionLocalizations: {
-                fr: 'Le sujet de la recherche'
+                fr: 'Le sujet à rechercher'
             },
             type: ApplicationCommandOptionType.String,
             required: true
         },
         {
             name: 'version',
-            description: 'This version of research', // TODO : Add description is required
+            nameLocalizations: {
+                fr: 'version'
+            },
+            description: 'The version to research for', // TODO : Add description is required
+            descriptionLocalizations: {
+                fr: 'La version à rechercher'
+            },
             type: ApplicationCommandOptionType.String,
+            required: false,
             /*choices: [
                 {
                     name: "",
@@ -40,69 +48,89 @@ export const ModHelpCommand: Command = {
     dmPermission: true,
     allowedChannels: [conf.get('channels.moddingSupport'), conf.get('channels.bot')],
     run: async (_: Client, interaction: ChatInputCommandInteraction) => {
-        let tagsParameter = '';
-        const version = interaction.options.getString('version') ?? '';
-        if (version != '') {
-            tagsParameter = `&hasTags[]=${version}`;
-        }
-        const subject = interaction.options.getString('subject');
-        requestForum(`solvedthread?term=${subject}${tagsParameter}&token=${conf.get('forumLink.token')}`, 'GET')
-            .then(body => {
-                if (body.message === 'No result') {
-                    interaction.reply({
-                        embeds: [{
-                            color: ERROR_COLOR,
-                            description: 'Aucun résultat ne correspond à votre recherche'
-                        }]
-                    });
-                }
-                else {
-                    const embed = new EmbedBuilder();
-                    embed.setColor(SUCCESS_COLOR);
-                    embed.setTitle('Liste des sujets résolus');
-                    embed.setThumbnail(AVATAR_URL);
+        try {
+            const subject = interaction.options.getString('subject', true);
+            const version = interaction.options.getString('version', false);
+            const tagsParameter = version ? `&hasTags[]=${version}` : '';
+            const response = await requestForum(`solvedthread?term=${encodeURIComponent(subject)}${tagsParameter}&token=${conf.get('forumLink.token')}`, 'GET');
+            if (!isOk(response)) {
+                return interaction.reply({
+                    embeds: [{
+                        color: ERROR_COLOR,
+                        description: response.message
+                    }]
+                });
+            }
 
-                    const prefixArray: string[] = [];
-                    const fieldContent: string[] = [];
-                    for (const key of Object.keys(body)) {
-                        for (let i = 0; i < body[key].length; i++) {
-                            const field: string = `- [${body[key][i].title}](${body[key][i].url})`;
-                            if (!prefixArray.includes(key)) {
-                                prefixArray.push(key);
-                                fieldContent.push(field);
-                            }
-                            else {
-                                if (fieldContent[prefixArray.lastIndexOf(key)].length <= (1024 - field.length)) {
-                                    fieldContent[prefixArray.lastIndexOf(key)] += `\n${field}`;
-                                }
-                                else {
-                                    prefixArray.push(key);
-                                    fieldContent.push(field);
-                                }
-                            }
-                        }
-                    }
+            const data = response.data;
+            if (Object.keys(data).length === 0) {
+                return interaction.reply({
+                    embeds: [{
+                        color: ERROR_COLOR,
+                        description: 'Aucun résultat ne correspond à votre recherche.'
+                    }]
+                });
+            }
 
-                    let embedSize: number = (embed.data.title as string).length;
-                    for (let i = 0; i < prefixArray.length; i++) {
-                        embedSize += prefixArray[i].length + fieldContent[i].length;
-                    }
+            const embed = new EmbedBuilder()
+                .setColor(SUCCESS_COLOR)
+                .setTitle('Liste des sujets résolus')
+                .setThumbnail(AVATAR_URL);
 
-                    if (prefixArray.length >= 25 || embedSize >= 6000) { // TODO Change for use bouton
-                        interaction.reply({
-                            embeds: [{
-                                description: 'Votre recherche renvoie trop de résultats.',
-                                color: ERROR_COLOR
-                            }]
-                        });
+            const prefixArray: string[] = [];
+            const fieldContent: string[] = [];
+            for (const [tag, posts] of Object.entries(data)) {
+                for (const post of posts) {
+                    const field: string = `- [${post.title}](${post.url})`;
+
+                    if (!prefixArray.includes(tag)) {
+                        prefixArray.push(tag);
+                        fieldContent.push(field);
                     }
                     else {
-                        for (let i = 0; i < prefixArray.length; i++) {
-                            embed.addFields({ name: prefixArray[i], value: fieldContent[i] });
+                        const lastIndex = prefixArray.lastIndexOf(tag);
+                        if (fieldContent[lastIndex].length <= (1024 - field.length)) {
+                            fieldContent[lastIndex] += `\n${field}`;
                         }
-                        interaction.reply({ embeds: [embed] });
+                        else {
+                            prefixArray.push(tag);
+                            fieldContent.push(field);
+                        }
                     }
                 }
+            }
+
+            let embedSize: number = (embed.data.title as string).length;
+            prefixArray.forEach((tag, index) => {
+                embedSize += tag.length + fieldContent[index].length;
+            })
+
+            // Check for Discord embed size or field limits
+            if (prefixArray.length >= 25 || embedSize >= 6000) { // TODO Change for use bouton
+                return interaction.reply({
+                    embeds: [{
+                        color: ERROR_COLOR,
+                        description: 'Votre recherche renvoie trop de résultats.'
+                    }]
+                });
+            }
+
+            prefixArray.forEach((tag, index) => {
+                embed.addFields({ name: tag, value: fieldContent[index] });
             });
+
+            return interaction.reply({ embeds: [embed] });
+        }
+        catch (error) {
+            logger.error('Error while processing modhelp:', error);
+            return interaction.reply({
+                embeds: [{
+                    color: ERROR_COLOR,
+                    description: 'Une erreur est survenue lors du traitement de votre commande.'
+                }],
+                flags: MessageFlags.Ephemeral
+            });
+        }
+
     }
 }
