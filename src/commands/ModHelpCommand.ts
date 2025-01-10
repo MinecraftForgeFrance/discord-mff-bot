@@ -78,11 +78,13 @@ export const ModHelpCommand: Command = {
                         if (!prefixArray.includes(tag)) {
                             prefixArray.push(tag);
                             fieldContent.push(field);
-                        } else {
+                        }
+                        else {
                             const lastIndex = prefixArray.lastIndexOf(tag);
                             if (fieldContent[lastIndex].length <= (1024 - field.length)) {
                                 fieldContent[lastIndex] += `\n${field}`;
-                            } else {
+                            }
+                            else {
                                 prefixArray.push(tag);
                                 fieldContent.push(field);
                             }
@@ -93,7 +95,7 @@ export const ModHelpCommand: Command = {
                 let embedSize: number = (embed.data.title as string).length;
                 prefixArray.forEach((tag, index) => {
                     embedSize += tag.length + fieldContent[index].length;
-                })
+                });
 
                 // Check for Discord embed size or field limits
                 if (prefixArray.length >= 25 || embedSize >= 6000) { // TODO Change for use bouton
@@ -124,4 +126,4 @@ export const ModHelpCommand: Command = {
         }
 
     }
-}
+};

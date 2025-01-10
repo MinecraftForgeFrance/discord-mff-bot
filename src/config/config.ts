@@ -11,6 +11,7 @@ interface BotConfig {
         port?: number;
         hostname: string;
         token: string;
+        registrationSecret: string;
     },
     channels: {
         bot: string;
@@ -46,9 +47,10 @@ const schema = {
             },
             port: { type: 'integer', default: 443 },
             hostname: { type: 'string' },
-            token: { type: 'string' }
+            token: { type: 'string' },
+            registrationSecret: { type: 'string' }
         },
-        required: ['hostname', 'token'],
+        required: ['hostname', 'token', 'registrationSecret'],
         default: {}
     },
     channels: {

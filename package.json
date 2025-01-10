@@ -22,7 +22,9 @@
         "conf": "^13.1.0",
         "discord-api-types": "^0.37.115",
         "discord.js": "^14.17.2",
+        "fastify": "^5.2.1",
         "json-schema-typed": "^8.0.1",
+        "jsonwebtoken": "^9.0.2",
         "winston": "^3.17.0",
         "winston-daily-rotate-file": "^5.0.0"
     },
