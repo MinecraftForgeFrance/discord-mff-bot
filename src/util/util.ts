@@ -7,20 +7,29 @@ interface Post {
     url: string;
 }
 
+export interface RegisterResponse {
+    result: string;
+    userId: number;
+}
+
 interface ErrorResponse {
     message: string;
 }
 
-interface ResponseData {
+export interface ResponseData {
     data: {
         [tag: string]: Post[];
     };
 }
 
-export type ApiResponse = ResponseData | ErrorResponse;
+export type ApiResponse = ResponseData | ErrorResponse | RegisterResponse;
 
 export function isOk(response: ApiResponse): response is ResponseData {
-    return 'data' in response;
+    return 'data' in response && typeof response.data === 'object';
+}
+
+export function isError(response: ApiResponse): response is ErrorResponse {
+    return 'message' in response;
 }
 
 /**
