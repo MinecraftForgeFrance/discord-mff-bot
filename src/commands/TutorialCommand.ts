@@ -4,7 +4,14 @@ import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-ap
 import { logger } from '../app.js';
 import { Command, handleApiResponse } from './Command.js';
 import { conf } from '../config/config.js';
-import { AVATAR_URL, ERROR_COLOR, requestForum, ResponseData, SUCCESS_COLOR } from '../util/util.js';
+import {
+    AVATAR_URL,
+    ERROR_COLOR,
+    fetchDynamicChoices,
+    requestForum,
+    ResponseData,
+    SUCCESS_COLOR
+} from '../util/util.js';
 
 export const TutorialCommand: Command = {
     name: 'tutorial',
@@ -40,12 +47,7 @@ export const TutorialCommand: Command = {
             },
             type: ApplicationCommandOptionType.String,
             required: false,
-            /*choices: [
-                {
-                    name: "",
-                    value: ""
-                }
-            ],*/
+            choices: []
         }
     ],
     dmPermission: true,
@@ -129,3 +131,22 @@ export const TutorialCommand: Command = {
         }
     }
 };
+
+export async function initializeTutorialCommand(): Promise<void> {
+    logger.info('Initializing TutorialCommand dynamic choices...');
+
+    const dynamicChoices = await fetchDynamicChoices();
+    if ('message' in dynamicChoices) {
+        logger.error(dynamicChoices.message);
+    }
+    else {
+        if (TutorialCommand.options) {
+            const versionOption = TutorialCommand.options.find(opt => opt.name === 'version');
+            if (versionOption && 'choices' in versionOption) {
+                versionOption.choices = dynamicChoices;
+                logger.info(`TutorialCommand initialized with choices: ${versionOption.choices.map(c => c.name).join(', ')}`);
+
+            }
+        }
+    }
+}

@@ -4,7 +4,14 @@ import { ChatInputCommandInteraction, Client, EmbedBuilder, MessageFlags } from 
 import { logger } from '../app.js';
 import { Command, handleApiResponse } from './Command.js';
 import { conf } from '../config/config.js';
-import { AVATAR_URL, ERROR_COLOR, requestForum, ResponseData, SUCCESS_COLOR } from '../util/util.js';
+import {
+    AVATAR_URL,
+    ERROR_COLOR,
+    fetchDynamicChoices,
+    requestForum,
+    ResponseData,
+    SUCCESS_COLOR
+} from '../util/util.js';
 
 export const ModHelpCommand: Command = {
     name: 'modhelp',
@@ -31,18 +38,13 @@ export const ModHelpCommand: Command = {
             nameLocalizations: {
                 fr: 'version'
             },
-            description: 'The version to research for', // TODO : Add description is required
+            description: 'The version to research for',
             descriptionLocalizations: {
                 fr: 'La version à rechercher'
             },
             type: ApplicationCommandOptionType.String,
             required: false,
-            /*choices: [
-                {
-                    name: "",
-                    value: ""
-                }
-            ],*/
+            choices: []
         }
     ],
     dmPermission: true,
@@ -124,6 +126,24 @@ export const ModHelpCommand: Command = {
                 flags: MessageFlags.Ephemeral
             });
         }
-
     }
 };
+
+export async function initializeModHelpCommand(): Promise<void> {
+    logger.info('Initializing ModHelpCommand dynamic choices...');
+
+    const dynamicChoices = await fetchDynamicChoices();
+    if ('message' in dynamicChoices) {
+        logger.error(dynamicChoices.message);
+    }
+    else {
+        if (ModHelpCommand.options) {
+            const versionOption = ModHelpCommand.options.find(opt => opt.name === 'version');
+            if (versionOption && 'choices' in versionOption) {
+                versionOption.choices = dynamicChoices;
+                logger.info(`ModHelpCommand initialized with choices: ${versionOption.choices.map(c => c.name).join(', ')}`);
+
+            }
+        }
+    }
+}

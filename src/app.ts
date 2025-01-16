@@ -10,6 +10,8 @@ import { options } from './logging/LogOptions.js';
 import messageCreate from './listeners/messageCreate.js';
 import interactionCreate from './listeners/interactionCreate.js';
 import { GlobalCommands, GuildCommands } from './commands/Command.js';
+import { initializeModHelpCommand } from './commands/ModHelpCommand.js';
+import { initializeTutorialCommand } from './commands/TutorialCommand.js';
 
 export const logger: Logger = createLogger(options);
 if (process.argv.indexOf('--debug') !== -1) {
@@ -27,8 +29,21 @@ const client = new Client({
     partials: [Partials.Channel, Partials.Message]
 });
 
+async function initializeCommands() {
+    logger.info('Initializing dynamic command data...');
+    try {
+        await initializeTutorialCommand();
+        await initializeModHelpCommand();
+        logger.info('Dynamic command data initialized successfully.');
+    }
+    catch (error) {
+        logger.error('Error during dynamic command initialization:', error);
+    }
+}
+
 const rest = new REST().setToken(conf.get('application.token'));
 try {
+    await initializeCommands();
     logger.info('Started refreshing application (/) commands.');
     await rest.put(
         Routes.applicationCommands(conf.get('application.clientId')),

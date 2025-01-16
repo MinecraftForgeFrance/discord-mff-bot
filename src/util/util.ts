@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { ApplicationCommandOptionChoiceData } from 'discord.js';
+
 import { logger } from '../app.js';
 import { conf } from '../config/config.js';
 
@@ -23,6 +25,11 @@ export interface ResponseData {
 }
 
 export type ApiResponse = ResponseData | ErrorResponse | RegisterResponse;
+
+interface Tag {
+    value: string;
+    valueEscaped: string;
+}
 
 export function isOk(response: ApiResponse): response is ResponseData {
     return 'data' in response && typeof response.data === 'object';
@@ -51,6 +58,22 @@ export async function requestForum(endpoint: string, method: 'GET' | 'POST', dat
     }
     catch (err) {
         logger.error(`Unable to reach endpoint ${endpoint}. Err:`, err);
+        return { message: 'An error occurred while fetching data.' } as ErrorResponse;
+    }
+}
+
+export async function fetchDynamicChoices(): Promise<ApplicationCommandOptionChoiceData<string>[] | ErrorResponse> {
+    try {
+        const response = await fetch(`${conf.get('forumLink.protocol')}://${conf.get('forumLink.hostname')}:${conf.get('forumLink.port')}/api/tags`);
+        if (!response.ok) {
+            logger.error('Unable to fetch dynamic choices.');
+            return { message: 'Unable to fetch dynamic choices.' } as ErrorResponse;
+        }
+        const data = await response.json() as { tags: Tag[] };
+        return data.tags.map((tag: Tag) => ({ name: tag.value, value: tag.valueEscaped } as ApplicationCommandOptionChoiceData<string>));
+    }
+    catch (err) {
+        logger.error('Unable to reach tag. Err:', err);
         return { message: 'An error occurred while fetching data.' } as ErrorResponse;
     }
 }
