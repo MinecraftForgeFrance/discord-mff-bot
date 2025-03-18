@@ -8,9 +8,9 @@
         "node": ">=16"
     },
     "scripts": {
-        "start": "node ./dist/src/app.js",
+        "start": "node ./dist/app.js",
         "build": "tsc",
-        "debug": "tsc && node ./dist/src/app.js --debug",
+        "debug": "tsc && node ./dist/app.js --debug",
         "test": "tsc && mocha ./dist/test",
         "lint": "eslint ."
     },
@@ -30,6 +30,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.17.0",
+        "@types/jsonwebtoken": "^9.0.9",
         "@types/mocha": "^10.0.10",
         "@types/node": "^22.10.5",
         "eslint": "^9.17.0",

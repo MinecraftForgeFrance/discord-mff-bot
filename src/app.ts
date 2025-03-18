@@ -12,6 +12,7 @@ import interactionCreate from './listeners/interactionCreate.js';
 import { GlobalCommands, GuildCommands } from './commands/Command.js';
 import { initializeModHelpCommand } from './commands/ModHelpCommand.js';
 import { initializeTutorialCommand } from './commands/TutorialCommand.js';
+import { DiscAccess, UsersManager } from './users/UsersManager.js';
 
 export const logger: Logger = createLogger(options);
 if (process.argv.indexOf('--debug') !== -1) {
@@ -28,6 +29,8 @@ const client = new Client({
     ],
     partials: [Partials.Channel, Partials.Message]
 });
+
+const usersManager = new UsersManager(new DiscAccess());
 
 async function initializeCommands() {
     logger.info('Initializing dynamic command data...');
@@ -61,7 +64,7 @@ catch (error) {
 
 ready(client);
 interactionCreate(client);
-messageCreate(client);
+messageCreate(client, usersManager);
 
 client.login(conf.get('application.token')).catch((err) => {
     logger.error('Unable to login to the application.');
