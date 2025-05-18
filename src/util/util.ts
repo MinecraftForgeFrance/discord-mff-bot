@@ -70,7 +70,9 @@ export async function fetchDynamicChoices(): Promise<ApplicationCommandOptionCho
             return { message: 'Unable to fetch dynamic choices.' } as ErrorResponse;
         }
         const data = await response.json() as { tags: Tag[] };
-        return data.tags.map((tag: Tag) => ({ name: tag.value, value: tag.valueEscaped } as ApplicationCommandOptionChoiceData<string>));
+        return data.tags
+            .filter((tag: Tag) => tag.value && /^\d+\.\d+\..+$/.test(tag.value)).slice(0, 25)
+            .map((tag: Tag) => ({ name: tag.value, value: tag.valueEscaped } as ApplicationCommandOptionChoiceData<string>));
     }
     catch (err) {
         logger.error('Unable to reach tag. Err:', err);

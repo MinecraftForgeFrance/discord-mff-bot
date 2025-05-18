@@ -3,7 +3,6 @@ export class UserInfo {
 
     private readonly discordId: string = '';
     private forumId: number | null = null;
-    private registrationToken: string | undefined;
 
     constructor(jsonStr: string) {
         const parsed: UserInfo = JSON.parse(jsonStr);
@@ -22,9 +21,6 @@ export class UserInfo {
         else {
             this.forumId = null;
         }
-
-        // this.registrationToken
-        this.registrationToken = parsed.registrationToken;
     }
 
     /**
@@ -39,17 +35,6 @@ export class UserInfo {
      */
     public getForumId(): number | null {
         return this.forumId;
-    }
-
-    /**
-     * Sets the token the user will receive on the forum
-     */
-    public setRegistrationToken(token: string): void {
-        this.registrationToken = token;
-    }
-
-    public getRegistrationToken(): string | undefined {
-        return this.registrationToken;
     }
 
     public setForumId(forumId: number): void {

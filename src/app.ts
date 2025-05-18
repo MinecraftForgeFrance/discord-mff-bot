@@ -1,4 +1,3 @@
-import Fastify from 'fastify';
 import * as process from 'process';
 import { createLogger, Logger } from 'winston';
 import { Client, GatewayIntentBits, Partials, REST } from 'discord.js';
@@ -13,6 +12,7 @@ import { GlobalCommands, GuildCommands } from './commands/Command.js';
 import { initializeModHelpCommand } from './commands/ModHelpCommand.js';
 import { initializeTutorialCommand } from './commands/TutorialCommand.js';
 import { DiscAccess, UsersManager } from './users/UsersManager.js';
+import { startWebServer } from './http.js';
 
 export const logger: Logger = createLogger(options);
 if (process.argv.indexOf('--debug') !== -1) {
@@ -65,6 +65,7 @@ catch (error) {
 ready(client);
 interactionCreate(client);
 messageCreate(client, usersManager);
+startWebServer(usersManager, client);
 
 client.login(conf.get('application.token')).catch((err) => {
     logger.error('Unable to login to the application.');
@@ -76,20 +77,3 @@ client.login(conf.get('application.token')).catch((err) => {
     process.exit(1); // TODO: Extract error value
 });
 
-const fastify = Fastify({
-  logger: true
-});
-
-fastify.post('/registration/callback', async (request, reply) => {
-    // TODO: handle registration callback
-    return { hello: 'world' };
-});
-
-// Run the server!
-try {
-    await fastify.listen({ port: 3000 });
-}
-catch (err) {
-    fastify.log.error(err);
-    process.exit(1);
-}
