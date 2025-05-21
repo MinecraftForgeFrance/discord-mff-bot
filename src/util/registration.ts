@@ -1,7 +1,6 @@
 import { Client, EmbedBuilder, User } from 'discord.js';
 import jwt from 'jsonwebtoken';
 import { conf } from '../config/config.js';
-import { UserInfo } from 'src/users/UserInfo.js';
 import { sendEmbedToLogChannel, SUCCESS_COLOR } from './util.js';
 
 const JWT_SECRET: string = conf.get('forumLink.registrationSecret');
@@ -14,7 +13,7 @@ export function createRegistrationToken(user: User): string {
     }, JWT_SECRET, { expiresIn: '1h' });
 }
 
-interface DecodedTokenFromForum extends jwt.JwtPayload {
+export interface DecodedTokenFromForum extends jwt.JwtPayload {
     id: string;
     displayName: string;
     avatarUrl: string;
@@ -32,8 +31,7 @@ export function decodeRegistrationToken(token: string): DecodedTokenFromForum {
 /**
  * Set user forum id, add member role and send validation success message.
  */
-export async function validateUserRegistration(sender: UserInfo, payload: DecodedTokenFromForum, client: Client): Promise<void> {
-    sender.setForumId(payload.forumUid);
+export async function validateUserRegistration(payload: DecodedTokenFromForum, client: Client): Promise<void> {
     const guild = await client.guilds.fetch(conf.get('application.guildId'));
     const member = await guild.members.fetch(payload.id);
     if (!member.roles.cache.has(conf.get('roles.member'))) {

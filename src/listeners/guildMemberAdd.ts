@@ -1,5 +1,5 @@
 import { Client, EmbedBuilder, Events, User } from 'discord.js';
-import { INFO_COLOR, sendEmbedToLogChannel } from 'src/util/util.js';
+import { INFO_COLOR, sendEmbedToLogChannel } from '../util/util.js';
 
 export default (client: Client): void => {
     client.on(Events.GuildMemberAdd, async member => {

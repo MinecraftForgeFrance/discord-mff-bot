@@ -1,5 +1,5 @@
 import { Client, EmbedBuilder, Events, User } from 'discord.js';
-import { ERROR_COLOR, sendEmbedToLogChannel } from 'src/util/util.js';
+import { ERROR_COLOR, sendEmbedToLogChannel } from '../util/util.js';
 
 
 export default (client: Client): void => {

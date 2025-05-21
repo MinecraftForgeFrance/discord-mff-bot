@@ -1,5 +1,5 @@
 import Fastify, { FastifyRequest } from 'fastify';
-import { decodeRegistrationToken, validateUserRegistration } from './util/registration.js';
+import { DecodedTokenFromForum, decodeRegistrationToken, validateUserRegistration } from './util/registration.js';
 import { UsersManager } from './users/UsersManager.js';
 import { Client } from 'discord.js';
 
@@ -28,22 +28,39 @@ const schema = {
 fastify.post('/registration/callback', { schema }, async (req: FastifyRequest<{ Body: { token: string } }>, reply) => {
     const token = req.body.token;
     const querySession = req.usersManager.beginSession();
-    const payload = decodeRegistrationToken(token);
-    const sender = querySession.getUser(payload.id);
-    if (sender.getForumId() !== null) {
-        req.usersManager.endSession(querySession);
-        reply.status(200).send({ message: 'User already registered' });
+    let payload: DecodedTokenFromForum | undefined;
+    try {
+        payload = decodeRegistrationToken(token);
+        const sender = querySession.getUser(payload.id);
+        if (sender.getForumId() !== null) {
+            req.usersManager.endSession(querySession);
+            reply.status(200).send({ code: 1, message: 'User already registered' });
+        }
+        else {
+            sender.setForumId(payload.forumUid);
+            req.usersManager.endSession(querySession);
+            validateUserRegistration(payload, req.discordClient);
+            reply.status(200).send({ code: 0, message: 'User registered successfully' });
+        }
     }
-    else {
-        validateUserRegistration(sender, payload, req.discordClient);
+    catch (error) {
+        fastify.log.error('Registration of user', payload?.displayName ?? 'invalid token', 'failed', error);
         req.usersManager.endSession(querySession);
-        reply.status(200).send({ message: 'User registered successfully' });
+        reply.status(500).send({ code: -1, message: 'Internal server error', error });
     }
 });
 
 export async function startWebServer(usersManager: UsersManager, client: Client) {
-    fastify.decorateRequest('usersManager', usersManager);
-    fastify.decorateRequest('discordClient', client);
+    fastify.decorateRequest('usersManager', {
+        getter () {
+            return usersManager;
+        }
+    });
+    fastify.decorateRequest('discordClient', {
+        getter () {
+            return client;
+        }
+    });
 
     // Run the server!
     try {
