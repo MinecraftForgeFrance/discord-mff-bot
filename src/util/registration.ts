@@ -1,6 +1,8 @@
-import { User } from 'discord.js';
+import { Client, EmbedBuilder, User } from 'discord.js';
 import jwt from 'jsonwebtoken';
 import { conf } from '../config/config.js';
+import { UserInfo } from 'src/users/UserInfo.js';
+import { sendEmbedToLogChannel, SUCCESS_COLOR } from './util.js';
 
 const JWT_SECRET: string = conf.get('forumLink.registrationSecret');
 
@@ -25,4 +27,26 @@ export function decodeRegistrationToken(token: string): DecodedTokenFromForum {
         throw new Error('Invalid token');
     }
     return payload as DecodedTokenFromForum;
+}
+
+/**
+ * Set user forum id, add member role and send validation success message.
+ */
+export async function validateUserRegistration(sender: UserInfo, payload: DecodedTokenFromForum, client: Client): Promise<void> {
+    sender.setForumId(payload.forumUid);
+    const guild = await client.guilds.fetch(conf.get('application.guildId'));
+    const member = await guild.members.fetch(payload.id);
+    if (!member.roles.cache.has(conf.get('roles.member'))) {
+        member.roles.add(conf.get('roles.member'));
+        try {
+            const embed = new EmbedBuilder()
+                .setColor(SUCCESS_COLOR)
+                .setDescription(`**${member.user.username}** a validé son compte discord.`);
+
+            sendEmbedToLogChannel(client, embed);
+        }
+        catch (e) {
+            console.error('Failed to send message to user', e);
+        }
+    }
 }

@@ -1,8 +1,7 @@
 import Fastify, { FastifyRequest } from 'fastify';
-import { decodeRegistrationToken } from './util/registration.js';
+import { decodeRegistrationToken, validateUserRegistration } from './util/registration.js';
 import { UsersManager } from './users/UsersManager.js';
 import { Client } from 'discord.js';
-import { conf } from './config/config.js';
 
 // Type override
 declare module 'fastify' {
@@ -31,23 +30,13 @@ fastify.post('/registration/callback', { schema }, async (req: FastifyRequest<{ 
     const querySession = req.usersManager.beginSession();
     const payload = decodeRegistrationToken(token);
     const sender = querySession.getUser(payload.id);
-    req.usersManager.endSession(querySession);
     if (sender.getForumId() !== null) {
+        req.usersManager.endSession(querySession);
         reply.status(200).send({ message: 'User already registered' });
     }
     else {
-        sender.setForumId(payload.forumUid);
-        const guild = await req.discordClient.guilds.fetch(conf.get('application.guildId'));
-        const member = await guild.members.fetch(payload.id);
-        if (!member.roles.cache.has(conf.get('roles.member'))) {
-            member.roles.add(conf.get('roles.member'));
-            try {
-                member.send('Félicitations, vous êtes désormais membre du discord Minecraft Forge France ! Vous avez désormais accès à tous les salons.');
-            }
-            catch (e) {
-                console.error('Failed to send message to user', e);
-            }
-        }
+        validateUserRegistration(sender, payload, req.discordClient);
+        req.usersManager.endSession(querySession);
         reply.status(200).send({ message: 'User registered successfully' });
     }
 });

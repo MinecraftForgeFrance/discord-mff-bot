@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ApplicationCommandOptionChoiceData } from 'discord.js';
+import { ApplicationCommandOptionChoiceData, Client, EmbedBuilder } from 'discord.js';
 
 import { logger } from '../app.js';
 import { conf } from '../config/config.js';
@@ -80,7 +80,15 @@ export async function fetchDynamicChoices(): Promise<ApplicationCommandOptionCho
     }
 }
 
-export const SUCCESS_COLOR: number = 0xFF00;
+export const SUCCESS_COLOR: number = 0x00FF00;
 export const ERROR_COLOR: number = 0xFF0000;
-export const INFO_COLOR: number = 0x66FF;
+export const INFO_COLOR: number = 0x0066FF;
 export const AVATAR_URL = 'https://cdn.discordapp.com/attachments/270667098143981589/347773487093383189/avatar_128x128_transparent.png';
+
+export function sendEmbedToLogChannel(client: Client, embed: EmbedBuilder): void {
+    const guild = client.guilds.cache.first();
+    const channel = guild?.channels.cache.find(c => c.name === conf.get('channels.logs'));
+    if (channel?.isTextBased()) {
+        channel.send({ embeds: [embed] }).catch(logger.error);
+    }
+}

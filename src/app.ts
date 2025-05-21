@@ -13,6 +13,8 @@ import { initializeModHelpCommand } from './commands/ModHelpCommand.js';
 import { initializeTutorialCommand } from './commands/TutorialCommand.js';
 import { DiscAccess, UsersManager } from './users/UsersManager.js';
 import { startWebServer } from './http.js';
+import guildMemberRemove from './listeners/guildMemberRemove.js';
+import guildMemberAdd from './listeners/guildMemberAdd.js';
 
 export const logger: Logger = createLogger(options);
 if (process.argv.indexOf('--debug') !== -1) {
@@ -63,6 +65,8 @@ catch (error) {
 }
 
 ready(client);
+guildMemberAdd(client);
+guildMemberRemove(client);
 interactionCreate(client);
 messageCreate(client, usersManager);
 startWebServer(usersManager, client);
