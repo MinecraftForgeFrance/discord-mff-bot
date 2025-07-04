@@ -1,6 +1,7 @@
 import { ChatInputApplicationCommandData, ChatInputCommandInteraction, Client } from 'discord.js';
 
 import { PingCommand } from './PingCommand.js';
+import { EventCommand } from './EventCommand.js';
 import { ModHelpCommand } from './ModHelpCommand.js';
 import { TutorialCommand } from './TutorialCommand.js';
 import { ApiResponse, ERROR_COLOR, isError } from '../util/util.js';
@@ -13,7 +14,8 @@ export interface Command extends ChatInputApplicationCommandData {
 export const GlobalCommands: Command[] = [
     PingCommand,
     TutorialCommand,
-    ModHelpCommand
+    ModHelpCommand,
+    EventCommand
 ];
 export const GuildCommands: Command[] = [];
 

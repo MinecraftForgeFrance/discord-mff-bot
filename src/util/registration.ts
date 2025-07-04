@@ -29,13 +29,13 @@ export function decodeRegistrationToken(token: string): DecodedTokenFromForum {
 }
 
 /**
- * Set user forum id, add member role and send validation success message.
+ * Set user forum id, add a member role and send a validation success message.
  */
 export async function validateUserRegistration(payload: DecodedTokenFromForum, client: Client): Promise<void> {
     const guild = await client.guilds.fetch(conf.get('application.guildId'));
     const member = await guild.members.fetch(payload.id);
     if (!member.roles.cache.has(conf.get('roles.member'))) {
-        member.roles.add(conf.get('roles.member'));
+        await member.roles.add(conf.get('roles.member'));
         try {
             const embed = new EmbedBuilder()
                 .setColor(SUCCESS_COLOR)

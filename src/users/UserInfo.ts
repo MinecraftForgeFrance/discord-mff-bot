@@ -1,4 +1,3 @@
-
 export class UserInfo {
 
     private readonly discordId: string = '';
@@ -11,7 +10,7 @@ export class UserInfo {
             this.discordId = parsed.discordId;
         }
         else {
-            throw Error("Field 'discordId' must be specified.");
+            throw Error('Field \'discordId\' must be specified.');
         }
 
         // this.forumId

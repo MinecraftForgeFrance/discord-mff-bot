@@ -26,12 +26,12 @@ export class UsersManager {
         // First search for cached value
         user = this.getFromCache(userId);
 
-        // If no cached value, try to load from file
+        // If no cached value, try to load from a file
         if (user === null) {
             user = this.getFromFile(userId);
         }
 
-        // If loading from file failed, create data
+        // If loading from a file failed, create data
         if (user === null) {
             user = new UserInfo(`
                 {
@@ -54,10 +54,10 @@ export class UsersManager {
     }
 
     /**
-     * Tries to read user information from file.
+     * Tries to read user information from a file.
      *
      * @param userId the id of the user
-     * @returns the user info or null if info can't be read from file
+     * @returns the user info or null if info can't be read from a file
      */
     getFromFile(userId: string): UserInfo | null {
         if (this.discAccess.exists(`data/users/${userId}.json`)) {
@@ -75,7 +75,7 @@ export class UsersManager {
     /**
      * Cache the given user data to be able to retrieve it when asked twice.
      *
-     * @param user the user to cache
+     * @param user the user is to cache
      */
     cacheUser(user: UserInfo): void {
         if (!this.usersCache[user.getDiscordId()]) {
@@ -84,8 +84,8 @@ export class UsersManager {
     }
 
     /**
-     * Set the given user data owned by given query session.
-     * The same user data can be owned by multiple query session.
+     * Set the given user data owned by a given query session.
+     * The same user data can be owned by multiple query sessions.
      *
      * @param user the user which will be owned by the given query sessions
      * @param querySession the QuerySession chich will own the given user data
@@ -115,7 +115,7 @@ export class UsersManager {
     }
 
     /**
-     * Iterates through all cached data then uncache it if this one is totally free.
+     * Iterates through all cached data, then uncache it if this one is totally free.
      */
     uncacheFreeData() {
         Object.keys(this.usersHolders).forEach(id => {
@@ -132,14 +132,14 @@ export class UsersManager {
     }
 
     /**
-     * Begins a query sessions. Use the returned object to query user data.
+     * Begins a query session. Use the returned object to query user data.
      */
     public beginSession(): QuerySession {
         return new QuerySession(this);
     }
 
     /**
-     * Ends a query sessions. All data hold for this session will be free.
+     * Ends a query session. All data held for this session will be free.
      *
      * @param querySession the query sessions to end
      */

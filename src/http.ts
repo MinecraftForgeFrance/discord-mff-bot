@@ -39,7 +39,7 @@ fastify.post('/registration/callback', { schema }, async (req: FastifyRequest<{ 
         else {
             sender.setForumId(payload.forumUid);
             req.usersManager.endSession(querySession);
-            validateUserRegistration(payload, req.discordClient);
+            await validateUserRegistration(payload, req.discordClient);
             reply.status(200).send({ code: 0, message: 'User registered successfully' });
         }
     }

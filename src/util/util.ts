@@ -18,9 +18,15 @@ interface ErrorResponse {
     message: string;
 }
 
-export interface ResponseData {
+export type EventResult = {
+    package: string;
+    description: string;
+    anchors: string;
+}
+
+export interface ResponseData<T = Post[]> {
     data: {
-        [tag: string]: Post[];
+        [key: string]: T;
     };
 }
 
@@ -39,6 +45,8 @@ export function isError(response: ApiResponse): response is ErrorResponse {
     return 'message' in response;
 }
 
+export const FORUM_URL = `${conf.get('forumLink.protocol')}://${conf.get('forumLink.hostname')}:${conf.get('forumLink.port')}`;
+
 /**
  * Makes a request to the forum API.
  * @param endpoint - The API endpoint to call.
@@ -50,7 +58,7 @@ export async function requestForum(endpoint: string, method: 'GET' | 'POST', dat
     try {
         const resp = await axios<ApiResponse>({
             method,
-            url: `${conf.get('forumLink.protocol')}://${conf.get('forumLink.hostname')}:${conf.get('forumLink.port')}/discordapi/${endpoint}`,
+            url: `${FORUM_URL}/discordapi/${endpoint}`,
             data,
             responseType: 'json'
         });
@@ -64,7 +72,7 @@ export async function requestForum(endpoint: string, method: 'GET' | 'POST', dat
 
 export async function fetchDynamicChoices(): Promise<ApplicationCommandOptionChoiceData<string>[] | ErrorResponse> {
     try {
-        const response = await fetch(`${conf.get('forumLink.protocol')}://${conf.get('forumLink.hostname')}:${conf.get('forumLink.port')}/api/tags`);
+        const response = await fetch(`${FORUM_URL}/api/tags`);
         if (!response.ok) {
             logger.error('Unable to fetch dynamic choices.');
             return { message: 'Unable to fetch dynamic choices.' } as ErrorResponse;
