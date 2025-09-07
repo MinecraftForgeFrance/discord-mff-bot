@@ -1,6 +1,6 @@
 {
     "name": "minecraftforgefrance",
-    "version": "2.0",
+    "version": "2.0.1",
     "type": "module",
     "private": true,
     "exports": "./src/app.js",
@@ -8,9 +8,9 @@
         "node": ">=22"
     },
     "scripts": {
-        "start": "node ./dist/src/app.js",
+        "start": "node ./dist/app.js",
         "build": "tsc",
-        "debug": "tsc && node ./dist/src/app.js --debug",
+        "debug": "tsc && node ./dist/app.js --debug",
         "test": "tsc && mocha ./dist/test",
         "lint": "eslint ."
     },
