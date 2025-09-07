@@ -3,7 +3,7 @@
     "version": "2.0.1",
     "type": "module",
     "private": true,
-    "exports": "./src/app.js",
+    "exports": "./dist/app.js",
     "engines": {
         "node": ">=22"
     },
