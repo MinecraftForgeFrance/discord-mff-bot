@@ -44,7 +44,7 @@ fastify.post('/registration/callback', { schema }, async (req: FastifyRequest<{ 
         }
     }
     catch (error) {
-        fastify.log.error('Registration of user', payload?.displayName ?? 'invalid token', 'failed', error);
+        fastify.log.error(`Registration of user ${payload?.displayName ?? 'invalid token'} failed, ${error}`);
         req.usersManager.endSession(querySession);
         reply.status(500).send({ code: -1, message: 'Internal server error', error });
     }
@@ -52,12 +52,12 @@ fastify.post('/registration/callback', { schema }, async (req: FastifyRequest<{ 
 
 export async function startWebServer(usersManager: UsersManager, client: Client) {
     fastify.decorateRequest('usersManager', {
-        getter () {
+        getter() {
             return usersManager;
         }
     });
     fastify.decorateRequest('discordClient', {
-        getter () {
+        getter() {
             return client;
         }
     });
