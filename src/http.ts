@@ -64,7 +64,10 @@ export async function startWebServer(usersManager: UsersManager, client: Client)
 
     // Run the server!
     try {
-        await fastify.listen({ port: 3000 });
+        await fastify.listen({
+            host: '::',
+            port: 3000
+        });
     }
     catch (err) {
         fastify.log.error(err);
