@@ -31,7 +31,7 @@
         "conf": "^14.0.0",
         "discord-api-types": "^0.38.13",
         "discord.js": "^14.20.0",
-        "fastify": "^5.4.0",
+        "fastify": "^5.7.3",
         "json-schema-typed": "^8.0.1",
         "jsonwebtoken": "^9.0.2",
         "winston": "^3.17.0",
