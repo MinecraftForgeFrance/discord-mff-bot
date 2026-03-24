@@ -1,4 +1,4 @@
-import { format, LoggerOptions, transports } from 'winston';
+import { format, type LoggerOptions, transports } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
 const fileFormat = format.combine(

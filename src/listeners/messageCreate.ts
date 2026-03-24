@@ -1,7 +1,7 @@
-import { Client, Events } from 'discord.js';
+import { type Client, Events } from 'discord.js';
 import { conf } from '../config/config.js';
 import { FORUM_URL } from '../util/util.js';
-import { UsersManager } from '../users/UsersManager.js';
+import type { UsersManager } from '../users/UsersManager.js';
 import { createRegistrationToken } from '../util/registration.js';
 
 export default (client: Client, usersManager: UsersManager): void => {

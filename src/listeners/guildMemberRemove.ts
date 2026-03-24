@@ -1,4 +1,4 @@
-import { Client, EmbedBuilder, Events, User } from 'discord.js';
+import { type Client, EmbedBuilder, Events, type User } from 'discord.js';
 import { ERROR_COLOR, sendEmbedToLogChannel } from '../util/util.js';
 
 

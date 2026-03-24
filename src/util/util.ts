@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ApplicationCommandOptionChoiceData, Client, EmbedBuilder } from 'discord.js';
+import { type ApplicationCommandOptionChoiceData, Client, type EmbedBuilder } from 'discord.js';
 
 import { logger } from '../app.js';
 import { conf } from '../config/config.js';

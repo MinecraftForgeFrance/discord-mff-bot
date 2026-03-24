@@ -1,6 +1,6 @@
-import { ChatInputCommandInteraction, Client } from 'discord.js';
+import type { ChatInputCommandInteraction, Client } from 'discord.js';
 import { ApplicationCommandType } from 'discord-api-types/v10';
-import { Command } from './Command.js';
+import type { Command } from './Command.js';
 import { INFO_COLOR } from '../util/util.js';
 
 export const PingCommand: Command = {

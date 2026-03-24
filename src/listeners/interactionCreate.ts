@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, Client, Events, MessageFlags } from 'discord.js';
+import { type ChatInputCommandInteraction, type Client, Events, MessageFlags } from 'discord.js';
 
 import { logger } from '../app.js';
 import { GlobalCommands } from '../commands/Command.js';

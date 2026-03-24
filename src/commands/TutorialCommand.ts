@@ -1,15 +1,15 @@
-import { ChatInputCommandInteraction, Client, EmbedBuilder } from 'discord.js';
+import { type ChatInputCommandInteraction, type Client, EmbedBuilder } from 'discord.js';
 import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
 
 import { logger } from '../app.js';
-import { Command, handleApiResponse } from './Command.js';
+import { type Command, handleApiResponse } from './Command.js';
 import { conf } from '../config/config.js';
 import {
     AVATAR_URL,
     ERROR_COLOR,
     fetchDynamicChoices,
     requestForum,
-    ResponseData,
+    type ResponseData,
     SUCCESS_COLOR
 } from '../util/util.js';
 

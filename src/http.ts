@@ -1,7 +1,7 @@
-import Fastify, { FastifyRequest } from 'fastify';
-import { DecodedTokenFromForum, decodeRegistrationToken, validateUserRegistration } from './util/registration.js';
-import { UsersManager } from './users/UsersManager.js';
-import { Client } from 'discord.js';
+import Fastify, { type FastifyRequest } from 'fastify';
+import { type DecodedTokenFromForum, decodeRegistrationToken, validateUserRegistration } from './util/registration.js';
+import type { UsersManager } from './users/UsersManager.js';
+import type { Client } from 'discord.js';
 
 // Type override
 declare module 'fastify' {

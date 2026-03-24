@@ -1,4 +1,4 @@
-import { Client, EmbedBuilder, User } from 'discord.js';
+import { type Client, EmbedBuilder, type User } from 'discord.js';
 import jwt from 'jsonwebtoken';
 import { conf } from '../config/config.js';
 import { sendEmbedToLogChannel, SUCCESS_COLOR } from './util.js';

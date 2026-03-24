@@ -1,5 +1,5 @@
 import * as process from 'process';
-import { createLogger, Logger } from 'winston';
+import { createLogger, type Logger } from 'winston';
 import { Client, GatewayIntentBits, Partials, REST } from 'discord.js';
 import { Routes } from 'discord-api-types/v10';
 

@@ -1,4 +1,4 @@
-import { Client, Events } from 'discord.js';
+import { type Client, Events } from 'discord.js';
 import { GlobalCommands, GuildCommands } from '../commands/Command.js';
 import { logger } from '../app.js';
 
