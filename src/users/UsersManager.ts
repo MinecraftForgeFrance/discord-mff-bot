@@ -109,7 +109,7 @@ export class UsersManager {
         Object.values(this.usersHolders).forEach((v: Array<QuerySession>) => {
             const index: number = v.indexOf(querySession);
             if (index !== -1) {
-                delete v[index];
+                v.splice(index, 1);
             }
         });
     }
@@ -119,7 +119,7 @@ export class UsersManager {
      */
     uncacheFreeData() {
         Object.keys(this.usersHolders).forEach(id => {
-            if (this.usersHolders[id].entries.length === 0) {
+            if (this.usersHolders[id].length === 0) {
                 const cachedValue: UserInfo = this.usersCache[id];
 
                 this.discAccess.write(`data/users/${cachedValue.getDiscordId()}.json`, JSON.stringify(cachedValue, null, '\t'));

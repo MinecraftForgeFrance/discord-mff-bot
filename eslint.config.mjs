@@ -6,6 +6,7 @@ export default defineConfig(
     {
         files: [
             'src/**/*.ts',
+            'test/**/*.ts',
         ],
         rules: {
             'semi': ['error', 'always'],
@@ -16,6 +17,15 @@ export default defineConfig(
             'template-curly-spacing': 'error',
             'array-bracket-spacing': ['error', 'never'],
             'object-curly-spacing': ['error', 'always'],
+        },
+    },
+    {
+        files: [
+            'test/**/*.test.ts',
+        ],
+        rules: {
+            '@typescript-eslint/no-explicit-any': 'off',
+            '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         },
     },
 );

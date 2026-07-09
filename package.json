@@ -11,7 +11,9 @@
         "start": "node ./dist/app.js",
         "build": "tsc",
         "debug": "tsc && node ./dist/app.js --debug",
-        "test": "tsc && mocha ./dist/test",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
         "lint": "eslint ."
     },
     "keywords": [],
@@ -38,14 +40,15 @@
         "winston-daily-rotate-file": "^5.0.0"
     },
     "devDependencies": {
-        "@eslint/js": "^9.29.0",
+        "@eslint/js": "^10.0.1",
         "@types/jsonwebtoken": "^9.0.10",
-        "@types/mocha": "^10.0.10",
         "@types/node": "^24.0.4",
-        "eslint": "^9.29.0",
-        "mocha": "^11.7.1",
+        "@vitest/coverage-v8": "^4.1.9",
+        "eslint": "^10.5.0",
+        "memfs": "^4.14.0",
         "ts-node": "^10.9.2",
         "typescript": "^6.0.2",
-        "typescript-eslint": "^8.35.0"
+        "typescript-eslint": "^8.35.0",
+        "vitest": "^4.1.9"
     }
 }
