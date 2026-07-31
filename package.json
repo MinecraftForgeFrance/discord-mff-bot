@@ -32,7 +32,7 @@
         "axios": "^1.16.0",
         "conf": "^15.1.0",
         "discord-api-types": "^0.38.13",
-        "discord.js": "^14.26.3",
+        "discord.js": "^14.27.0",
         "fastify": "^5.8.5",
         "json-schema-typed": "^8.0.1",
         "jsonwebtoken": "^9.0.2",
